@@ -1,4 +1,4 @@
-import BigNumber from "bignumber.js";
+import BigNumber from 'bignumber.js';
 
 /**
  * Convert from uDenom to the human readable equivalent as BigNumber type
@@ -30,5 +30,5 @@ const convertCoinToUDenom = (
 export {
   convertCoinToUDenom,
   convertCoinFromUDenom,
- 
-}
+
+};

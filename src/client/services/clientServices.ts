@@ -7,13 +7,14 @@ import {
 import { SecretNetworkClient } from 'secretjs';
 import { createFetchClient } from '~/client/services/createFetch';
 import { identifyQueryResponseErrors } from '~/errors';
+
 /**
  * query the contract using a secret client
  */
 const secretClientContractQuery$ = ({
-  queryMsg, 
-  client, 
-  contractAddress, 
+  queryMsg,
+  client,
+  contractAddress,
   codeHash,
 }: {
   queryMsg: any,
@@ -32,9 +33,9 @@ const secretClientContractQuery$ = ({
  * sets up the service observable for calling the querying with the secret client
  */
 const sendSecretClientContractQuery$ = ({
-  queryMsg, 
-  client, 
-  contractAddress, 
+  queryMsg,
+  client,
+  contractAddress,
   codeHash,
 }: {
   queryMsg: any,
@@ -52,6 +53,6 @@ const sendSecretClientContractQuery$ = ({
     first(),
   );
 
-  export {
-    sendSecretClientContractQuery$
-  }
+export {
+  sendSecretClientContractQuery$,
+};

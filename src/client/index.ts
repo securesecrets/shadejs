@@ -1,8 +1,8 @@
 import {
   of,
   defer,
-  tap, 
-  first,  
+  tap,
+  first,
 } from 'rxjs';
 import {
   SecretNetworkClient,
@@ -74,5 +74,4 @@ function getActiveQueryClient$(lcdEndpoint?: string, chainId?: string) {
 export {
   getSecretNetworkClient$,
   getActiveQueryClient$,
-  activeClient,
 };

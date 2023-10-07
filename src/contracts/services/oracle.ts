@@ -3,16 +3,16 @@ import {
   OraclePricesResponse,
   ParsedOraclePriceResponse,
   ParsedOraclePricesResponse,
-} from '~/types/contracts/oracle'
-import { 
+} from '~/types/contracts/oracle';
+import {
   switchMap,
-  first, 
+  first,
   map,
 } from 'rxjs';
 import { sendSecretClientContractQuery$ } from '~/client/services/clientServices';
-import { queryOraclePrice, queryOraclePrices } from '../definitions/oracle';
 import { getActiveQueryClient$ } from '~/client';
 import { convertCoinFromUDenom } from '~/lib/utils';
+import { queryOraclePrice, queryOraclePrices } from '~/contracts/definitions/oracle';
 
 /**
 * Parses the contract price query into the app data model
@@ -39,7 +39,6 @@ function parsePricesFromContract(pricesResponse: OraclePricesResponse) {
   }), {} as ParsedOraclePricesResponse);
 }
 
-
 /**
  * query the price of an asset using the oracle key
  */
@@ -56,16 +55,16 @@ const queryPrice$ = ({
   lcdEndpoint?: string,
   chainId?: string,
 }) => getActiveQueryClient$(lcdEndpoint, chainId).pipe(
-  switchMap((client) =>  sendSecretClientContractQuery$({
-    queryMsg: queryOraclePrice(oracleKey), 
-    client, 
-    contractAddress, 
+  switchMap((client) => sendSecretClientContractQuery$({
+    queryMsg: queryOraclePrice(oracleKey),
+    client,
+    contractAddress,
     codeHash,
   })),
   map((response) => parsePriceFromContract(response as OraclePriceResponse)),
   first(),
-)
-  
+);
+
 /**
  * query multiple asset prices using oracle keys
  */
@@ -82,17 +81,15 @@ const queryPrices$ = ({
   lcdEndpoint?: string,
   chainId?: string,
 }) => getActiveQueryClient$(lcdEndpoint, chainId).pipe(
-  switchMap((client) =>  sendSecretClientContractQuery$({
-    queryMsg: queryOraclePrices(oracleKeys), 
-    client, 
-    contractAddress, 
+  switchMap((client) => sendSecretClientContractQuery$({
+    queryMsg: queryOraclePrices(oracleKeys),
+    client,
+    contractAddress,
     codeHash,
   })),
   map((response) => parsePricesFromContract(response as OraclePricesResponse)),
   first(),
-)
-
-  
+);
 
 export {
   queryPrice$,

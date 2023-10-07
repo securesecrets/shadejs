@@ -2,11 +2,20 @@ module.exports = {
   env: {
     browser: true,
     es2021: true,
-    node: true,
   },
-  extends: [
-    'plugin:vue/vue3-recommended',
-    'airbnb-base',
+  extends: 'airbnb-base',
+  overrides: [
+    {
+      env: {
+        node: true,
+      },
+      files: [
+        '.eslintrc.{js,cjs}',
+      ],
+      parserOptions: {
+        sourceType: 'script',
+      },
+    },
   ],
   settings: {
     'import/resolver': {
@@ -14,6 +23,7 @@ module.exports = {
       typescript: {},
     },
   },
+  parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 'latest',
     parser: '@typescript-eslint/parser',
@@ -41,9 +51,5 @@ module.exports = {
     'import/prefer-default-export': 'off',
     // importing from vitest for test dependencies
     'import/no-extraneous-dependencies': ['error', { devDependencies: ['**/*.test.ts', '**/*.test.tsx'] }],
-  },
-  // typescript definition for timer IDs
-  globals: {
-    NodeJS: true,
   },
 };

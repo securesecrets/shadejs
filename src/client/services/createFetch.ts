@@ -18,7 +18,7 @@ function createFetchClient<T>(data$: Observable<T>) {
 
 function createFetch(data$: Observable<Response>) {
   return data$.pipe(
-    switchMap((response) => {
+    switchMap(async (response) => {
       if (response.ok) {
         return response.json();
       }
