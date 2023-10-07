@@ -3,8 +3,8 @@ import {
   expect,
 } from 'vitest';
 import {
-  queryOraclePrice,
-  queryOraclePrices,
+  msgQueryOraclePrice,
+  msgQueryOraclePrices,
 } from '~/contracts/definitions/oracle';
 
 test('it test the form of the query oracle msg', () => {
@@ -13,7 +13,7 @@ test('it test the form of the query oracle msg', () => {
       key: 'MOCK_KEY',
     },
   };
-  expect(queryOraclePrice('MOCK_KEY')).toStrictEqual(output);
+  expect(msgQueryOraclePrice('MOCK_KEY')).toStrictEqual(output);
 });
 
 test('it test the form of the query oracle msg', () => {
@@ -22,5 +22,5 @@ test('it test the form of the query oracle msg', () => {
       keys: ['MOCK_KEY_1', 'MOCK_KEY_2'],
     },
   };
-  expect(queryOraclePrices(['MOCK_KEY_1', 'MOCK_KEY_2'])).toStrictEqual(output);
+  expect(msgQueryOraclePrices(['MOCK_KEY_1', 'MOCK_KEY_2'])).toStrictEqual(output);
 });

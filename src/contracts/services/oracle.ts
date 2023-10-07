@@ -12,7 +12,7 @@ import {
 import { sendSecretClientContractQuery$ } from '~/client/services/clientServices';
 import { getActiveQueryClient$ } from '~/client';
 import { convertCoinFromUDenom } from '~/lib/utils';
-import { queryOraclePrice, queryOraclePrices } from '~/contracts/definitions/oracle';
+import { msgQueryOraclePrice, msgQueryOraclePrices } from '~/contracts/definitions/oracle';
 
 /**
 * Parses the contract price query into the app data model
@@ -56,7 +56,7 @@ const queryPrice$ = ({
   chainId?: string,
 }) => getActiveQueryClient$(lcdEndpoint, chainId).pipe(
   switchMap((client) => sendSecretClientContractQuery$({
-    queryMsg: queryOraclePrice(oracleKey),
+    queryMsg: msgQueryOraclePrice(oracleKey),
     client,
     contractAddress,
     codeHash,
@@ -82,7 +82,7 @@ const queryPrices$ = ({
   chainId?: string,
 }) => getActiveQueryClient$(lcdEndpoint, chainId).pipe(
   switchMap((client) => sendSecretClientContractQuery$({
-    queryMsg: queryOraclePrices(oracleKeys),
+    queryMsg: msgQueryOraclePrices(oracleKeys),
     client,
     contractAddress,
     codeHash,
@@ -92,6 +92,8 @@ const queryPrices$ = ({
 );
 
 export {
+  parsePriceFromContract,
+  parsePricesFromContract,
   queryPrice$,
   queryPrices$,
 };

@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js';
 type OraclePriceResponse = {
   key: string,
   data: {
-    rate: number,
+    rate: string,
     last_updated_base: number,
     last_updated_quote: number,
   }
