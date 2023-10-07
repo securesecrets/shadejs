@@ -1,0 +1,26 @@
+# To make sure everything is fine before reaching github
+#
+
+commit-msg:
+  parallel: true
+  commands:
+    # make sure we are using conventional commits
+    # https://www.conventionalcommits.org/en/v1.0.0
+    lint-commit-msg:
+      run: npx commitlint --edit
+
+pre-commit:
+ parallel: true
+ commands:
+   type-check:
+     glob: '*.{ts,tsx}'
+     run: yarn typecheck
+   eslint:
+     glob: "*.{js,ts,vue}"
+     run: yarn lint:fix {staged_files}
+
+pre-push:
+  parallel: true
+  commands:
+    test:
+      run: yarn test
