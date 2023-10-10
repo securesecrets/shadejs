@@ -1,0 +1,47 @@
+name: Tests, Typecheck, Eslint
+
+on: [push]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Node Version
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18.16.0
+        cache: yarn
+    - name: Install Dependencies
+      run: yarn install --frozen-lockfile
+    - name: Test
+      run: yarn test
+  typecheck:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Node Version
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18.16.0
+        cache: yarn
+    - name: Install Dependencies
+      run: yarn install --frozen-lockfile
+    - name: Type-Check
+      run: yarn typecheck
+  eslint:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Node Version
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18.16.0
+        cache: yarn
+    - name: Install Dependencies
+      run: yarn install --frozen-lockfile
+    - name: Eslint-Check
+      run: yarn lint

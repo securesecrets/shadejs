@@ -1,0 +1,23 @@
+# IDEs & Logs
+*.log
+.idea
+.nyc_output
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Vite default settings
+node_modules
+.DS_Store
+dist
+dist-ssr
+*.local
+
+# Vitest
+coverage
+
+# We use yarn
+package-lock.json
