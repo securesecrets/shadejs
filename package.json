@@ -1,16 +1,16 @@
 {
   "name": "shadejs",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "author": "Secure Secrets",
   "license": "MIT",
   "type": "module",
-  "main": "./dist/my-lib.umd.cjs",
-  "module": "./dist/my-lib.js",
+  "main": "./dist/shadejs.cjs",
+  "module": "./dist/shadejs.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/my-lib.js",
-      "require": "./dist/my-lib.umd.cjs"
+      "import": "./dist/shadejs.js",
+      "require": "./dist/shadejs.umd.cjs"
     }
   },
   "files": [

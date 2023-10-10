@@ -1,2 +1,3 @@
 import { getSecretNetworkClient$, getActiveQueryClient$ } from './client';
-export { getSecretNetworkClient$, getActiveQueryClient$, };
+import { queryPrice$, queryPrices$ } from './contracts/services/oracle';
+export { getSecretNetworkClient$, getActiveQueryClient$, queryPrice$, queryPrices$, };

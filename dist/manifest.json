@@ -1,6 +1,6 @@
 {
   "src/index.ts": {
-    "file": "my-lib.umd.cjs",
+    "file": "shadejs.umd.cjs",
     "isEntry": true,
     "src": "src/index.ts"
   }
