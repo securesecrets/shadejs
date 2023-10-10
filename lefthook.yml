@@ -16,7 +16,7 @@ pre-commit:
      glob: '*.{ts,tsx}'
      run: yarn typecheck
    eslint:
-     glob: "*.{js,ts,vue}"
+     glob: "*.{js,ts}"
      run: yarn lint:fix {staged_files}
 
 pre-push:
