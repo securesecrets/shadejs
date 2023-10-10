@@ -3,6 +3,7 @@ import {
   defer,
   tap,
   first,
+  Observable,
 } from 'rxjs';
 import {
   SecretNetworkClient,
@@ -13,6 +14,7 @@ import {
   DEFAULT_SECRET_LCD_ENDPOINT,
   SECRET_MAINNET_CHAIN_ID,
 } from '~/config';
+import { ClientData } from '~/types/client';
 
 /**
  * Create and returns Secret Network client
@@ -26,26 +28,34 @@ const getSecretNetworkClient$ = ({
   walletAccount?: WalletAccount
   lcdEndpoint: string,
   chainId: string,
-}) => createFetchClient(defer(
+}): Observable<ClientData> => createFetchClient(defer(
   () => {
     if (walletAccount) {
-      return of(new SecretNetworkClient({
-        url: lcdEndpoint,
-        wallet: walletAccount.signer,
-        walletAddress: walletAccount.walletAddress,
+      return of({
+        client: new SecretNetworkClient({
+          url: lcdEndpoint,
+          wallet: walletAccount.signer,
+          walletAddress: walletAccount.walletAddress,
+          chainId,
+          encryptionUtils: walletAccount.encryptionUtils,
+          encryptionSeed: walletAccount.encryptionSeed,
+        }),
+        endpoint: lcdEndpoint,
         chainId,
-        encryptionUtils: walletAccount.encryptionUtils,
-        encryptionSeed: walletAccount.encryptionSeed,
-      }));
+      });
     }
-    return of(new SecretNetworkClient({
-      url: lcdEndpoint,
+    return of({
+      client: new SecretNetworkClient({
+        url: lcdEndpoint,
+        chainId,
+      }),
+      endpoint: lcdEndpoint,
       chainId,
-    }));
+    });
   },
 ));
 
-let activeClient: SecretNetworkClient | undefined;
+let activeClient: ClientData | undefined;
 
 /**
  * Gets the active query client. If one does not exist, initialize it and stores it for
@@ -54,8 +64,14 @@ let activeClient: SecretNetworkClient | undefined;
  * @param chainId uses a default mainnet chainID if one is not provided
  */
 function getActiveQueryClient$(lcdEndpoint?: string, chainId?: string) {
-  // check if a client exists for a given chain and return it if it exists
-  if (activeClient) {
+  // check if a client exists and return it if it does
+  // as long as the endpoint and chain Id haven't changed from previous.
+  if (activeClient
+    && lcdEndpoint
+    && lcdEndpoint === activeClient.endpoint
+    && chainId
+    && chainId === activeClient.chainId
+  ) {
     return of(activeClient);
   }
 
@@ -64,8 +80,12 @@ function getActiveQueryClient$(lcdEndpoint?: string, chainId?: string) {
     lcdEndpoint: lcdEndpoint ?? DEFAULT_SECRET_LCD_ENDPOINT,
     chainId: chainId ?? SECRET_MAINNET_CHAIN_ID,
   }).pipe(
-    tap((client) => {
-      activeClient = client;
+    tap(({ client }) => {
+      activeClient = {
+        client,
+        endpoint: lcdEndpoint ?? DEFAULT_SECRET_LCD_ENDPOINT,
+        chainId: chainId ?? SECRET_MAINNET_CHAIN_ID,
+      };
     }),
     first(),
   );

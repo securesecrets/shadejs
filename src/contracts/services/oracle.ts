@@ -55,7 +55,7 @@ const queryPrice$ = ({
   lcdEndpoint?: string,
   chainId?: string,
 }) => getActiveQueryClient$(lcdEndpoint, chainId).pipe(
-  switchMap((client) => sendSecretClientContractQuery$({
+  switchMap(({ client }) => sendSecretClientContractQuery$({
     queryMsg: msgQueryOraclePrice(oracleKey),
     client,
     contractAddress,
@@ -81,7 +81,7 @@ const queryPrices$ = ({
   lcdEndpoint?: string,
   chainId?: string,
 }) => getActiveQueryClient$(lcdEndpoint, chainId).pipe(
-  switchMap((client) => sendSecretClientContractQuery$({
+  switchMap(({ client }) => sendSecretClientContractQuery$({
     queryMsg: msgQueryOraclePrices(oracleKeys),
     client,
     contractAddress,
