@@ -1,9 +1,23 @@
 {
   "name": "shadejs",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "Secure Secrets",
   "license": "MIT",
+  "type": "module",
+  "main": "./dist/my-lib.umd.cjs",
+  "module": "./dist/my-lib.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/my-lib.js",
+      "require": "./dist/my-lib.umd.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
+    "build": "tsc && vite build",
     "commitizen": "cz",
     "lint": "eslint \"**/*.{ts,js}\"",
     "lint:fix": "eslint \"**/*.{vue,ts,js}\" --fix",
@@ -12,7 +26,6 @@
     "test:watch": "vitest watch",
     "typecheck": "tsc --noEmit"
   },
-  "type": "module",
   "dependencies": {
     "@arkweid/lefthook": "^0.7.7",
     "@commitlint/cli": "^17.7.2",
@@ -31,7 +44,8 @@
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^6.7.4",
-    "@typescript-eslint/parser": "^6.7.4"
+    "@typescript-eslint/parser": "^6.7.4",
+    "vite-plugin-dts": "^3.6.0"
   },
   "config": {
     "commitizen": {
