@@ -24,7 +24,8 @@ export default defineConfig({
     reportCompressedSize: true,
     lib: {
       entry: path.resolve(__dirname, 'src/index.ts'),
-      name: 'index',
+      name: 'ShadeJS',
+      fileName: 'shade-js',
     },
   },
   plugins: [dts({ rollupTypes: true })],
