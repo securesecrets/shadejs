@@ -1,3 +1,4 @@
+import '~/polyfills/index';
 import { getSecretNetworkClient$, getActiveQueryClient$ } from '~/client';
 import { queryPrice$, queryPrices$ } from '~/contracts/services/oracle';
 

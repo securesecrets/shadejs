@@ -2,6 +2,8 @@ import { defineConfig } from 'vite';
 import path from 'path';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import dts from 'vite-plugin-dts';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { nodePolyfills } from 'vite-plugin-node-polyfills'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -19,6 +21,7 @@ export default defineConfig({
   },
 
   build: {
+    target: 'node',
     manifest: true,
     minify: true,
     reportCompressedSize: true,
@@ -28,5 +31,10 @@ export default defineConfig({
       fileName: 'shade-js',
     },
   },
-  plugins: [dts({ rollupTypes: true })],
+  plugins: [
+    dts({ rollupTypes: true }),
+    nodePolyfills({
+      include: ['path']
+    }),
+  ],
 });
