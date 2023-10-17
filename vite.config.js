@@ -21,7 +21,8 @@ export default defineConfig({
         lib: {
             entry: path.resolve(__dirname, 'src/index.ts'),
             name: 'index',
+            formats: ['es', 'cjs'],
         },
     },
-    plugins: [dts()],
+    plugins: [dts({ rollupTypes: true })],
 });
