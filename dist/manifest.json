@@ -1,0 +1,7 @@
+{
+  "src/index.ts": {
+    "file": "shadejs.cjs",
+    "isEntry": true,
+    "src": "src/index.ts"
+  }
+}
