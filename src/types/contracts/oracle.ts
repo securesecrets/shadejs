@@ -21,7 +21,7 @@ type ParsedOraclePricesResponse = {
   [oracleKey: string]: ParsedOraclePriceResponse
 }
 
-export {
+export type {
   OraclePriceResponse,
   OraclePricesResponse,
   ParsedOraclePriceResponse,

@@ -6,6 +6,6 @@ type ClientData = {
   chainId: string,
 }
 
-export {
+export type {
   ClientData,
 };

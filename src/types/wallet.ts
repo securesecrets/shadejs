@@ -10,6 +10,6 @@ type WalletAddress = {
 
 type WalletAccount = WalletSigner & WalletAddress
 
-export {
+export type {
   WalletAccount,
 };
