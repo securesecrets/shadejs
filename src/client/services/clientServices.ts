@@ -8,7 +8,7 @@ import { SecretNetworkClient } from 'secretjs';
 import { createFetchClient } from '~/client/services/createFetch';
 import { identifyQueryResponseErrors } from '~/errors';
 
-import { Buffer } from 'buffer';
+import { encodeJsonToB64 } from '~/lib/utils';
 
 /**
  * query the contract using a secret client
@@ -56,9 +56,9 @@ const secretClientBatchQuery$ = ({
     query: {
       batch: {
         queries: queries.map((q, i) => ({
-          id: Buffer.from(i.toString(), 'binary').toString('base64'),
+          id: encodeJsonToB64(i),
           contract: q.contract,
-          query: Buffer.from(JSON.stringify(q.query), 'binary').toString('base64'),
+          query: encodeJsonToB64(q.query),
         })),
       },
     },
