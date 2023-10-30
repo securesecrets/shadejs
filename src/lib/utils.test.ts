@@ -6,6 +6,7 @@ import { BigNumber } from 'bignumber.js';
 import {
   convertCoinFromUDenom,
   convertCoinToUDenom,
+  encodeJsonToB64,
 } from './utils';
 
 test('It converts token from U denom V2', () => {
@@ -26,4 +27,12 @@ test('It converts token to U denom V2', () => {
   const testBigNumber3 = BigNumber('123456789123456789.123456789123456789');
   expect(convertCoinToUDenom(testBigNumber3, 18)).toBe('123456789123456789123456789123456789');
   expect(convertCoinToUDenom('1111.123456789101213141', 18)).toBe('1111123456789101213141');
+});
+
+test('It encodes a JSON into a base64 string', () => {
+  const testJSON = {
+    value1: 'teststring1',
+    value2: 'teststring2',
+  };
+  expect(encodeJsonToB64(testJSON)).toBe('eyJ2YWx1ZTEiOiJ0ZXN0c3RyaW5nMSIsInZhbHVlMiI6InRlc3RzdHJpbmcyIn0=');
 });
