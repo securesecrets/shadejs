@@ -3,7 +3,7 @@ import path from 'path';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import dts from 'vite-plugin-dts';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { nodePolyfills } from 'vite-plugin-node-polyfills'
+import { nodePolyfills } from 'vite-plugin-node-polyfills';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -34,7 +34,7 @@ export default defineConfig({
   plugins: [
     dts({ rollupTypes: true }),
     nodePolyfills({
-      include: ['path']
+      include: ['path'],
     }),
   ],
 });
