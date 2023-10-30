@@ -18,16 +18,19 @@ import { ClientData } from '~/types/client';
 
 /**
  * Create and returns Secret Network client
- * @param walletAccount not required for making public queries
+ * @param lcdEndpoint LCD endpoint to make queries to
+ * @param chainId chainID string from the config of the chain
+ * @param walletAccount wallet account data - not required for making public queries
  */
 const getSecretNetworkClient$ = ({
-  walletAccount,
   lcdEndpoint,
   chainId,
+  walletAccount,
 }:{
-  walletAccount?: WalletAccount
+
   lcdEndpoint: string,
   chainId: string,
+  walletAccount?: WalletAccount
 }): Observable<ClientData> => createFetchClient(defer(
   () => {
     if (walletAccount) {

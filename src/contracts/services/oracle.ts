@@ -14,12 +14,14 @@ import { getActiveQueryClient$ } from '~/client';
 import { convertCoinFromUDenom } from '~/lib/utils';
 import { msgQueryOraclePrice, msgQueryOraclePrices } from '~/contracts/definitions/oracle';
 
+const ORACLE_NORMALIZATION_FACTOR = 18;
+
 /**
 * Parses the contract price query into the app data model
 */
 const parsePriceFromContract = (response: OraclePriceResponse): ParsedOraclePriceResponse => ({
   oracleKey: response.key,
-  rate: convertCoinFromUDenom(response.data.rate, 18),
+  rate: convertCoinFromUDenom(response.data.rate, ORACLE_NORMALIZATION_FACTOR),
   lastUpdatedBase: response.data.last_updated_base,
   lastUpdatedQuote: response.data.last_updated_quote,
 });
@@ -32,7 +34,7 @@ function parsePricesFromContract(pricesResponse: OraclePricesResponse) {
     ...prev,
     [curr.key]: {
       oracleKey: curr.key,
-      rate: convertCoinFromUDenom(curr.data.rate, 18),
+      rate: convertCoinFromUDenom(curr.data.rate, ORACLE_NORMALIZATION_FACTOR),
       lastUpdatedBase: curr.data.last_updated_base,
       lastUpdatedQuote: curr.data.last_updated_quote,
     } as ParsedOraclePriceResponse,

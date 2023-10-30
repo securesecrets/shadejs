@@ -8,11 +8,18 @@ import {
 import {
   parsePriceFromContract,
   parsePricesFromContract,
+  queryPrice$,
+  queryPrices$,
 } from '~/contracts/services/oracle';
 import priceResponse from '~/test/mocks/oracle/priceResponse.json';
 import pricesResponse from '~/test/mocks/oracle/pricesResponse.json';
-import BigNumber from 'bignumber.js';
 import { of } from 'rxjs';
+import {
+  priceParsed,
+  pricesParsed,
+} from '~/test/mocks/oracle/pricesParsed';
+
+const sendSecretClientContractQuery$ = vi.hoisted(() => vi.fn());
 
 beforeAll(() => {
   vi.mock('~/contracts/definitions/oracle', () => ({
@@ -21,15 +28,11 @@ beforeAll(() => {
   }));
 
   vi.mock('~/client/index', () => ({
-    getActiveQueryClient$: vi.fn(() => of('CLIENT')),
+    getActiveQueryClient$: vi.fn(() => of({ client: 'CLIENT' })),
   }));
 
   vi.mock('~/client/services/clientServices', () => ({
-    sendSecretClientContractQuery$: vi.fn(() => of()),
-  }));
-
-  vi.mock('~/client/services/clientServices', () => ({
-    sendSecretClientContractQuery$: vi.fn(() => of()),
+    sendSecretClientContractQuery$,
   }));
 });
 
@@ -40,30 +43,65 @@ afterAll(() => {
 test('it can parse the price response', () => {
   expect(parsePriceFromContract(
     priceResponse,
-  )).toStrictEqual({
-    oracleKey: 'BTC',
-    rate: BigNumber('27917.2071556'),
-    lastUpdatedBase: 1696644063,
-    lastUpdatedQuote: 18446744073709552000,
-  });
+  )).toStrictEqual(priceParsed);
 });
 
 test('it can parse the prices response', () => {
-  const parsedOutput = {
-    BTC: {
-      oracleKey: 'BTC',
-      rate: BigNumber('27917.2071556'),
-      lastUpdatedBase: 1696644063,
-      lastUpdatedQuote: 18446744073709552000,
-    },
-    ETH: {
-      oracleKey: 'ETH',
-      rate: BigNumber('1644.0836829'),
-      lastUpdatedBase: 1696644063,
-      lastUpdatedQuote: 18446744073709552000,
-    },
-  };
   expect(parsePricesFromContract(
     pricesResponse,
-  )).toStrictEqual(parsedOutput);
+  )).toStrictEqual(pricesParsed);
+});
+
+test('it can send the query single price service', () => {
+  sendSecretClientContractQuery$.mockReturnValue(of(priceResponse));
+
+  const input = {
+    contractAddress: 'CONTRACT_ADDRESS',
+    codeHash: 'CODE_HASH',
+    oracleKey: 'ORACLE_KEY',
+    lcdEndpoint: 'LCD_ENDPOINT',
+    chainId: 'CHAIN_ID',
+  };
+  let output;
+  queryPrice$(input).subscribe({
+    next: (response) => {
+      output = response;
+    },
+  });
+
+  expect(sendSecretClientContractQuery$).toHaveBeenCalledWith({
+    queryMsg: 'MSG_QUERY_ORACLE_PRICE',
+    client: 'CLIENT',
+    contractAddress: input.contractAddress,
+    codeHash: input.codeHash,
+  });
+
+  expect(output).toStrictEqual(priceParsed);
+});
+
+test('it can send the query multiple prices service', () => {
+  sendSecretClientContractQuery$.mockReturnValue(of(pricesResponse));
+
+  const input = {
+    contractAddress: 'CONTRACT_ADDRESS',
+    codeHash: 'CODE_HASH',
+    oracleKeys: ['ORACLE_KEY'],
+    lcdEndpoint: 'LCD_ENDPOINT',
+    chainId: 'CHAIN_ID',
+  };
+  let output;
+  queryPrices$(input).subscribe({
+    next: (response) => {
+      output = response;
+    },
+  });
+
+  expect(sendSecretClientContractQuery$).toHaveBeenCalledWith({
+    queryMsg: 'MSG_QUERY_ORACLE_PRICES',
+    client: 'CLIENT',
+    contractAddress: input.contractAddress,
+    codeHash: input.codeHash,
+  });
+
+  expect(output).toStrictEqual(pricesParsed);
 });
