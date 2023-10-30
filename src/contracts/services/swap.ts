@@ -76,7 +76,7 @@ function parseFactoryPairs({
   return {
     pairs: pairsFormatted,
     startIndex: startingIndex,
-    endIndex: startingIndex + limit,
+    endIndex: startingIndex + limit - 1,
   };
 }
 
@@ -134,8 +134,6 @@ const queryFactoryConfig$ = ({
 }:{
   contractAddress: string,
   codeHash?: string,
-  startingIndex: number,
-  limit: number,
   lcdEndpoint?: string,
   chainId?: string,
 }) => getActiveQueryClient$(lcdEndpoint, chainId).pipe(
@@ -192,8 +190,6 @@ const queryPairConfig$ = ({
 }:{
   contractAddress: string,
   codeHash?: string,
-  stringIndex: number,
-  limit: number,
   lcdEndpoint?: string,
   chainId?: string,
 }) => getActiveQueryClient$(lcdEndpoint, chainId).pipe(
