@@ -98,18 +98,18 @@ type PairInfoResponse = {
     liquidity_token: Contract,
     factory: Contract | null,
     pair: TokenPair,
-     amount_0: string,
-     amount_1: string,
-     total_liquidity: string,
-     contract_version: number,
-     fee_info:{
+    amount_0: string,
+    amount_1: string,
+    total_liquidity: string,
+    contract_version: number,
+    fee_info:{
         shade_dao_address: string,
         lp_fee: Fee,
         shade_dao_fee: Fee,
         stable_lp_fee: Fee,
         stable_shade_dao_fee: Fee
-     },
-     stable_info: StableInfo | null
+    },
+    stable_info: StableInfo | null
   }
 }
 

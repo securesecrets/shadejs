@@ -1,9 +1,12 @@
-type Contract = {
-  address: string,
-  codeHash: string,
-};
+import { Contract } from '~/types/contracts/shared';
 
-type FactoryContract = Contract & { isEnabled: boolean }
+type FactoryPair = {
+  pairContract: Contract,
+  token0Contract: Contract,
+  token1Contract: Contract,
+  isStable: boolean,
+  isEnabled: boolean
+}
 
 type ContractInstantiationInfo = {
   codeHash: string,
@@ -25,7 +28,7 @@ type FactoryConfig = {
 }
 
 type FactoryPairs = {
-  pairs: FactoryContract[],
+  pairs: FactoryPair[],
   startIndex: number,
   endIndex: number,
 }
@@ -45,8 +48,89 @@ type PairConfig = {
   fee: CustomFee | null,
 }
 
+type CustomIterationControls = {
+  epsilon: string,
+  maxIteratorNewton: number,
+  maxIteratorBisect: number,
+}
+
+type StableTokenData = {
+  oracleKey: string,
+  decimals: number,
+}
+
+type StableParams = {
+  alpha: string,
+  gamma1: string,
+  gamma2: string,
+  oracle: Contract,
+  token0Data: StableTokenData,
+  token1Data: StableTokenData,
+  minTradeSizeXForY: string,
+  minTradeSizeYForX: string,
+  maxPriceImpactAllowed: string,
+  customIterationControls: CustomIterationControls | null,
+}
+
+type PairInfo = {
+  lpTokenAmount: string,
+  lpTokenContract: Contract,
+  token0Contract: Contract,
+  token1Contract: Contract,
+  factoryContract: Contract | null,
+  daoContractAddress: string,
+  isStable: boolean,
+  token0Amount: string,
+  token1Amount: string,
+  priceRatio: string | null,
+  pairSettings: {
+    lpFee: number,
+    daoFee: number,
+    stableLpFee: number,
+    stableDaoFee: number,
+    stableParams: StableParams | null
+  },
+  contractVersion: number,
+}
+
+type BatchPairInfo = {
+  pairContractAddress: string,
+  pairInfo: PairInfo,
+}
+
+type BatchPairsInfo = BatchPairInfo[]
+
+type RewardTokenInfo = {
+  token: Contract,
+  rewardPerSecond: string,
+  rewardPerStakedToken: string,
+  validTo: number,
+  lastUpdated: number,
+}
+
+type StakingInfo = {
+  lpTokenContract: Contract,
+  pairContractAddress: string,
+  adminAuthContract: Contract,
+  queryAuthContract: Contract | null,
+  totalStakedAmount: string,
+  rewardTokens: RewardTokenInfo[],
+}
+
+type BatchSingleStakingInfo = {
+  stakingContractAddress: string,
+  stakingInfo: StakingInfo,
+}
+
+type BatchStakingInfo = BatchSingleStakingInfo[]
+
 export type {
   FactoryPairs,
   PairConfig,
   FactoryConfig,
+  PairInfo,
+  BatchPairsInfo,
+  StakingInfo,
+  BatchSingleStakingInfo,
+  BatchStakingInfo,
 };

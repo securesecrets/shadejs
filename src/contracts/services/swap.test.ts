@@ -8,6 +8,8 @@ import {
   parseFactoryConfig,
   parseFactoryPairs,
   parsePairConfig,
+  parsePairInfo,
+  parseStakingInfo,
   queryFactoryConfig$,
   queryFactoryPairs$,
   queryPairConfig$,
@@ -15,15 +17,21 @@ import {
 import factoryConfigResponse from '~/test/mocks/swap/factoryConfig.json';
 import factoryPairsResponse from '~/test/mocks/swap/factoryPairs.json';
 import pairConfigResponse from '~/test/mocks/swap/pairConfig.json';
+import pairInfoResponse from '~/test/mocks/swap/pairInfoResponse.json';
+import stakingInfoResponse from '~/test/mocks/swap/stakingConfig.json';
 import { of } from 'rxjs';
 import {
   FactoryConfigResponse,
   FactoryPairsResponse,
   PairConfigResponse,
+  PairInfoResponse,
+  StakingConfigResponse,
 } from '~/types/contracts/swap/response';
 import { factoryConfigParsed } from '~/test/mocks/swap/factoryConfigParsed';
 import { factoryPairsParsed } from '~/test/mocks/swap/factoryPairsParsed';
 import { pairConfigParsed } from '~/test/mocks/swap/pairConfigParsed';
+import { pairInfoParsed } from '~/test/mocks/swap/pairInfoParsed';
+import { stakingConfigParsed } from '~/test/mocks/swap/stakingConfigParsed';
 
 const sendSecretClientContractQuery$ = vi.hoisted(() => vi.fn());
 
@@ -61,6 +69,16 @@ test('it can parse the pair config response', () => {
   expect(parsePairConfig(pairConfigResponse as PairConfigResponse)).toStrictEqual(pairConfigParsed);
 });
 
+test('it can parse the pair info response', () => {
+  expect(parsePairInfo(pairInfoResponse as PairInfoResponse)).toStrictEqual(pairInfoParsed);
+});
+
+test('it can parse the staking info response', () => {
+  expect(parseStakingInfo(
+    stakingInfoResponse as StakingConfigResponse,
+  )).toStrictEqual(stakingConfigParsed);
+});
+
 test('it can call the query factory config service', () => {
   sendSecretClientContractQuery$.mockReturnValue(of(factoryConfigResponse));
 
@@ -86,8 +104,6 @@ test('it can call the query factory config service', () => {
   });
 
   expect(output).toStrictEqual(factoryConfigParsed);
-
-  vi.doUnmock('~/client/services/clientServices');
 });
 
 test('it can call the query factory pairs service', () => {
