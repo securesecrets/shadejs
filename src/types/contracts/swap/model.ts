@@ -89,10 +89,37 @@ type BatchPairInfo = {
 
 type BatchPairsInfo = BatchPairInfo[]
 
+type RewardTokenInfo = {
+  token: Contract,
+  rewardPerSecond: string,
+  rewardPerStakedToken: string,
+  validTo: number,
+  lastUpdated: number,
+}
+
+type StakingInfo = {
+  lpTokenContract: Contract,
+  pairContractAddress: string,
+  adminAuthContract: Contract,
+  queryAuthContract: Contract | null,
+  totalStakedAmount: string,
+  rewardTokens: RewardTokenInfo[],
+}
+
+type BatchSingleStakingInfo = {
+  stakingContractAddress: string,
+  stakingInfo: StakingInfo,
+}
+
+type BatchStakingInfo = BatchSingleStakingInfo[]
+
 export type {
   FactoryPairs,
   PairConfig,
   FactoryConfig,
   PairInfo,
   BatchPairsInfo,
+  StakingInfo,
+  BatchSingleStakingInfo,
+  BatchStakingInfo,
 };

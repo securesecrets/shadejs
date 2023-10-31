@@ -6,20 +6,27 @@ import {
 } from 'rxjs';
 import { sendSecretClientContractQuery$ } from '~/client/services/clientServices';
 import {
-  FactoryConfigResponse, FactoryPairsResponse, PairConfigResponse, PairInfoResponse,
+  FactoryConfigResponse,
+  FactoryPairsResponse,
+  PairConfigResponse,
+  PairInfoResponse,
+  StakingConfigResponse,
 } from '~/types/contracts/swap/response';
 import {
   BatchPairsInfo,
+  BatchStakingInfo,
   FactoryConfig,
   FactoryPairs,
   PairConfig,
   PairInfo,
+  StakingInfo,
 } from '~/types/contracts/swap/model';
 import {
   msgQueryFactoryConfig,
   msgQueryFactoryPairs,
   msgQueryPairConfig,
   msgQueryPairInfo,
+  msgQueryStakingConfig,
 } from '~/contracts/definitions/swap';
 import { Contract } from '~/types/contracts/shared';
 import { BatchQuery, BatchQueryParsedResponse } from '~/types/contracts/batchQuery/model';
@@ -196,6 +203,58 @@ const parseBatchQueryPairInfoResponse = (
 }));
 
 /**
+ * parses the single staking info response
+ */
+function parseStakingInfoResponse(response: StakingConfigResponse): StakingInfo {
+  const {
+    lp_token: lpToken,
+    amm_pair: ammPair,
+    admin_auth: adminAuth,
+    query_auth: queryAuth,
+    total_amount_staked: totalAmountStaked,
+    reward_tokens: rewardTokens,
+  } = response;
+
+  return {
+    lpTokenContract: {
+      address: lpToken.address,
+      codeHash: lpToken.code_hash,
+    },
+    pairContractAddress: ammPair,
+    adminAuthContract: {
+      address: adminAuth.address,
+      codeHash: adminAuth.code_hash,
+    },
+    queryAuthContract: queryAuth ? {
+      address: queryAuth.address,
+      codeHash: queryAuth.code_hash,
+    } : null,
+    totalStakedAmount: totalAmountStaked,
+    rewardTokens: rewardTokens.map((token) => ({
+      token: {
+        address: token.token.address,
+        codeHash: token.token.code_hash,
+      },
+      rewardPerSecond: token.reward_per_second,
+      rewardPerStakedToken: token.reward_per_staked_token,
+      validTo: token.valid_to,
+      lastUpdated: token.last_updated,
+    })),
+  };
+}
+
+/**
+ * parses the staking info reponse from a batch query of
+ * multiple staking contracts
+ */
+const parseBatchQueryStakingInfoResponse = (
+  response: BatchQueryParsedResponse,
+): BatchStakingInfo => response.map((item) => ({
+  stakingContractAddress: item.id as string,
+  stakingInfo: parseStakingInfoResponse(item.response),
+}));
+
+/**
  * query the factory config
  */
 const queryFactoryConfig$ = ({
@@ -278,7 +337,7 @@ const queryPairConfig$ = ({
 /**
  * query the pair info for multiple pools at one time
  */
-function queryPairsInfo$({
+function batchQueryPairsInfo$({
   queryRouterContractAddress,
   queryRouterCodeHash,
   lcdEndpoint,
@@ -311,6 +370,42 @@ function queryPairsInfo$({
   );
 }
 
+/**
+ * query the staking info for multiple staking contracts at one time
+ */
+function batchQueryStakingInfo$({
+  queryRouterContractAddress,
+  queryRouterCodeHash,
+  lcdEndpoint,
+  chainId,
+  stakingContracts,
+}:{
+  queryRouterContractAddress: string,
+  queryRouterCodeHash?: string,
+  lcdEndpoint?: string,
+  chainId?: string,
+  stakingContracts: Contract[]
+}) {
+  const queries:BatchQuery[] = stakingContracts.map((contract) => ({
+    id: contract.address,
+    contract: {
+      address: contract.address,
+      codeHash: contract.codeHash,
+    },
+    queryMsg: msgQueryStakingConfig(),
+  }));
+  return batchQuery$({
+    contractAddress: queryRouterContractAddress,
+    codeHash: queryRouterCodeHash,
+    lcdEndpoint,
+    chainId,
+    queries,
+  }).pipe(
+    map(parseBatchQueryStakingInfoResponse),
+    first(),
+  );
+}
+
 export {
   parseFactoryConfig,
   parseFactoryPairs,
@@ -318,5 +413,6 @@ export {
   queryFactoryConfig$,
   queryFactoryPairs$,
   queryPairConfig$,
-  queryPairsInfo$,
+  batchQueryPairsInfo$,
+  batchQueryStakingInfo$,
 };
