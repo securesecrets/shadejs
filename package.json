@@ -26,7 +26,10 @@
     "test": "vitest --run",
     "test:coverage": "vitest run --coverage",
     "test:watch": "vitest watch",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
   },
   "dependencies": {
     "@commitlint/cli": "^17.7.2",
@@ -41,6 +44,7 @@
     "secretjs": "^1.11.1",
     "typescript": "^5.2.2",
     "vite": "^4.4.11",
+    "vitepress": "^1.0.0-rc.24",
     "vitest": "^0.34.6",
     "whatwg-fetch": "^3.6.19"
   },
