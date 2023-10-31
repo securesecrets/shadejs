@@ -1,6 +1,12 @@
 import { Contract } from '~/types/contracts/shared';
 
-type FactoryContract = Contract & { isEnabled: boolean }
+type FactoryPair = {
+  pairContract: Contract,
+  token0Contract: Contract,
+  token1Contract: Contract,
+  isStable: boolean,
+  isEnabled: boolean
+}
 
 type ContractInstantiationInfo = {
   codeHash: string,
@@ -22,7 +28,7 @@ type FactoryConfig = {
 }
 
 type FactoryPairs = {
-  pairs: FactoryContract[],
+  pairs: FactoryPair[],
   startIndex: number,
   endIndex: number,
 }

@@ -83,8 +83,19 @@ function parseFactoryPairs({
   const { amm_pairs: pairs } = response.list_a_m_m_pairs;
 
   const pairsFormatted = pairs.map((pair) => ({
-    address: pair.address,
-    codeHash: pair.code_hash,
+    pairContract: {
+      address: pair.address,
+      codeHash: pair.code_hash,
+    },
+    token0Contract: {
+      address: pair.pair[0].custom_token.contract_addr,
+      codeHash: pair.pair[0].custom_token.token_code_hash,
+    },
+    token1Contract: {
+      address: pair.pair[1].custom_token.contract_addr,
+      codeHash: pair.pair[1].custom_token.token_code_hash,
+    },
+    isStable: pair.pair[2],
     isEnabled: pair.enabled,
   }));
 
