@@ -141,7 +141,7 @@ function parsePairConfig(response: PairConfigResponse): PairConfig {
 /**
  * parses the single pair info response
  */
-function parsePairInfoResponse(
+function parsePairInfo(
   response: PairInfoResponse,
 ): PairInfo {
   const { get_pair_info: pairInfo } = response;
@@ -199,13 +199,13 @@ const parseBatchQueryPairInfoResponse = (
   response: BatchQueryParsedResponse,
 ): BatchPairsInfo => response.map((item) => ({
   pairContractAddress: item.id as string,
-  pairInfo: parsePairInfoResponse(item.response),
+  pairInfo: parsePairInfo(item.response),
 }));
 
 /**
  * parses the single staking info response
  */
-function parseStakingInfoResponse(response: StakingConfigResponse): StakingInfo {
+function parseStakingInfo(response: StakingConfigResponse): StakingInfo {
   const {
     lp_token: lpToken,
     amm_pair: ammPair,
@@ -251,7 +251,7 @@ const parseBatchQueryStakingInfoResponse = (
   response: BatchQueryParsedResponse,
 ): BatchStakingInfo => response.map((item) => ({
   stakingContractAddress: item.id as string,
-  stakingInfo: parseStakingInfoResponse(item.response),
+  stakingInfo: parseStakingInfo(item.response),
 }));
 
 /**
@@ -410,6 +410,8 @@ export {
   parseFactoryConfig,
   parseFactoryPairs,
   parsePairConfig,
+  parsePairInfo,
+  parseStakingInfo,
   queryFactoryConfig$,
   queryFactoryPairs$,
   queryPairConfig$,
