@@ -67,16 +67,21 @@ type StableParams = {
 }
 
 type PairInfo = {
+  lpTokenAmount: string,
+  lpTokenContract: Contract,
+  token0Contract: Contract,
+  token1Contract: Contract,
+  factoryContract: Contract | null,
+  daoContractAddress: string,
+  isStable: boolean,
   token0Amount: string,
   token1Amount: string,
-  lpTokenAmount: string,
   priceRatio: string | null,
   pairSettings: {
     lpFee: number,
     daoFee: number,
     stableLpFee: number,
     stableDaoFee: number,
-    daoContractAddress: string,
     stableParams: StableParams | null
   },
   contractVersion: number,

@@ -1,6 +1,24 @@
 import { PairInfo } from '~/types/contracts/swap/model';
 
 const pairInfoParsed: PairInfo = {
+  token0Contract: {
+    address: 'secret14706vxakdzkz9a36872cs62vpl5qd84kpwvpew',
+    codeHash: '638a3e1d50175fbcb8373cf801565283e3eb23d88a9b7b7f99fcc5eb1e6b561e',
+  },
+  token1Contract: {
+    address: 'secret1eurddal3m0tphtapad9awgzcuxwz8ptrdx7h4n',
+    codeHash: '638a3e1d50175fbcb8373cf801565283e3eb23d88a9b7b7f99fcc5eb1e6b561e',
+  },
+  lpTokenContract: {
+    address: 'secret17nmgfelgmmzdnzpfgr0g09kfjyk6sn5l9s0m2x',
+    codeHash: 'b0c2048d28a0ca0b92274549b336703622ecb24a8c21f417e70c03aa620fcd7b',
+  },
+  factoryContract: {
+    address: 'secret1ja0hcwvy76grqkpgwznxukgd7t8a8anmmx05pp',
+    codeHash: '2ad4ed2a4a45fd6de3daca9541ba82c26bb66c76d1c3540de39b509abd26538e',
+  },
+  daoContractAddress: 'secret1g86l6j393vtzd9jmmxu57mx4q8y9gza0tncjpp',
+  isStable: true,
   token0Amount: '3218142110921700343525',
   token1Amount: '6366867216411002795778',
   lpTokenAmount: '4783477681443035000237',
@@ -10,7 +28,6 @@ const pairInfoParsed: PairInfo = {
     daoFee: 0.0005,
     stableLpFee: 0.0005,
     stableDaoFee: 0.0005,
-    daoContractAddress: 'secret1g86l6j393vtzd9jmmxu57mx4q8y9gza0tncjpp',
     stableParams: {
       alpha: '150',
       gamma1: '6',

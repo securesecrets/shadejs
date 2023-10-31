@@ -151,6 +151,24 @@ function parsePairInfo(
   } = pairInfo;
 
   return {
+    token0Contract: {
+      address: pairInfo.pair[0].custom_token.contract_addr,
+      codeHash: pairInfo.pair[0].custom_token.token_code_hash,
+    },
+    token1Contract: {
+      address: pairInfo.pair[1].custom_token.contract_addr,
+      codeHash: pairInfo.pair[1].custom_token.token_code_hash,
+    },
+    lpTokenContract: {
+      address: pairInfo.liquidity_token.address,
+      codeHash: pairInfo.liquidity_token.code_hash,
+    },
+    factoryContract: pairInfo.factory ? {
+      address: pairInfo.factory.address,
+      codeHash: pairInfo.factory.code_hash,
+    } : null,
+    daoContractAddress: fees.shade_dao_address,
+    isStable: pairInfo.pair[2],
     token0Amount: pairInfo.amount_0,
     token1Amount: pairInfo.amount_1,
     lpTokenAmount: pairInfo.total_liquidity,
@@ -160,7 +178,7 @@ function parsePairInfo(
       daoFee: fees.shade_dao_fee.nom / fees.shade_dao_fee.denom,
       stableLpFee: fees.stable_lp_fee.nom / fees.stable_lp_fee.denom,
       stableDaoFee: fees.stable_shade_dao_fee.nom / fees.stable_shade_dao_fee.denom,
-      daoContractAddress: fees.shade_dao_address,
+
       stableParams: stableInfo ? {
         alpha: stableInfo.stable_params.a,
         gamma1: stableInfo.stable_params.gamma1,
