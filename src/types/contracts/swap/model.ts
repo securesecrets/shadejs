@@ -1,7 +1,4 @@
-type Contract = {
-  address: string,
-  codeHash: string,
-};
+import { Contract } from '~/types/contracts/shared';
 
 type FactoryContract = Contract & { isEnabled: boolean }
 
@@ -45,8 +42,57 @@ type PairConfig = {
   fee: CustomFee | null,
 }
 
+type CustomIterationControls = {
+  epsilon: string,
+  maxIteratorNewton: number,
+  maxIteratorBisect: number,
+}
+
+type StableTokenData = {
+  oracleKey: string,
+  decimals: number,
+}
+
+type StableParams = {
+  alpha: string,
+  gamma1: string,
+  gamma2: string,
+  oracle: Contract,
+  token0Data: StableTokenData,
+  token1Data: StableTokenData,
+  minTradeSizeXForY: string,
+  minTradeSizeYForX: string,
+  maxPriceImpactAllowed: string,
+  customIterationControls: CustomIterationControls | null,
+}
+
+type PairInfo = {
+  token0Amount: string,
+  token1Amount: string,
+  lpTokenAmount: string,
+  priceRatio: string | null,
+  pairSettings: {
+    lpFee: number,
+    daoFee: number,
+    stableLpFee: number,
+    stableDaoFee: number,
+    daoContractAddress: string,
+    stableParams: StableParams | null
+  },
+  contractVersion: number,
+}
+
+type BatchPairInfo = {
+  pairContractAddress: string,
+  pairInfo: PairInfo,
+}
+
+type BatchPairsInfo = BatchPairInfo[]
+
 export type {
   FactoryPairs,
   PairConfig,
   FactoryConfig,
+  PairInfo,
+  BatchPairsInfo,
 };

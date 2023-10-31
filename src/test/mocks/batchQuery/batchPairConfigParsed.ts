@@ -1,4 +1,4 @@
-import { BatchQueryParsedResponse } from '~/types/contracts/bathQuery/model';
+import { BatchQueryParsedResponse } from '~/types/contracts/batchQuery/model';
 
 const batchPairConfigParsed: BatchQueryParsedResponse = [{
   id: 1,

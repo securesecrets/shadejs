@@ -1,5 +1,5 @@
 import { encodeJsonToB64 } from '~/lib/utils';
-import { BatchQuery } from '~/types/contracts/bathQuery/model';
+import { BatchQuery } from '~/types/contracts/batchQuery/model';
 
 /**
  * batch query multiple contracts/messages at one time

@@ -5,17 +5,25 @@ import {
   map,
 } from 'rxjs';
 import { sendSecretClientContractQuery$ } from '~/client/services/clientServices';
-import { FactoryConfigResponse, FactoryPairsResponse, PairConfigResponse } from '~/types/contracts/swap/response';
 import {
+  FactoryConfigResponse, FactoryPairsResponse, PairConfigResponse, PairInfoResponse,
+} from '~/types/contracts/swap/response';
+import {
+  BatchPairsInfo,
   FactoryConfig,
   FactoryPairs,
   PairConfig,
+  PairInfo,
 } from '~/types/contracts/swap/model';
 import {
   msgQueryFactoryConfig,
   msgQueryFactoryPairs,
   msgQueryPairConfig,
+  msgQueryPairInfo,
 } from '~/contracts/definitions/swap';
+import { Contract } from '~/types/contracts/shared';
+import { BatchQuery, BatchQueryParsedResponse } from '~/types/contracts/batchQuery/model';
+import { batchQuery$ } from './batchQuery';
 
 /**
  * parses the factory config to a usable data model
@@ -124,6 +132,70 @@ function parsePairConfig(response: PairConfigResponse): PairConfig {
 }
 
 /**
+ * parses the single pair info response
+ */
+function parsePairInfoResponse(
+  response: PairInfoResponse,
+): PairInfo {
+  const { get_pair_info: pairInfo } = response;
+  const {
+    fee_info: fees,
+    stable_info: stableInfo,
+  } = pairInfo;
+
+  return {
+    token0Amount: pairInfo.amount_0,
+    token1Amount: pairInfo.amount_1,
+    lpTokenAmount: pairInfo.total_liquidity,
+    priceRatio: stableInfo ? stableInfo.p : null,
+    pairSettings: {
+      lpFee: fees.lp_fee.nom / fees.lp_fee.denom,
+      daoFee: fees.shade_dao_fee.nom / fees.shade_dao_fee.denom,
+      stableLpFee: fees.stable_lp_fee.nom / fees.stable_lp_fee.denom,
+      stableDaoFee: fees.stable_shade_dao_fee.nom / fees.stable_shade_dao_fee.denom,
+      daoContractAddress: fees.shade_dao_address,
+      stableParams: stableInfo ? {
+        alpha: stableInfo.stable_params.a,
+        gamma1: stableInfo.stable_params.gamma1,
+        gamma2: stableInfo.stable_params.gamma2,
+        oracle: {
+          address: stableInfo.stable_params.oracle.address,
+          codeHash: stableInfo.stable_params.oracle.code_hash,
+        },
+        token0Data: {
+          oracleKey: stableInfo.stable_token0_data.oracle_key,
+          decimals: stableInfo.stable_token0_data.decimals,
+        },
+        token1Data: {
+          oracleKey: stableInfo.stable_token1_data.oracle_key,
+          decimals: stableInfo.stable_token1_data.decimals,
+        },
+        minTradeSizeXForY: stableInfo.stable_params.min_trade_size_x_for_y,
+        minTradeSizeYForX: stableInfo.stable_params.min_trade_size_y_for_x,
+        maxPriceImpactAllowed: stableInfo.stable_params.max_price_impact_allowed,
+        customIterationControls: stableInfo.stable_params.custom_iteration_controls ? {
+          epsilon: stableInfo.stable_params.custom_iteration_controls.epsilon,
+          maxIteratorNewton: stableInfo.stable_params.custom_iteration_controls.max_iter_newton,
+          maxIteratorBisect: stableInfo.stable_params.custom_iteration_controls.max_iter_bisect,
+        } : null,
+      } : null,
+    },
+    contractVersion: pairInfo.contract_version,
+  };
+}
+
+/**
+ * parses the pair info reponse from a batch query of
+ * multiple pair contracts
+ */
+const parseBatchQueryPairInfoResponse = (
+  response: BatchQueryParsedResponse,
+): BatchPairsInfo => response.map((item) => ({
+  pairContractAddress: item.id as string,
+  pairInfo: parsePairInfoResponse(item.response),
+}));
+
+/**
  * query the factory config
  */
 const queryFactoryConfig$ = ({
@@ -203,6 +275,42 @@ const queryPairConfig$ = ({
   first(),
 );
 
+/**
+ * query the pair info for multiple pools at one time
+ */
+function queryPairsInfo$({
+  queryRouterContractAddress,
+  queryRouterCodeHash,
+  lcdEndpoint,
+  chainId,
+  pairsContracts,
+}:{
+  queryRouterContractAddress: string,
+  queryRouterCodeHash?: string,
+  lcdEndpoint?: string,
+  chainId?: string,
+  pairsContracts: Contract[]
+}) {
+  const queries:BatchQuery[] = pairsContracts.map((contract) => ({
+    id: contract.address,
+    contract: {
+      address: contract.address,
+      codeHash: contract.codeHash,
+    },
+    queryMsg: msgQueryPairInfo(),
+  }));
+  return batchQuery$({
+    contractAddress: queryRouterContractAddress,
+    codeHash: queryRouterCodeHash,
+    lcdEndpoint,
+    chainId,
+    queries,
+  }).pipe(
+    map(parseBatchQueryPairInfoResponse),
+    first(),
+  );
+}
+
 export {
   parseFactoryConfig,
   parseFactoryPairs,
@@ -210,4 +318,5 @@ export {
   queryFactoryConfig$,
   queryFactoryPairs$,
   queryPairConfig$,
+  queryPairsInfo$,
 };

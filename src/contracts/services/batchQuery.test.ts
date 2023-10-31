@@ -8,7 +8,7 @@ import {
 import { of } from 'rxjs';
 import batchPairConfigResponse from '~/test/mocks/batchQuery/batchPairConfigResponse.json';
 import { batchPairConfigParsed } from '~/test/mocks/batchQuery/batchPairConfigParsed';
-import { BatchQuery } from '~/types/contracts/bathQuery/model';
+import { BatchQuery } from '~/types/contracts/batchQuery/model';
 import { msgBatchQuery } from '~/contracts/definitions/batchQuery';
 import {
   parseBatchQuery,

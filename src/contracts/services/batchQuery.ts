@@ -10,8 +10,8 @@ import {
   BatchQuery,
   BatchQueryParsedResponseItem,
   BatchQueryParsedResponse,
-} from '~/types/contracts/bathQuery/model';
-import { BatchQueryResponse } from '~/types/contracts/bathQuery/response';
+} from '~/types/contracts/batchQuery/model';
+import { BatchQueryResponse } from '~/types/contracts/batchQuery/response';
 import { decodeB64ToJson } from '~/lib/utils';
 
 /**
