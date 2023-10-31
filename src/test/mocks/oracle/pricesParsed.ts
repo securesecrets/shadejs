@@ -1,8 +1,6 @@
-import BigNumber from 'bignumber.js';
-
 const priceParsed = {
   oracleKey: 'BTC',
-  rate: BigNumber('27917.2071556'),
+  rate: '27917207155600000000000',
   lastUpdatedBase: 1696644063,
   lastUpdatedQuote: 18446744073709552000,
 };
@@ -10,13 +8,13 @@ const priceParsed = {
 const pricesParsed = {
   BTC: {
     oracleKey: 'BTC',
-    rate: BigNumber('27917.2071556'),
+    rate: '27917207155600000000000',
     lastUpdatedBase: 1696644063,
     lastUpdatedQuote: 18446744073709552000,
   },
   ETH: {
     oracleKey: 'ETH',
-    rate: BigNumber('1644.0836829'),
+    rate: '1644083682900000000000',
     lastUpdatedBase: 1696644063,
     lastUpdatedQuote: 18446744073709552000,
   },
