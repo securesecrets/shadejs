@@ -2,6 +2,8 @@ import BigNumber from 'bignumber.js';
 
 const encodeJsonToB64 = (toEncode:any) : string => Buffer.from(JSON.stringify(toEncode), 'utf8').toString('base64');
 
+const decodeB64ToJson = (encodedData: string) => JSON.parse(Buffer.from(encodedData, 'base64').toString('utf8'));
+
 /**
  * Convert from uDenom to the human readable equivalent as BigNumber type
  */
@@ -33,4 +35,5 @@ export {
   convertCoinToUDenom,
   convertCoinFromUDenom,
   encodeJsonToB64,
+  decodeB64ToJson,
 };
