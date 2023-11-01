@@ -8,7 +8,7 @@ This page demonstrates how to query the ShadeSwap contracts
 **input**
 
 ```js
-async function queryFactoryConfig = ({
+async function queryFactoryConfig({
   contractAddress,
   codeHash,
   lcdEndpoint,
@@ -99,7 +99,7 @@ query the list of pairs registered in the factory contract
 **input**
 
 ```js
-async function queryFactoryPairs = ({
+async function queryFactoryPairs({
   contractAddress,
   codeHash,
   startingIndex,
@@ -145,7 +145,7 @@ type FactoryPair = {
 **example use**
 
 ```js
-const output = await queryFactoryPairs = ({
+const output = await queryFactoryPairs({
   contractAddress: 'secret1ja0hcwvy76grqkpgwznxukgd7t8a8anmmx05pp',
   codeHash: '2ad4ed2a4a45fd6de3daca9541ba82c26bb66c76d1c3540de39b509abd26538e'
   startingIndex: 0,
@@ -199,7 +199,7 @@ query the configuration of the pair
 **input**
 
 ```js
-async function queryPairConfig = ({
+async function queryPairConfig({
   contractAddress,
   codeHash,
   lcdEndpoint,

@@ -10,6 +10,7 @@ import {
   switchMap,
   first,
   map,
+  lastValueFrom,
 } from 'rxjs';
 import { sendSecretClientContractQuery$ } from '~/client/services/clientServices';
 import { getActiveQueryClient$ } from '~/client';
@@ -67,6 +68,31 @@ const queryPrice$ = ({
 );
 
 /**
+ * query the price of an asset using the oracle key
+ */
+async function queryPrice({
+  contractAddress,
+  codeHash,
+  oracleKey,
+  lcdEndpoint,
+  chainId,
+}:{
+  contractAddress: string,
+  codeHash?: string,
+  oracleKey: string,
+  lcdEndpoint?: string,
+  chainId?: string,
+}) {
+  return lastValueFrom(queryPrice$({
+    contractAddress,
+    codeHash,
+    oracleKey,
+    lcdEndpoint,
+    chainId,
+  }));
+}
+
+/**
  * query multiple asset prices using oracle keys
  */
 const queryPrices$ = ({
@@ -92,9 +118,36 @@ const queryPrices$ = ({
   first(),
 );
 
+/**
+ * query multiple asset prices using oracle keys
+ */
+async function queryPrices({
+  contractAddress,
+  codeHash,
+  oracleKeys,
+  lcdEndpoint,
+  chainId,
+}:{
+  contractAddress: string,
+  codeHash?: string,
+  oracleKeys: string[],
+  lcdEndpoint?: string,
+  chainId?: string,
+}) {
+  return lastValueFrom(queryPrices$({
+    contractAddress,
+    codeHash,
+    oracleKeys,
+    lcdEndpoint,
+    chainId,
+  }));
+}
+
 export {
   parsePriceFromContract,
   parsePricesFromContract,
   queryPrice$,
   queryPrices$,
+  queryPrice,
+  queryPrices,
 };
