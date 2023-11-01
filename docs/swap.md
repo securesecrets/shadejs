@@ -8,7 +8,7 @@ This page demonstrates how to query the ShadeSwap contracts
 **input**
 
 ```js
-function queryFactoryConfig$ = ({
+async function queryFactoryConfig = ({
   contractAddress,
   codeHash,
   lcdEndpoint,
@@ -18,7 +18,7 @@ function queryFactoryConfig$ = ({
   codeHash?: string,
   lcdEndpoint?: string,
   chainId?: string, // defaults to mainnet
-}): Observable<FactoryConfig> 
+}): Promise<FactoryConfig> 
 ```
 ::: warning
 It is recommended that you provide your own LCD endpoint, although we do provide a default mainnet option. Performance of the default endpoint is not guaranteed.
@@ -58,12 +58,11 @@ type ContractInstantiationInfo = {
 **example use**
 
 ```js
-queryFactoryConfig$ = ({
+const output = await queryFactoryConfig = ({
   contractAddress: 'secret1ja0hcwvy76grqkpgwznxukgd7t8a8anmmx05pp',
   codeHash: '2ad4ed2a4a45fd6de3daca9541ba82c26bb66c76d1c3540de39b509abd26538e' 
-}).subscribe({
-  next: (data) => { console.log(data) }
-}) 
+})
+console.log(output) 
 ```
 ***console***
 ```md
@@ -100,7 +99,7 @@ query the list of pairs registered in the factory contract
 **input**
 
 ```js
-function queryFactoryPairs$ = ({
+async function queryFactoryPairs = ({
   contractAddress,
   codeHash,
   startingIndex,
@@ -114,7 +113,7 @@ function queryFactoryPairs$ = ({
   limit: number,
   lcdEndpoint?: string,
   chainId?: string,
-}): Observable<FactoryPairs>
+}): Promise<FactoryPairs>
 ```
 
 **output**
@@ -146,14 +145,14 @@ type FactoryPair = {
 **example use**
 
 ```js
-queryFactoryPairs$ = ({
+const output = await queryFactoryPairs$ = ({
   contractAddress: 'secret1ja0hcwvy76grqkpgwznxukgd7t8a8anmmx05pp',
   codeHash: '2ad4ed2a4a45fd6de3daca9541ba82c26bb66c76d1c3540de39b509abd26538e'
   startingIndex: 0,
   limit: 100, // determines number of records to return
-}).subscribe({
-  next: (data) => { console.log(data) }
-}) 
+})
+
+console.log(output)
 ```
 ***console***
 ```md
@@ -200,7 +199,7 @@ query the configuration of the pair
 **input**
 
 ```js
-function queryPairConfig$ = ({
+async function queryPairConfig = ({
   contractAddress,
   codeHash,
   lcdEndpoint,
@@ -210,7 +209,7 @@ function queryPairConfig$ = ({
   codeHash?: string,
   lcdEndpoint?: string,
   chainId?: string,
-}): Observable<PairConfig>
+}): Promise<PairConfig>
 ```
 
 **output**
@@ -244,12 +243,12 @@ type CustomFee = {
 **example use**
 
 ```js
-queryPairConfig$= ({
+const output = await queryPairConfig({
   contractAddress: '[PAIR_CONTRACT_ADDRESS]',
   codeHash: '[PAIR_CODE_HASH]'
-}).subscribe({
-  next: (data) => { console.log(data) }
-}) 
+})
+
+console.log(output)
 ```
 ***console***
 ```md
@@ -291,7 +290,7 @@ This query uses a smart contract batch query router to allow you to query many p
 **input**
 
 ```js
-function batchQueryPairsInfo$({
+async function batchQueryPairsInfo({
   queryRouterContractAddress,
   queryRouterCodeHash,
   lcdEndpoint,
@@ -303,7 +302,7 @@ function batchQueryPairsInfo$({
   lcdEndpoint?: string,
   chainId?: string,
   pairsContracts: Contract[]
-}): Observable<BatchPairInfo>
+}): Promise<BatchPairInfo>
 ```
 
 **output**
@@ -373,7 +372,7 @@ type StableTokenData = {
 **example use**
 
 ```js
-batchQueryPairsInfo$= ({
+const output = await batchQueryPairsInfo({
   queryRouterContractAddress: '[QUERY_ROUTER_CONTRACT_ADDRESS]',
   queryRouterCodeHash: '[QUERY_ROUTER_CODE_HASH]',
   pairsContracts: [{
@@ -384,9 +383,8 @@ batchQueryPairsInfo$= ({
     address: '[PAIR_2_ADDRESS]',
     codeHash: '[PAIR_2_CODE_HASH]',
   }]
-}).subscribe({
-  next: (data) => { console.log(data) }
-}) 
+})
+console.log(output)
 ```
 ***console***
 ```md
@@ -400,7 +398,7 @@ Query the staking info for multiple pairs
 **input**
 
 ```js
-function batchQueryStakingInfo$({
+async function batchQueryStakingInfo({
   queryRouterContractAddress,
   queryRouterCodeHash,
   lcdEndpoint,
@@ -412,7 +410,7 @@ function batchQueryStakingInfo$({
   lcdEndpoint?: string,
   chainId?: string,
   stakingContracts: Contract[]
-}): Observable<BatchStakingInfo>
+}): Promise<BatchStakingInfo>
 ```
 ::: tip
 This is a reminder that the staking contract is separate from the pairs contract. Be sure to input the staking contracts in this query.
@@ -458,7 +456,7 @@ type StakingInfo = {
 **example use**
 
 ```js
-batchQueryStakingInfo$({
+const output = await batchQueryStakingInfo({
   queryRouterContractAddress: '[QUERY_ROUTER_CONTRACT_ADDRESS]',
   queryRouterCodeHash: '[QUERY_ROUTER_CODE_HASH]',
   stakingContracts: [{
@@ -469,9 +467,8 @@ batchQueryStakingInfo$({
     address: '[STAKING_2_ADDRESS]',
     codeHash: '[STAKING_2_CODE_HASH]',
   }]
-}).subscribe({
-  next: (data) => { console.log(data) }
-}) 
+})
+console.log(output)
 ```
 ***console***
 ```md

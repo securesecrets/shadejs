@@ -3,6 +3,7 @@ import {
   switchMap,
   first,
   map,
+  lastValueFrom,
 } from 'rxjs';
 import { sendSecretClientContractQuery$ } from '~/client/services/clientServices';
 import {
@@ -308,6 +309,28 @@ const queryFactoryConfig$ = ({
 );
 
 /**
+ * query the factory config
+ */
+async function queryFactoryConfig({
+  contractAddress,
+  codeHash,
+  lcdEndpoint,
+  chainId,
+}:{
+  contractAddress: string,
+  codeHash?: string,
+  lcdEndpoint?: string,
+  chainId?: string,
+}) {
+  return lastValueFrom(queryFactoryConfig$({
+    contractAddress,
+    codeHash,
+    lcdEndpoint,
+    chainId,
+  }));
+}
+
+/**
  * query the list of pairs registered in the factory contract
  */
 const queryFactoryPairs$ = ({
@@ -340,6 +363,34 @@ const queryFactoryPairs$ = ({
 );
 
 /**
+ * query the list of pairs registered in the factory contract
+ */
+async function queryFactoryPairs({
+  contractAddress,
+  codeHash,
+  startingIndex,
+  limit,
+  lcdEndpoint,
+  chainId,
+}:{
+  contractAddress: string,
+  codeHash?: string,
+  startingIndex: number,
+  limit: number,
+  lcdEndpoint?: string,
+  chainId?: string,
+}) {
+  return lastValueFrom(queryFactoryPairs$({
+    contractAddress,
+    codeHash,
+    startingIndex,
+    limit,
+    lcdEndpoint,
+    chainId,
+  }));
+}
+
+/**
  * query the config for a pair
  */
 const queryPairConfig$ = ({
@@ -362,6 +413,28 @@ const queryPairConfig$ = ({
   map((response) => parsePairConfig(response as PairConfigResponse)),
   first(),
 );
+
+/**
+ * query the config for a pair
+ */
+async function queryPairConfig({
+  contractAddress,
+  codeHash,
+  lcdEndpoint,
+  chainId,
+}:{
+  contractAddress: string,
+  codeHash?: string,
+  lcdEndpoint?: string,
+  chainId?: string,
+}) {
+  return lastValueFrom(queryPairConfig$({
+    contractAddress,
+    codeHash,
+    lcdEndpoint,
+    chainId,
+  }));
+}
 
 /**
  * query the pair info for multiple pools at one time
@@ -400,6 +473,31 @@ function batchQueryPairsInfo$({
 }
 
 /**
+ * query the pair info for multiple pools at one time
+ */
+async function batchQueryPairsInfo({
+  queryRouterContractAddress,
+  queryRouterCodeHash,
+  lcdEndpoint,
+  chainId,
+  pairsContracts,
+}:{
+  queryRouterContractAddress: string,
+  queryRouterCodeHash?: string,
+  lcdEndpoint?: string,
+  chainId?: string,
+  pairsContracts: Contract[]
+}) {
+  return lastValueFrom(batchQueryPairsInfo$({
+    queryRouterContractAddress,
+    queryRouterCodeHash,
+    lcdEndpoint,
+    chainId,
+    pairsContracts,
+  }));
+}
+
+/**
  * query the staking info for multiple staking contracts at one time
  */
 function batchQueryStakingInfo$({
@@ -435,6 +533,31 @@ function batchQueryStakingInfo$({
   );
 }
 
+/**
+ * query the staking info for multiple staking contracts at one time
+ */
+async function batchQueryStakingInfo({
+  queryRouterContractAddress,
+  queryRouterCodeHash,
+  lcdEndpoint,
+  chainId,
+  stakingContracts,
+}:{
+  queryRouterContractAddress: string,
+  queryRouterCodeHash?: string,
+  lcdEndpoint?: string,
+  chainId?: string,
+  stakingContracts: Contract[]
+}) {
+  return lastValueFrom(batchQueryStakingInfo$({
+    queryRouterContractAddress,
+    queryRouterCodeHash,
+    lcdEndpoint,
+    chainId,
+    stakingContracts,
+  }));
+}
+
 export {
   parseFactoryConfig,
   parseFactoryPairs,
@@ -442,8 +565,13 @@ export {
   parsePairInfo,
   parseStakingInfo,
   queryFactoryConfig$,
+  queryFactoryConfig,
   queryFactoryPairs$,
+  queryFactoryPairs,
   queryPairConfig$,
+  queryPairConfig,
   batchQueryPairsInfo$,
+  batchQueryPairsInfo,
   batchQueryStakingInfo$,
+  batchQueryStakingInfo,
 };
