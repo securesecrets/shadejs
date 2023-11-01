@@ -1,6 +1,6 @@
 # Swap Examples
 
-This page demonstrates some of the built-in markdown extensions provided by VitePress.
+This page demonstrates how to query the ShadeSwap contracts
 
 
 ## Factory Config
