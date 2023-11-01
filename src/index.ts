@@ -6,7 +6,10 @@ import {
   queryPrice,
   queryPrices,
 } from '~/contracts/services/oracle';
-import { batchQuery$ } from '~/contracts/services/batchQuery';
+import {
+  batchQuery$,
+  batchQuery,
+} from '~/contracts/services/batchQuery';
 import {
   queryFactoryConfig$,
   queryFactoryPairs$,
@@ -29,6 +32,7 @@ export {
   queryPrice,
   queryPrices,
   batchQuery$,
+  batchQuery,
   queryFactoryConfig$,
   queryFactoryPairs$,
   queryPairConfig$,

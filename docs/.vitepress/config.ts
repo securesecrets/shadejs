@@ -17,6 +17,7 @@ export default defineConfig({
         items: [
           { text: 'Swap', link: '/swap' },
           { text: 'Oracle', link: '/oracle' },
+          { text: 'Batch Query', link: '/batch-query' },
         ]
       }
     ],

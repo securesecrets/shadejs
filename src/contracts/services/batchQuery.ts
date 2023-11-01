@@ -2,6 +2,7 @@ import {
   switchMap,
   first,
   map,
+  lastValueFrom,
 } from 'rxjs';
 import { sendSecretClientContractQuery$ } from '~/client/services/clientServices';
 import { getActiveQueryClient$ } from '~/client';
@@ -51,7 +52,33 @@ const batchQuery$ = ({
   first(),
 );
 
+/**
+ * batch query of multiple contracts/message at a time
+ */
+async function batchQuery({
+  contractAddress,
+  codeHash,
+  lcdEndpoint,
+  chainId,
+  queries,
+}:{
+  contractAddress: string,
+  codeHash?: string,
+  lcdEndpoint?: string,
+  chainId?: string,
+  queries: BatchQuery[]
+}) {
+  return lastValueFrom(batchQuery$({
+    contractAddress,
+    codeHash,
+    lcdEndpoint,
+    chainId,
+    queries,
+  }));
+}
+
 export {
   parseBatchQuery,
   batchQuery$,
+  batchQuery,
 };

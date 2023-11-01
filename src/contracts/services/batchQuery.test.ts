@@ -13,7 +13,10 @@ import { msgBatchQuery } from '~/contracts/definitions/batchQuery';
 import {
   parseBatchQuery,
   batchQuery$,
+  batchQuery,
 } from './batchQuery';
+
+const sendSecretClientContractQuery$ = vi.hoisted(() => vi.fn());
 
 beforeAll(() => {
   vi.mock('~/contracts/definitions/batchQuery', () => ({
@@ -25,7 +28,7 @@ beforeAll(() => {
   }));
 
   vi.mock('~/client/services/clientServices', () => ({
-    sendSecretClientContractQuery$: vi.fn(() => of(batchPairConfigResponse)),
+    sendSecretClientContractQuery$,
   }));
 });
 
@@ -39,7 +42,7 @@ test('it can parse the batch query response', () => {
   )).toStrictEqual(batchPairConfigParsed);
 });
 
-test('it can call the batch query service', () => {
+test('it can call the batch query service', async () => {
   const input = {
     contractAddress: 'CONTRACT_ADDRESS',
     codeHash: 'CODE_HASH',
@@ -47,6 +50,8 @@ test('it can call the batch query service', () => {
     chainId: 'CHAIN_ID',
     queries: ['BATCH_QUERY' as unknown as BatchQuery],
   };
+  // observables function
+  sendSecretClientContractQuery$.mockReturnValueOnce(of(batchPairConfigResponse));
 
   let output;
   batchQuery$(input).subscribe({
@@ -55,7 +60,12 @@ test('it can call the batch query service', () => {
     },
   });
 
-  expect(msgBatchQuery).toHaveBeenCalledWith(input.queries);
-
+  expect(msgBatchQuery).toHaveBeenNthCalledWith(1, input.queries);
   expect(output).toStrictEqual(batchPairConfigParsed);
+
+  // async/await function
+  sendSecretClientContractQuery$.mockReturnValueOnce(of(batchPairConfigResponse));
+  const response = await batchQuery(input);
+  expect(msgBatchQuery).toHaveBeenNthCalledWith(2, input.queries);
+  expect(response).toStrictEqual(batchPairConfigParsed);
 });
