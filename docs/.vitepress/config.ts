@@ -18,6 +18,7 @@ export default defineConfig({
           { text: 'Swap', link: '/swap' },
           { text: 'Oracle', link: '/oracle' },
           { text: 'Batch Query', link: '/batch-query' },
+          { text: 'Snip20', link: '/snip20' },
         ]
       }
     ],

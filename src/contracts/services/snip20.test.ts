@@ -1,6 +1,7 @@
 import {
   parseTokenInfo,
   querySnip20TokenInfo$,
+  querySnip20TokenInfo,
 } from '~/contracts/services/snip20';
 import {
   test,
@@ -38,9 +39,7 @@ test('it can parse the response snip20 token info query', () => {
   )).toStrictEqual(tokenInfoParsed);
 });
 
-test('it can call the snip20 token info query', () => {
-  sendSecretClientContractQuery$.mockReturnValue(of(tokenInfoResponse));
-
+test('it can call the snip20 token info query', async () => {
   const input = {
     snip20ContractAddress: 'CONTRACT_ADDRESS',
     snip20CodeHash: 'CODE_HASH',
@@ -48,6 +47,8 @@ test('it can call the snip20 token info query', () => {
     chainId: 'CHAIN_ID',
   };
 
+  // observable function
+  sendSecretClientContractQuery$.mockReturnValueOnce(of(tokenInfoResponse));
   let output;
   querySnip20TokenInfo$(input).subscribe({
     next: (response) => {
@@ -63,4 +64,17 @@ test('it can call the snip20 token info query', () => {
   });
 
   expect(output).toStrictEqual(tokenInfoParsed);
+
+  // async/await function
+  sendSecretClientContractQuery$.mockReturnValueOnce(of(tokenInfoResponse));
+  const response = await querySnip20TokenInfo(input);
+
+  expect(sendSecretClientContractQuery$).toHaveBeenCalledWith({
+    queryMsg: 'TOKEN_INFO_MSG',
+    client: 'CLIENT',
+    contractAddress: input.snip20ContractAddress,
+    codeHash: input.snip20CodeHash,
+  });
+
+  expect(response).toStrictEqual(tokenInfoParsed);
 });
