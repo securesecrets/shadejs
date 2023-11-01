@@ -10,6 +10,8 @@ import {
   parsePricesFromContract,
   queryPrice$,
   queryPrices$,
+  queryPrice,
+  queryPrices,
 } from '~/contracts/services/oracle';
 import priceResponse from '~/test/mocks/oracle/priceResponse.json';
 import pricesResponse from '~/test/mocks/oracle/pricesResponse.json';
@@ -52,9 +54,7 @@ test('it can parse the prices response', () => {
   )).toStrictEqual(pricesParsed);
 });
 
-test('it can send the query single price service', () => {
-  sendSecretClientContractQuery$.mockReturnValue(of(priceResponse));
-
+test('it can send the query single price service', async () => {
   const input = {
     contractAddress: 'CONTRACT_ADDRESS',
     codeHash: 'CODE_HASH',
@@ -62,6 +62,10 @@ test('it can send the query single price service', () => {
     lcdEndpoint: 'LCD_ENDPOINT',
     chainId: 'CHAIN_ID',
   };
+
+  // observables function
+  sendSecretClientContractQuery$.mockReturnValueOnce(of(priceResponse));
+
   let output;
   queryPrice$(input).subscribe({
     next: (response) => {
@@ -77,11 +81,22 @@ test('it can send the query single price service', () => {
   });
 
   expect(output).toStrictEqual(priceParsed);
+
+  // async/await function
+  sendSecretClientContractQuery$.mockReturnValueOnce(of(priceResponse));
+  const response = await queryPrice(input);
+
+  expect(sendSecretClientContractQuery$).toHaveBeenCalledWith({
+    queryMsg: 'MSG_QUERY_ORACLE_PRICE',
+    client: 'CLIENT',
+    contractAddress: input.contractAddress,
+    codeHash: input.codeHash,
+  });
+
+  expect(response).toStrictEqual(priceParsed);
 });
 
-test('it can send the query multiple prices service', () => {
-  sendSecretClientContractQuery$.mockReturnValue(of(pricesResponse));
-
+test('it can send the query multiple prices service', async () => {
   const input = {
     contractAddress: 'CONTRACT_ADDRESS',
     codeHash: 'CODE_HASH',
@@ -89,6 +104,10 @@ test('it can send the query multiple prices service', () => {
     lcdEndpoint: 'LCD_ENDPOINT',
     chainId: 'CHAIN_ID',
   };
+
+  // observables function
+  sendSecretClientContractQuery$.mockReturnValueOnce(of(pricesResponse));
+
   let output;
   queryPrices$(input).subscribe({
     next: (response) => {
@@ -104,4 +123,17 @@ test('it can send the query multiple prices service', () => {
   });
 
   expect(output).toStrictEqual(pricesParsed);
+
+  // async/await function
+  sendSecretClientContractQuery$.mockReturnValueOnce(of(pricesResponse));
+  const response = await queryPrices(input);
+
+  expect(sendSecretClientContractQuery$).toHaveBeenCalledWith({
+    queryMsg: 'MSG_QUERY_ORACLE_PRICES',
+    client: 'CLIENT',
+    contractAddress: input.contractAddress,
+    codeHash: input.codeHash,
+  });
+
+  expect(response).toStrictEqual(pricesParsed);
 });

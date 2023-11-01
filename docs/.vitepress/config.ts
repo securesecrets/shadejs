@@ -16,12 +16,14 @@ export default defineConfig({
         text: 'Examples',
         items: [
           { text: 'Swap', link: '/swap' },
+          { text: 'Oracle', link: '/oracle' },
         ]
       }
     ],
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/vuejs/vitepress' }
+      { icon: 'github', link: 'https://github.com/securesecrets/shadejs' },
+      { icon: 'discord', link: 'https://discord.com/channels/905665558610051113/905670616391233566' }
     ]
   }
 })

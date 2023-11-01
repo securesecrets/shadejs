@@ -4,7 +4,7 @@ layout: home
 
 hero:
   name: "ShadeJS"
-  text: "Powerful TypeScript Library for Shade Integration"
+  text: "Powerful SDK for Shade Integration"
   tagline: Simple, Robust, and Efficient Developer Tooling
   actions:
     - theme: brand
@@ -15,11 +15,12 @@ hero:
     #   link: /api-examples
 
 features:
-  - title: Feature A
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature B
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature C
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+  - title: TypeScript Support
+    details: Seamlessly integrate into your javascript projects.
+  - title: Shade Smart Contracts
+    details: Query and execute message interfaces defined for interating with Shade Protocol
+  - title: Secret.js Wrapper
+    details: Wraps Secret Network's javascript SDK to simplify the developer experience
+
 ---
 
