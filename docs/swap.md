@@ -145,11 +145,11 @@ type FactoryPair = {
 **example use**
 
 ```js
-const output = await queryFactoryPairs$ = ({
+const output = await queryFactoryPairs = ({
   contractAddress: 'secret1ja0hcwvy76grqkpgwznxukgd7t8a8anmmx05pp',
   codeHash: '2ad4ed2a4a45fd6de3daca9541ba82c26bb66c76d1c3540de39b509abd26538e'
   startingIndex: 0,
-  limit: 100, // determines number of records to return
+  limit: 25, // determines number of records to return
 })
 
 console.log(output)
