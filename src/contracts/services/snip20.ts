@@ -3,6 +3,7 @@ import {
   switchMap,
   map,
   first,
+  lastValueFrom,
 } from 'rxjs';
 import { sendSecretClientContractQuery$ } from '~/client/services/clientServices';
 import { snip20 } from '~/contracts/definitions/snip20';
@@ -40,7 +41,30 @@ const querySnip20TokenInfo$ = ({
   first(),
 );
 
+/**
+ * query the factory config
+ */
+async function querySnip20TokenInfo({
+  snip20ContractAddress,
+  snip20CodeHash,
+  lcdEndpoint,
+  chainId,
+}:{
+  snip20ContractAddress: string,
+  snip20CodeHash?: string,
+  lcdEndpoint?: string,
+  chainId?: string,
+}) {
+  return lastValueFrom(querySnip20TokenInfo$({
+    snip20ContractAddress,
+    snip20CodeHash,
+    lcdEndpoint,
+    chainId,
+  }));
+}
+
 export {
   querySnip20TokenInfo$,
   parseTokenInfo,
+  querySnip20TokenInfo,
 };

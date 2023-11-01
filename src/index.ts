@@ -22,7 +22,10 @@ import {
   batchQueryPairsInfo,
   batchQueryStakingInfo,
 } from '~/contracts/services/swap';
-import { querySnip20TokenInfo$ } from './contracts/services/snip20';
+import {
+  querySnip20TokenInfo$,
+  querySnip20TokenInfo,
+} from './contracts/services/snip20';
 
 export {
   getSecretNetworkClient$,
@@ -44,4 +47,5 @@ export {
   batchQueryPairsInfo,
   batchQueryStakingInfo,
   querySnip20TokenInfo$,
+  querySnip20TokenInfo,
 };
