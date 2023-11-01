@@ -8,11 +8,11 @@ hero:
   tagline: Simple, Robust, and Efficient Developer Tooling
   actions:
     - theme: brand
-      text: Markdown Examples
-      link: /markdown-examples
-    - theme: alt
-      text: API Examples
-      link: /api-examples
+      text: View Examples
+      link: /swap
+    # - theme: alt
+    #   text: API Examples
+    #   link: /api-examples
 
 features:
   - title: Feature A

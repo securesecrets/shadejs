@@ -458,7 +458,7 @@ type StakingInfo = {
 **example use**
 
 ```js
-batchQueryStakingInfo$= ({
+batchQueryStakingInfo$({
   queryRouterContractAddress: '[QUERY_ROUTER_CONTRACT_ADDRESS]',
   queryRouterCodeHash: '[QUERY_ROUTER_CODE_HASH]',
   stakingContracts: [{
