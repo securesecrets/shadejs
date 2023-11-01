@@ -18,7 +18,7 @@ const parseTokenInfo = (response: TokenInfoResponse): TokenInfo => ({
 });
 
 /**
- * query the factory config
+ * query the snip20 token info
  */
 const querySnip20TokenInfo$ = ({
   snip20ContractAddress,
@@ -42,7 +42,7 @@ const querySnip20TokenInfo$ = ({
 );
 
 /**
- * query the factory config
+ * query the snip20 token info
  */
 async function querySnip20TokenInfo({
   snip20ContractAddress,
