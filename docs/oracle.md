@@ -20,9 +20,6 @@ async function queryPrice({
   chainId?: string,
 }) : Promise<ParsedOraclePriceResponse> 
 ```
-::: warning
-It is recommended that you provide your own LCD endpoint, although we do provide a default mainnet option. Performance of the default endpoint is not guaranteed.
-:::
 
 **output**
 
@@ -76,9 +73,6 @@ async function queryPrices({
   chainId?: string,
 }) : Promise<ParsedOraclePricesResponse> 
 ```
-::: warning
-It is recommended that you provide your own LCD endpoint, although we do provide a default mainnet option. Performance of the default endpoint is not guaranteed.
-:::
 
 **output**
 
