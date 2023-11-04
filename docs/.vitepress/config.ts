@@ -13,7 +13,16 @@ export default defineConfig({
 
     sidebar: [
       {
+        text: 'Introduction',
+        collapsed: false,
+        items: [
+          { text: 'What is ShadeJS?', link: 'what-is-shadejs' },
+          { text: 'Getting Started', link: 'getting-started' },
+        ]
+      },
+      {
         text: 'Examples',
+        collapsed: false,
         items: [
           { text: 'Swap', link: '/swap' },
           { text: 'Oracle', link: '/oracle' },

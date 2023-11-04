@@ -2,7 +2,7 @@
 
 This page demonstrates how to query using a smart contract batch query router. The purposes of a query router is to combine multiple queries to one or more contracts into a single http request. This reduces load on the node infrastructure and is faster for retrieving data than would otherwise be obtained by individual contract queries.
 
-The batch query function is generalized to work with any contract queries. Miscellaneous Shade.js services already implement the batch query router, for example the <a href="/swap.html#pairs-info" target="_blank">Pairs Info Query</a>
+The batch query function is generalized to work with any contract queries. Miscellaneous ShadeJS services already implement the batch query router, for example the <a href="/swap.html#pairs-info" target="_blank">Pairs Info Query</a>
 
 
 ## Performance 
@@ -19,7 +19,7 @@ All of the following results are run with 500 total queries
 
 ::: warning
 This testing was completed with a limited sample size and optimal batch size has 
-not yet determined. There is also an unknown variable of the quality of the infrastructure being used to perform these queries. It is encouraged to perform your own optimization testing when working with a batch query router.
+not yet determined. There is also an unknown variable of the quality of the infrastructure you would be using to perform these queries. It is encouraged to perform your own optimization testing when working with a batch query router.
 :::
 ## Batch Query
 

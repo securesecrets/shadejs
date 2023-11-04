@@ -8,6 +8,9 @@ This page demonstrates how to query the ShadeSwap contracts
 **input**
 
 ```js
+/*
+* Queries the configuration for the swap factory
+*/
 async function queryFactoryConfig({
   contractAddress,
   codeHash,
@@ -20,9 +23,6 @@ async function queryFactoryConfig({
   chainId?: string, // defaults to mainnet
 }): Promise<FactoryConfig> 
 ```
-::: warning
-It is recommended that you provide your own LCD endpoint, although we do provide a default mainnet option. Performance of the default endpoint is not guaranteed.
-:::
 
 **output**
 
