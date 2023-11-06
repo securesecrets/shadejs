@@ -7,6 +7,13 @@ type TokenInfoResponse = {
   }
 }
 
+type BalanceResponse = {
+  balance: {
+    amount: string,
+  }
+}
+
 export type {
   TokenInfoResponse,
+  BalanceResponse,
 };

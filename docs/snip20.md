@@ -52,3 +52,48 @@ console.log(output)
 };
 
 ```
+
+## Get Balance
+
+**input**
+
+```js
+async function querySnip20Balance({
+  snip20ContractAddress,
+  snip20CodeHash,
+  userAddress,
+  viewingKey,
+  lcdEndpoint,
+  chainId,
+}:{
+  snip20ContractAddress: string,
+  snip20CodeHash?: string,
+  userAddress: string,
+  viewingKey: string,
+  lcdEndpoint?: string,
+  chainId?: string,
+}): Promise<string>
+```
+
+**output**
+
+```js
+type string // returned as a uDenom 
+
+```
+
+**example use**
+
+```js
+const output = await querySnip20Balance = ({
+  contractAddress: 'secret153wu605vvp934xhd4k9dtd640zsep5jkesstdm',
+  userAddress: '[USER_SECRET_NETWORK_ADDRESS]',
+  viewingKey: 'VIEWING_KEY'
+})
+console.log(output) 
+```
+***console***
+```md
+'123'
+
+```

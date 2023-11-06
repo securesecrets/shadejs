@@ -1,5 +1,8 @@
 import '~/polyfills/index';
-import { getSecretNetworkClient$, getActiveQueryClient$ } from '~/client';
+import {
+  getSecretNetworkClient$,
+  getActiveQueryClient$,
+} from '~/client';
 import {
   queryPrice$,
   queryPrices$,
@@ -25,6 +28,8 @@ import {
 import {
   querySnip20TokenInfo$,
   querySnip20TokenInfo,
+  querySnip20Balance,
+  querySnip20Balance$,
 } from './contracts/services/snip20';
 
 export {
@@ -48,4 +53,6 @@ export {
   batchQueryStakingInfo,
   querySnip20TokenInfo$,
   querySnip20TokenInfo,
+  querySnip20Balance,
+  querySnip20Balance$,
 };
