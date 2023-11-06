@@ -10,10 +10,10 @@ import { StableConfig, bisect } from './stable';
 function getConf(): StableConfig {
   BigNumber.set({ DECIMAL_PLACES: 30 });
   return new StableConfig({
-    x: BigNumber(30000.0),
-    y: BigNumber(10000.0),
-    p: BigNumber(3.0),
-    a: BigNumber(10.0),
+    pool0Size: BigNumber(30000.0),
+    pool1Size: BigNumber(10000.0),
+    priceRatio: BigNumber(3.0),
+    alpha: BigNumber(10.0),
     gamma1: BigNumber(4.0),
     gamma2: BigNumber(5.0),
     lpFee: BigNumber(0),
@@ -27,10 +27,10 @@ function getConf(): StableConfig {
 function getConfFee(): StableConfig {
   BigNumber.set({ DECIMAL_PLACES: 30 });
   return new StableConfig({
-    x: BigNumber(30000.0),
-    y: BigNumber(10000.0),
-    p: BigNumber(3.0),
-    a: BigNumber(10.0),
+    pool0Size: BigNumber(30000.0),
+    pool1Size: BigNumber(10000.0),
+    priceRatio: BigNumber(3.0),
+    alpha: BigNumber(10.0),
     gamma1: BigNumber(4.0),
     gamma2: BigNumber(5.0),
     lpFee: BigNumber(0.01),
@@ -44,10 +44,10 @@ function getConfFee(): StableConfig {
 function getConfImbalanced(): StableConfig {
   BigNumber.set({ DECIMAL_PLACES: 30 });
   return new StableConfig({
-    x: BigNumber(15000.0),
-    y: BigNumber(10000.0),
-    p: BigNumber(1.0),
-    a: BigNumber(10.0),
+    pool0Size: BigNumber(15000.0),
+    pool1Size: BigNumber(10000.0),
+    priceRatio: BigNumber(1.0),
+    alpha: BigNumber(10.0),
     gamma1: BigNumber(4.0),
     gamma2: BigNumber(5.0),
     lpFee: BigNumber(0.01),
@@ -61,10 +61,10 @@ function getConfImbalanced(): StableConfig {
 function getConfSmallPool(): StableConfig {
   BigNumber.set({ DECIMAL_PLACES: 30 });
   return new StableConfig({
-    x: BigNumber(30.0),
-    y: BigNumber(6.0),
-    p: BigNumber(5.0),
-    a: BigNumber(10.0),
+    pool0Size: BigNumber(30.0),
+    pool1Size: BigNumber(6.0),
+    priceRatio: BigNumber(5.0),
+    alpha: BigNumber(10.0),
     gamma1: BigNumber(4.0),
     gamma2: BigNumber(5.0),
     lpFee: BigNumber(0),

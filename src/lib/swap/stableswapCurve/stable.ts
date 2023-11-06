@@ -192,7 +192,7 @@ export class StableConfig {
   priceOfToken1: BigNumber;
 
   // manually set param which controls the 'flatness' of the curve near equilibrium
-  a: BigNumber;
+  alpha: BigNumber;
 
   // manually set param which controls how the quickly the curve gains slippage when
   // X is underrepresented
@@ -220,10 +220,10 @@ export class StableConfig {
   priceImpactLimit: BigNumber;
 
   constructor({
-    x,
-    y,
-    p,
-    a,
+    pool0Size,
+    pool1Size,
+    priceRatio,
+    alpha,
     gamma1,
     gamma2,
     lpFee,
@@ -232,10 +232,10 @@ export class StableConfig {
     minTradeSize1For0,
     priceImpactLimit,
   }: {
-    x: BigNumber,
-    y: BigNumber,
-    p: BigNumber,
-    a: BigNumber,
+    pool0Size: BigNumber,
+    pool1Size: BigNumber,
+    priceRatio: BigNumber,
+    alpha: BigNumber,
     gamma1: BigNumber,
     gamma2: BigNumber,
     lpFee: BigNumber,
@@ -245,10 +245,10 @@ export class StableConfig {
     priceImpactLimit: BigNumber,
   }) {
     BigNumber.set({ DECIMAL_PLACES: 30 });
-    this.pool0Size = x;
-    this.pool1Size = y;
-    this.priceOfToken1 = p;
-    this.a = a;
+    this.pool0Size = pool0Size;
+    this.pool1Size = pool1Size;
+    this.priceOfToken1 = priceRatio;
+    this.alpha = alpha;
     this.gamma1 = gamma1;
     this.gamma2 = gamma2;
     this.lpFee = lpFee;
@@ -662,7 +662,7 @@ export class StableConfig {
     pool1SizeInUnitsPool0: &BigNumber,
   }): BigNumber {
     //
-    return this.a.multipliedBy(((BigNumber(4).multipliedBy((this.pool0Size.dividedBy(invariant)))).multipliedBy((pool1SizeInUnitsPool0.dividedBy(invariant)))).pow(gamma));
+    return this.alpha.multipliedBy(((BigNumber(4).multipliedBy((this.pool0Size.dividedBy(invariant)))).multipliedBy((pool1SizeInUnitsPool0.dividedBy(invariant)))).pow(gamma));
   }
 
   // returns the 'coefficient' used in the invariant functions
@@ -678,7 +678,7 @@ export class StableConfig {
     gamma: &BigNumber,
   }): BigNumber {
     const xpy: BigNumber = pool0Size.multipliedBy(pool1SizeInUnitsPool0);
-    return this.a.multipliedBy((BigNumber(4).multipliedBy(xpy)).pow(gamma));
+    return this.alpha.multipliedBy((BigNumber(4).multipliedBy(xpy)).pow(gamma));
   }
 
   // Returns the invariant fn as a function of x and py

@@ -36,6 +36,14 @@ export default defineConfig({
         items: [
           { text: 'Swap', link: '/transactions/swap' },
         ]
+      },
+      {
+        text: 'ShadeSwap Calculations',
+        collapsed: false,
+        items: [
+          { text: 'Swap', link: '/calculations/swap' },
+          { text: 'Routing', link: '/calculations/routing' },
+        ]
       }
     ],
 
