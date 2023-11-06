@@ -8,7 +8,7 @@ export default defineConfig({
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: 'Home', link: '/' },
-      { text: 'Examples', link: '/swap' }
+      { text: 'Examples', link: '/queries/swap' }
     ],
 
     sidebar: [
@@ -21,13 +21,20 @@ export default defineConfig({
         ]
       },
       {
-        text: 'Examples',
+        text: 'Queries',
         collapsed: false,
         items: [
-          { text: 'Swap', link: '/swap' },
-          { text: 'Oracle', link: '/oracle' },
-          { text: 'Batch Query', link: '/batch-query' },
-          { text: 'Snip20', link: '/snip20' },
+          { text: 'Swap', link: '/queries/swap' },
+          { text: 'Oracle', link: '/queries/oracle' },
+          { text: 'Batch Query', link: '/queries/batch-query' },
+          { text: 'Snip20', link: '/queries/snip20' },
+        ]
+      },
+      {
+        text: 'Transactions',
+        collapsed: false,
+        items: [
+          { text: 'Swap', link: '/transactions/swap' },
         ]
       }
     ],

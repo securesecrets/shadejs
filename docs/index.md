@@ -9,7 +9,7 @@ hero:
   actions:
     - theme: brand
       text: View Examples
-      link: /swap
+      link: /queries/swap
     # - theme: alt
     #   text: API Examples
     #   link: /api-examples

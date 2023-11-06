@@ -16,6 +16,7 @@ import {
   queryFactoryPairs,
   queryPairConfig$,
   queryPairConfig,
+  parseSwapResponse,
 } from '~/contracts/services/swap';
 import factoryConfigResponse from '~/test/mocks/swap/factoryConfig.json';
 import factoryPairsResponse from '~/test/mocks/swap/factoryPairs.json';
@@ -35,6 +36,9 @@ import { factoryPairsParsed } from '~/test/mocks/swap/factoryPairsParsed';
 import { pairConfigParsed } from '~/test/mocks/swap/pairConfigParsed';
 import { pairInfoParsed } from '~/test/mocks/swap/pairInfoParsed';
 import { stakingConfigParsed } from '~/test/mocks/swap/stakingConfigParsed';
+import swapResponse from '~/test/mocks/swap/swapResponse.json';
+import { TxResponse } from 'secretjs';
+import { parsedSwapResponse } from '~/test/mocks/swap/parsedSwapResponse';
 
 const sendSecretClientContractQuery$ = vi.hoisted(() => vi.fn());
 
@@ -80,6 +84,12 @@ test('it can parse the staking info response', () => {
   expect(parseStakingInfo(
     stakingInfoResponse as StakingConfigResponse,
   )).toStrictEqual(stakingConfigParsed);
+});
+
+test('it can parse the swap token response', () => {
+  expect(parseSwapResponse(
+    swapResponse as unknown as TxResponse,
+  )).toStrictEqual(parsedSwapResponse);
 });
 
 test('it can call the query factory config service', async () => {

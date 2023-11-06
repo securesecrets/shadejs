@@ -21,6 +21,7 @@ import {
   PairConfig,
   PairInfo,
   StakingInfo,
+  ParsedSwapResponse,
 } from '~/types/contracts/swap/model';
 import {
   msgQueryFactoryConfig,
@@ -31,6 +32,8 @@ import {
 } from '~/contracts/definitions/swap';
 import { Contract } from '~/types/contracts/shared';
 import { BatchQuery, BatchQueryParsedResponse } from '~/types/contracts/batchQuery/model';
+import { TxResponse } from 'secretjs';
+import { Attribute } from 'secretjs/dist/protobuf/cosmos/base/abci/v1beta1/abci';
 import { batchQuery$ } from './batchQuery';
 
 /**
@@ -283,6 +286,55 @@ const parseBatchQueryStakingInfoResponse = (
   stakingContractAddress: item.id as string,
   stakingInfo: parseStakingInfo(item.response),
 }));
+
+/**
+* parse the response from a successful token swap
+*/
+const parseSwapResponse = (
+  response: TxResponse,
+): ParsedSwapResponse => {
+  let inputTokenAddress: string | undefined;
+  let outputTokenAddress: string | undefined;
+  let inputTokenAmount: string | undefined;
+  let outputTokenAmount: string | undefined;
+  const txHash = response.transactionHash;
+  const { jsonLog } = response;
+
+  if (jsonLog !== undefined
+    && jsonLog.length > 0
+  ) {
+    const wasmAttributes = jsonLog[0].events.find((event) => (
+      event.type === 'wasm'
+    ));
+    if (wasmAttributes === undefined) {
+      return {
+        txHash,
+        inputTokenAddress,
+        outputTokenAddress,
+        inputTokenAmount,
+        outputTokenAmount,
+      };
+    }
+    wasmAttributes.attributes.forEach((attribute: Attribute) => {
+      if (attribute.key.trim() === 'amount_out') {
+        outputTokenAmount = attribute.value.trim();
+      } else if (attribute.key.trim() === 'amount_in' && inputTokenAmount === undefined) {
+        inputTokenAmount = attribute.value.trim();
+      } else if (attribute.key.trim() === 'token_out_key') {
+        outputTokenAddress = attribute.value.trim();
+      } else if (attribute.key.trim() === 'token_in_key' && inputTokenAddress === undefined) {
+        inputTokenAddress = attribute.value.trim();
+      }
+    });
+  }
+  return {
+    txHash,
+    inputTokenAddress,
+    outputTokenAddress,
+    inputTokenAmount,
+    outputTokenAmount,
+  };
+};
 
 /**
  * query the factory config
@@ -574,4 +626,5 @@ export {
   batchQueryPairsInfo,
   batchQueryStakingInfo$,
   batchQueryStakingInfo,
+  parseSwapResponse,
 };

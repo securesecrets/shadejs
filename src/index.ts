@@ -24,13 +24,15 @@ import {
   queryPairConfig,
   batchQueryPairsInfo,
   batchQueryStakingInfo,
+  parseSwapResponse,
 } from '~/contracts/services/swap';
 import {
   querySnip20TokenInfo$,
   querySnip20TokenInfo,
   querySnip20Balance,
   querySnip20Balance$,
-} from './contracts/services/snip20';
+} from '~/contracts/services/snip20';
+import { msgSwap } from '~/contracts/definitions/swap';
 
 export {
   getSecretNetworkClient$,
@@ -55,4 +57,6 @@ export {
   querySnip20TokenInfo,
   querySnip20Balance,
   querySnip20Balance$,
+  msgSwap,
+  parseSwapResponse,
 };
