@@ -33,6 +33,20 @@ import {
   querySnip20Balance$,
 } from '~/contracts/services/snip20';
 import { msgSwap } from '~/contracts/definitions/swap';
+import {
+  constantProductSwapToken0for1,
+  constantProductSwapToken1for0,
+  stableSwapToken0for1,
+  stableSwapToken1for0,
+  constantProductPriceImpactToken0for1,
+  constantProductPriceImpactToken1for0,
+  stableSwapPriceImpactToken0For1,
+  stableSwapPriceImpactToken1For0,
+  constantProductReverseSwapToken0for1,
+  constantProductReverseSwapToken1for0,
+  stableReverseSwapToken0for1,
+  stableReverseSwapToken1for0,
+} from '~/lib/swap/swapCalculations';
 
 export {
   getSecretNetworkClient$,
@@ -59,4 +73,16 @@ export {
   querySnip20Balance$,
   msgSwap,
   parseSwapResponse,
+  constantProductSwapToken0for1,
+  constantProductSwapToken1for0,
+  stableSwapToken0for1,
+  stableSwapToken1for0,
+  constantProductPriceImpactToken0for1,
+  constantProductPriceImpactToken1for0,
+  stableSwapPriceImpactToken0For1,
+  stableSwapPriceImpactToken1For0,
+  constantProductReverseSwapToken0for1,
+  constantProductReverseSwapToken1for0,
+  stableReverseSwapToken0for1,
+  stableReverseSwapToken1for0,
 };
