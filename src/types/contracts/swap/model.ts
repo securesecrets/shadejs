@@ -124,6 +124,21 @@ type BatchSingleStakingInfo = {
 
 type BatchStakingInfo = BatchSingleStakingInfo[]
 
+type Path = {
+  poolContractAddress: string,
+  poolCodeHash: string,
+}
+
+type Paths = Path[]
+
+type ParsedSwapResponse = {
+  txHash: string,
+  inputTokenAddress: string | undefined,
+  outputTokenAddress: string | undefined,
+  inputTokenAmount: string | undefined,
+  outputTokenAmount: string | undefined,
+}
+
 export type {
   FactoryPairs,
   PairConfig,
@@ -133,4 +148,7 @@ export type {
   StakingInfo,
   BatchSingleStakingInfo,
   BatchStakingInfo,
+  Path,
+  Paths,
+  ParsedSwapResponse,
 };
