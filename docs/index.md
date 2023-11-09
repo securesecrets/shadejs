@@ -6,6 +6,9 @@ hero:
   name: "ShadeJS"
   text: "Powerful SDK for Shade Integration"
   tagline: Simple, Robust, and Efficient Developer Tooling
+  image:
+    src: /logo.svg
+    alt: shadejs
   actions:
     - theme: brand
       text: View Examples
