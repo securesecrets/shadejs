@@ -1,6 +1,6 @@
 # Shade Contract Registry
 
-This page contains a list of deployed contracts:
+This page contains a list of deployed contracts.
 
 ## Mainnet 
 | Contract 	| Address	| Code Hash 	|
