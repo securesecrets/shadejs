@@ -3,7 +3,7 @@
 This page demonstrates how to generate messages and parse responses for  swap transactions
 
 ## Swap Tokens
-```js
+```ts
 function msgSwap({
   routerContractAddress,
   routerCodeHash,
@@ -22,7 +22,7 @@ function msgSwap({
 ```
 
 **input type**
-```js
+```ts
 type Path = {
   poolContractAddress: string,
   poolCodeHash: string,
@@ -33,16 +33,16 @@ type Paths = Path[]
 
 ### Response Parser
 This function can be used to parse the transaction response after it has been broadcasted to the chain.
-```js
+```ts
 parseSwapResponse(response: TxResponse)
 ```
 **input type**
-```js
+```ts
 type TxResponse // standard TxResponse as defined in secret.js
 ```
 
 **output**
-```js
+```ts
 type ParsedSwapResponse = {
   txHash: string,
   inputTokenAddress: string | undefined,
