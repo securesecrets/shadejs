@@ -5,7 +5,7 @@ Library for interacting with Shade smart contracts
 
 <p align="center">
   <img alt="npm" src="https://img.shields.io/npm/v/shadejs" />
-  <img alt="ci" style="margin-left: 0.3em" src="https://github.com/securesecrets/shadejs/blob/main/.github/workflows/javascript.yml/badge.svg?branch=master" />
+  <img alt="ci" style="margin-left: 0.3em" src="https://github.com/securesecrets/shadejs/blob/main/.github/workflows/javascript.yml/badge.svg?branch=main" />
 </p>
 
 ## Yarn
