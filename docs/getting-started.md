@@ -82,3 +82,5 @@ queryPairConfig$({
 
 ```
 
+## Contract Registry
+You can access the Shade mainnet and testnet contract registry [here](./contracts.md).
