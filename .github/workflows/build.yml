@@ -15,5 +15,5 @@ jobs:
         cache: yarn
     - name: Install Dependencies
       run: yarn install --frozen-lockfile
-    - name: Eslint-Check
+    - name: Build-check
       run: yarn build
