@@ -7,7 +7,7 @@ Hi! We're really excited that you are interested in contributing to ShadeJS. Bef
 
 ## Pull Request Guidelines
 
-- Checkout a topic branch from the relevant branch, e.g. `main`, and merge back against that branch.
+- Checkout a topic branch from `develop`, and open pull requests against that branch. Develop is used as the staging branch for the next release. A release will be generated after merging develop -> main.
 
 - If adding a new feature:
 
