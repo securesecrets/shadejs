@@ -8,6 +8,8 @@ ShadeJS is a typescript SDK for interacting with <a href="https://shadeprotocol.
 ## Out of Scope
 In its current state, ShadeJS does NOT include services to execute contracts via a <a href="https://secretjs.scrt.network/#integrations" target="_blank">Secret Signing Client.</a> This is becuase signing transactions requires a complex integration with multiple types of wallets. However, ShadeJS DOES include message creator functions for executions that can be easily imported into your project, so that you can call them from your own signing client manager.
 
+## Contributing
+Interested in contributing to this repository? Check our our [Contributing Guide](./docs/CONTRIBUTING.md).
 
 <p align="center">
   <img alt="npm" src="https://img.shields.io/npm/v/shadejs" />
@@ -17,7 +19,7 @@ In its current state, ShadeJS does NOT include services to execute contracts via
 ## Yarn
 Yarn is the default package manager.
 
-## Build 
+## Install 
 ```
 $ yarn
 ```
@@ -25,6 +27,11 @@ $ yarn
 ## Test 
 ```
 $ yarn test
+```
+
+## Build 
+```
+$ yarn build
 ```
 
 ## Docs
