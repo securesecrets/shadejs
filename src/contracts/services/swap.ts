@@ -627,4 +627,6 @@ export {
   batchQueryStakingInfo$,
   batchQueryStakingInfo,
   parseSwapResponse,
+  parseBatchQueryPairInfoResponse,
+  parseBatchQueryStakingInfoResponse,
 };

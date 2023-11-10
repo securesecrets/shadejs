@@ -17,6 +17,12 @@ import {
   queryPairConfig$,
   queryPairConfig,
   parseSwapResponse,
+  parseBatchQueryPairInfoResponse,
+  parseBatchQueryStakingInfoResponse,
+  batchQueryPairsInfo,
+  batchQueryPairsInfo$,
+  batchQueryStakingInfo,
+  batchQueryStakingInfo$,
 } from '~/contracts/services/swap';
 import factoryConfigResponse from '~/test/mocks/swap/factoryConfig.json';
 import factoryPairsResponse from '~/test/mocks/swap/factoryPairs.json';
@@ -39,14 +45,21 @@ import { stakingConfigParsed } from '~/test/mocks/swap/stakingConfigParsed';
 import swapResponse from '~/test/mocks/swap/swapResponse.json';
 import { TxResponse } from 'secretjs';
 import { parsedSwapResponse } from '~/test/mocks/swap/parsedSwapResponse';
+import { pairsInfoResponseUnparsed } from '~/test/mocks/swap/batchPairsInfoResponseUnparsed';
+import { pairsInfoParsed } from '~/test/mocks/swap/batchPairsInfoParsed';
+import { batchStakingConfigUnparsed } from '~/test/mocks/swap/batchStakingConfigUnparsed';
+import { batchStakingConfigParsed } from '~/test/mocks/swap/batchStakingConfigParsed';
 
 const sendSecretClientContractQuery$ = vi.hoisted(() => vi.fn());
+const batchQuery$ = vi.hoisted(() => vi.fn());
 
 beforeAll(() => {
   vi.mock('~/contracts/definitions/swap', () => ({
     msgQueryFactoryConfig: vi.fn(() => 'FACTORY_CONFIG_MSG'),
     msgQueryFactoryPairs: vi.fn(() => 'FACTORY_PAIRS_MSG'),
     msgQueryPairConfig: vi.fn(() => 'PAIR_CONFIG_MSG'),
+    msgQueryPairInfo: vi.fn(() => 'PAIR_INFO_MSG'),
+    msgQueryStakingConfig: vi.fn(() => 'STAKING_CONFIG_MSG'),
   }));
 
   vi.mock('~/client/index', () => ({
@@ -55,6 +68,10 @@ beforeAll(() => {
 
   vi.mock('~/client/services/clientServices', () => ({
     sendSecretClientContractQuery$,
+  }));
+
+  vi.mock('~/contracts/services/batchQuery', () => ({
+    batchQuery$,
   }));
 });
 
@@ -90,6 +107,18 @@ test('it can parse the swap token response', () => {
   expect(parseSwapResponse(
     swapResponse as unknown as TxResponse,
   )).toStrictEqual(parsedSwapResponse);
+});
+
+test('it can parse the batch pairs response', () => {
+  expect(parseBatchQueryPairInfoResponse(
+    pairsInfoResponseUnparsed,
+  )).toStrictEqual(pairsInfoParsed);
+});
+
+test('it can parse the batch staking response', () => {
+  expect(parseBatchQueryStakingInfoResponse(
+    batchStakingConfigUnparsed,
+  )).toStrictEqual(batchStakingConfigParsed);
 });
 
 test('it can call the query factory config service', async () => {
@@ -210,4 +239,118 @@ test('it can call the query pair config service', async () => {
     codeHash: input.codeHash,
   });
   expect(response).toStrictEqual(pairConfigParsed);
+});
+
+test('it can call the batch pairs info query service', async () => {
+  const input = {
+    queryRouterContractAddress: 'CONTRACT_ADDRESS',
+    queryRouterCodeHash: 'CODE_HASH',
+    lcdEndpoint: 'LCD_ENDPOINT',
+    chainId: 'CHAIN_ID',
+    pairsContracts: [{
+      address: 'PAIR_ADDRESS',
+      codeHash: 'PAIR_CODE_HASH',
+    }],
+  };
+  // observables function
+  batchQuery$.mockReturnValueOnce(of(pairsInfoResponseUnparsed));
+  let output;
+  batchQueryPairsInfo$(input).subscribe({
+    next: (response) => {
+      output = response;
+    },
+  });
+
+  expect(batchQuery$).toHaveBeenCalledWith({
+    contractAddress: input.queryRouterContractAddress,
+    codeHash: input.queryRouterCodeHash,
+    lcdEndpoint: input.lcdEndpoint,
+    chainId: input.chainId,
+    queries: [{
+      id: input.pairsContracts[0].address,
+      contract: {
+        address: input.pairsContracts[0].address,
+        codeHash: input.pairsContracts[0].codeHash,
+      },
+      queryMsg: 'PAIR_INFO_MSG',
+    }],
+  });
+
+  expect(output).toStrictEqual(pairsInfoParsed);
+
+  // async/await function
+  batchQuery$.mockReturnValueOnce(of(pairsInfoResponseUnparsed));
+  const response = await batchQueryPairsInfo(input);
+  expect(batchQuery$).toHaveBeenCalledWith({
+    contractAddress: input.queryRouterContractAddress,
+    codeHash: input.queryRouterCodeHash,
+    lcdEndpoint: input.lcdEndpoint,
+    chainId: input.chainId,
+    queries: [{
+      id: input.pairsContracts[0].address,
+      contract: {
+        address: input.pairsContracts[0].address,
+        codeHash: input.pairsContracts[0].codeHash,
+      },
+      queryMsg: 'PAIR_INFO_MSG',
+    }],
+  });
+  expect(response).toStrictEqual(pairsInfoParsed);
+});
+
+test('it can call the batch staking info query service', async () => {
+  const input = {
+    queryRouterContractAddress: 'CONTRACT_ADDRESS',
+    queryRouterCodeHash: 'CODE_HASH',
+    lcdEndpoint: 'LCD_ENDPOINT',
+    chainId: 'CHAIN_ID',
+    stakingContracts: [{
+      address: 'PAIR_ADDRESS',
+      codeHash: 'PAIR_CODE_HASH',
+    }],
+  };
+  // observables function
+  batchQuery$.mockReturnValueOnce(of(batchStakingConfigUnparsed));
+  let output;
+  batchQueryStakingInfo$(input).subscribe({
+    next: (response) => {
+      output = response;
+    },
+  });
+
+  expect(batchQuery$).toHaveBeenCalledWith({
+    contractAddress: input.queryRouterContractAddress,
+    codeHash: input.queryRouterCodeHash,
+    lcdEndpoint: input.lcdEndpoint,
+    chainId: input.chainId,
+    queries: [{
+      id: input.stakingContracts[0].address,
+      contract: {
+        address: input.stakingContracts[0].address,
+        codeHash: input.stakingContracts[0].codeHash,
+      },
+      queryMsg: 'PAIR_INFO_MSG',
+    }],
+  });
+
+  expect(output).toStrictEqual(batchStakingConfigParsed);
+
+  // async/await function
+  batchQuery$.mockReturnValueOnce(of(batchStakingConfigUnparsed));
+  const response = await batchQueryStakingInfo(input);
+  expect(batchQuery$).toHaveBeenCalledWith({
+    contractAddress: input.queryRouterContractAddress,
+    codeHash: input.queryRouterCodeHash,
+    lcdEndpoint: input.lcdEndpoint,
+    chainId: input.chainId,
+    queries: [{
+      id: input.stakingContracts[0].address,
+      contract: {
+        address: input.stakingContracts[0].address,
+        codeHash: input.stakingContracts[0].codeHash,
+      },
+      queryMsg: 'STAKING_CONFIG_MSG',
+    }],
+  });
+  expect(response).toStrictEqual(batchStakingConfigParsed);
 });
