@@ -1,5 +1,9 @@
-# ShadeJS 
+# ShadeJS  
 <img src="./docs/logo.svg" alt="ShadeJS Logo" width="150" height="150" />
+<p align="center">
+  <img alt="npm" src="https://img.shields.io/npm/v/shadejs" />
+  <img alt="ci" style="margin-left: 0.3em" src="https://github.com/securesecrets/shadejs/actions/workflows/test.yml/badge.svg?branch=main" />
+</p>
 
 # What is ShadeJS?
 
@@ -11,10 +15,6 @@ In its current state, ShadeJS does NOT include services to execute contracts via
 ## Contributing
 Interested in contributing to this repository? Check our our [Contributing Guide](./docs/CONTRIBUTING.md).
 
-<p align="center">
-  <img alt="npm" src="https://img.shields.io/npm/v/shadejs" />
-  <img alt="ci" style="margin-left: 0.3em" src="https://github.com/securesecrets/shadejs/actions/workflows/test.yml/badge.svg?branch=main" />
-</p>
 
 ## Yarn
 Yarn is the default package manager.
