@@ -44,6 +44,9 @@ export default defineConfig({
           { text: 'Swap', link: '/calculations/swap' },
           { text: 'Routing', link: '/calculations/routing' },
         ]
+      },
+      {
+         text: 'Contract Registry', link: '/contracts' ,
       }
     ],
 
