@@ -11,11 +11,11 @@ hero:
     alt: shadejs
   actions:
     - theme: brand
+      text: Get Started
+      link: /what-is-shadejs
+    - theme: alt
       text: View Examples
       link: /queries/swap
-    # - theme: alt
-    #   text: API Examples
-    #   link: /api-examples
 
 features:
   - title: TypeScript Support
