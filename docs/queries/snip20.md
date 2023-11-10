@@ -7,7 +7,7 @@ This page demonstrates how to query Snip20 token contracts
 
 **input**
 
-```js
+```ts
 async function querySnip20TokenInfo({
   snip20ContractAddress,
   snip20CodeHash,
@@ -23,7 +23,7 @@ async function querySnip20TokenInfo({
 
 **output**
 
-```js
+```ts
 type TokenInfo = {
   name: string,
   symbol: string,
@@ -35,7 +35,7 @@ type TokenInfo = {
 
 **example use**
 
-```js
+```ts
 const output = await querySnip20TokenInfo = ({
   contractAddress: 'secret1fl449muk5yq8dlad7a22nje4p5d2pnsgymhjfd',
   codeHash: '638a3e1d50175fbcb8373cf801565283e3eb23d88a9b7b7f99fcc5eb1e6b561e' 
@@ -57,7 +57,7 @@ console.log(output)
 
 **input**
 
-```js
+```ts
 async function querySnip20Balance({
   snip20ContractAddress,
   snip20CodeHash,
@@ -77,14 +77,14 @@ async function querySnip20Balance({
 
 **output**
 
-```js
+```ts
 type string // returned as a uDenom 
 
 ```
 
 **example use**
 
-```js
+```ts
 const output = await querySnip20Balance = ({
   contractAddress: 'secret153wu605vvp934xhd4k9dtd640zsep5jkesstdm',
   userAddress: '[USER_SECRET_NETWORK_ADDRESS]',

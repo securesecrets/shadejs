@@ -25,7 +25,7 @@ not yet determined. There is also an unknown variable of the quality of the infr
 
 **input**
 
-```js
+```ts
 type BatchQuery = {
   id: string | number,
   contract: {
@@ -52,7 +52,7 @@ async function batchQuery({
 
 **output**
 
-```js
+```ts
 type BatchQueryParsedResponse = BatchQueryParsedResponseItem[]
 
 type BatchQueryParsedResponseItem = {
@@ -65,7 +65,7 @@ type BatchQueryParsedResponseItem = {
 
 **example use**
 
-```js
+```ts
 const output = await batchQuery({
   contractAddress: '[QUERY_ROUTER_CONTRACT_ADDRESS]',
   codeHash: '[QUERY_ROUTER_CODE_HASH]',

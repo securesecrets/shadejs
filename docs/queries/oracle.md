@@ -5,7 +5,7 @@ This page demonstrates how to query the Shade Oracle Router, which serves price 
 
 **input**
 
-```js
+```ts
 async function queryPrice({
   contractAddress,
   codeHash,
@@ -23,7 +23,7 @@ async function queryPrice({
 
 **output**
 
-```js
+```ts
 type ParsedOraclePriceResponse = {
   oracleKey: string,
   rate: string,
@@ -36,7 +36,7 @@ type ParsedOraclePriceResponse = {
 
 **example use**
 
-```js
+```ts
 const output = await queryPrice({
   contractAddress: '[ORACLE_CONTRACT_ADDRESS]',
   codeHash: '[ORACLE_CODE_HASH]',,
@@ -58,7 +58,7 @@ const priceParsed = {
 
 **input**
 
-```js
+```ts
 async function queryPrices({
   contractAddress,
   codeHash,
@@ -76,7 +76,7 @@ async function queryPrices({
 
 **output**
 
-```js
+```ts
 type ParsedOraclePricesResponse = {
   [oracleKey: string]: ParsedOraclePriceResponse
 }
@@ -95,7 +95,7 @@ type ParsedOraclePriceResponse = {
 
 **example use**
 
-```js
+```ts
 const output = await queryPrices({
   contractAddress: '[ORACLE_CONTRACT_ADDRESS]',
   codeHash: '[ORACLE_CODE_HASH]',,

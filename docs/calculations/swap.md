@@ -6,7 +6,7 @@ This page demonstrates how to calculate outputs of a single pair swap on ShadeSw
 
 ### Forward Swap
 Standard swap calculation of output token amount for a given input.
-```js
+```ts
 /**
 * returns output of a simulated swap from token0 to token1 using the constant
 * product rule for non-stable pairs.
@@ -26,7 +26,7 @@ function constantProductSwapToken0for1({
 })
 ```
 
-```js
+```ts
 /**
 * returns output of a simulated swap from token1 to token0 using the constant
 * product rule for non-stable pairs
@@ -48,7 +48,7 @@ function constantProductSwapToken1for0({
 
 ### Reverse Swap
 Backwards calcuation for determining a token input amount for a given output amount.
-```js
+```ts
 /**
 * returns input of a simulated swap from token0 to token1 using the constant
 * product rule for non-stable pairs
@@ -67,7 +67,7 @@ function constantProductReverseSwapToken0for1({
   fee: BigNumber // decimal percent
 })
 ```
-```js
+```ts
 /**
 * returns input of a simulated swap from token1 to token0 using the constant
 * product rule for non-stable pairs
@@ -91,7 +91,7 @@ function constantProductReverseSwapToken1for0({
 
 ### Forward Swap
 Standard swap calculation of output token amount for a given input.
-```js
+```ts
 /**
 * returns output of a simulated swap of token0 for 
 * token1 using the stableswap math
@@ -126,7 +126,7 @@ function stableSwapToken0for1({
 })
 ```
 
-```js
+```ts
 /**
 * returns output of a simulated swap of token1 for 
 * token0 using the stableswap math
@@ -163,7 +163,7 @@ function stableSwapToken1for0({
 
 ### Reverse Swap
 Backwards calcuation for determining a token input amount for a given output amount.
-```js
+```ts
 /**
 * returns input of a simulated swap of token0 for 
 * token1 using the stableswap math
@@ -197,7 +197,7 @@ function stableReverseSwapToken0for1({
   priceImpactLimit: BigNumber,
 })
 ```
-```js
+```ts
 /**
 * returns output of a simulated swap of token1 for 
 * token0 using the stableswap math
@@ -237,7 +237,7 @@ Price impact is the difference between the current market price and the price yo
 sometimes referred to as "slippage", however slippage tends to be a misused term. Slippage is supposed to be the change in output between the time the user submits a transaction and the actual amount received due to unpredictable changes in liquidity (caused by other users' swaps).
 
 ### Constant Product (CPMM)
-```js
+```ts
 /**
 * Inputs may either be in human readable or raw form. 
 * There is no rounding performed, 
@@ -253,7 +253,7 @@ function constantProductPriceImpactToken0for1({
   token0InputAmount: BigNumber,
 })
 ```
-```js
+```ts
 /**
 * Inputs may either be in human readable or raw form. 
 * There is no rounding performed, therefore
@@ -271,7 +271,7 @@ function constantProductPriceImpactToken1for0({
 ```
 
 ### Stableswap 
-```js
+```ts
 /**
 * returns price impact of a simulated swap of token0 
 * for token1 inputs token amounts must be passsed in 
@@ -305,7 +305,7 @@ function stableSwapPriceImpactToken0For1({
   priceImpactLimit: BigNumber,
 }) 
 ```
-```js
+```ts
 /**
 * returns price impact of a simulated swap of token1 
 * for token0 inputs token amounts must be passsed in 

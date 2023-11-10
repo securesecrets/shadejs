@@ -7,7 +7,7 @@ This page demonstrates how to query the ShadeSwap contracts
 
 **input**
 
-```js
+```ts
 /*
 * Queries the configuration for the swap factory
 */
@@ -26,7 +26,7 @@ async function queryFactoryConfig({
 
 **output**
 
-```js
+```ts
 type FactoryConfig = {
   pairContractInstatiationInfo: ContractInstantiationInfo,
   lpTokenContractInstatiationInfo: ContractInstantiationInfo,
@@ -57,7 +57,7 @@ type ContractInstantiationInfo = {
 
 **example use**
 
-```js
+```ts
 const output = await queryFactoryConfig = ({
   contractAddress: 'secret1ja0hcwvy76grqkpgwznxukgd7t8a8anmmx05pp',
   codeHash: '2ad4ed2a4a45fd6de3daca9541ba82c26bb66c76d1c3540de39b509abd26538e' 
@@ -98,7 +98,7 @@ query the list of pairs registered in the factory contract
 
 **input**
 
-```js
+```ts
 async function queryFactoryPairs({
   contractAddress,
   codeHash,
@@ -118,7 +118,7 @@ async function queryFactoryPairs({
 
 **output**
 
-```js
+```ts
 type FactoryPairs = {
   pairs: FactoryPair[],
   startIndex: number,
@@ -144,7 +144,7 @@ type FactoryPair = {
 
 **example use**
 
-```js
+```ts
 const output = await queryFactoryPairs({
   contractAddress: 'secret1ja0hcwvy76grqkpgwznxukgd7t8a8anmmx05pp',
   codeHash: '2ad4ed2a4a45fd6de3daca9541ba82c26bb66c76d1c3540de39b509abd26538e'
@@ -198,7 +198,7 @@ query the configuration of the pair
 
 **input**
 
-```js
+```ts
 async function queryPairConfig({
   contractAddress,
   codeHash,
@@ -214,7 +214,7 @@ async function queryPairConfig({
 
 **output**
 
-```js
+```ts
 
 type PairConfig = {
   factoryContract: Contract | null,
@@ -242,7 +242,7 @@ type CustomFee = {
 
 **example use**
 
-```js
+```ts
 const output = await queryPairConfig({
   contractAddress: '[PAIR_CONTRACT_ADDRESS]',
   codeHash: '[PAIR_CODE_HASH]'
@@ -289,7 +289,7 @@ This query uses a smart contract batch query router to allow you to query many p
 
 **input**
 
-```js
+```ts
 async function batchQueryPairsInfo({
   queryRouterContractAddress,
   queryRouterCodeHash,
@@ -307,7 +307,7 @@ async function batchQueryPairsInfo({
 
 **output**
 
-```js
+```ts
 type BatchPairsInfo = BatchPairInfo[]
 
 // type references below
@@ -371,7 +371,7 @@ type StableTokenData = {
 
 **example use**
 
-```js
+```ts
 const output = await batchQueryPairsInfo({
   queryRouterContractAddress: '[QUERY_ROUTER_CONTRACT_ADDRESS]',
   queryRouterCodeHash: '[QUERY_ROUTER_CODE_HASH]',
@@ -397,7 +397,7 @@ Query the staking info for multiple pairs
 
 **input**
 
-```js
+```ts
 async function batchQueryStakingInfo({
   queryRouterContractAddress,
   queryRouterCodeHash,
@@ -418,7 +418,7 @@ This is a reminder that the staking contract is separate from the pairs contract
 
 **output**
 
-```js
+```ts
 type BatchStakingInfo = BatchSingleStakingInfo[]
 
 // type references below
@@ -455,7 +455,7 @@ type StakingInfo = {
 
 **example use**
 
-```js
+```ts
 const output = await batchQueryStakingInfo({
   queryRouterContractAddress: '[QUERY_ROUTER_CONTRACT_ADDRESS]',
   queryRouterCodeHash: '[QUERY_ROUTER_CODE_HASH]',

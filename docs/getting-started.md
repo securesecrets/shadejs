@@ -16,7 +16,7 @@ $ yarn add TBD_LIBRARY_NAME
 ## Example Query
 
 ### Standard Syntax
-```js
+```ts
 /*
 * Queries the configuration for the swap pair
 */
@@ -35,7 +35,7 @@ async function queryPairConfig({
 ::: warning
 The LCD endpoint is an optional property. We provide one as a default inside ShadeJS to get you started quickly on Secret Network mainnet using a public API. It is still recommended that you provide your own because performance of the default endpoint is not guaranteed.
 :::
-```js
+```ts
 try{
   const output = await queryPairConfig({
     contractAddress: '[PAIR_CONTRACT_ADDRESS]',
@@ -52,7 +52,7 @@ Under the hood, ShadeJS uses <a href="https://rxjs.dev/" target="_blank">RxJS</a
 The standard async/await syntax funcion is designed as a simple wrapper function around the RxJS, so either way you are calling the RxJS version!
 :::
 
-```js
+```ts
 /*
 * Queries the configuration for the swap pair
 */
@@ -68,7 +68,7 @@ function queryPairConfig$({
   chainId?: string,
 }): Observable<PairConfig>
 ```
-```js
+```ts
 queryPairConfig$({
   contractAddress: '[PAIR_CONTRACT_ADDRESS]',
 }).subscribe({
