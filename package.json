@@ -24,7 +24,7 @@
   ],
   "scripts": {
     "build": "tsc && vite build",
-    "release": "tsc && vite build && changesets publish",
+    "release": "tsc && vite build && changeset publish",
     "commitizen": "cz",
     "lint": "eslint \"**/*.{ts,js}\"",
     "lint:fix": "eslint \"**/*.{vue,ts,js}\" --fix",
