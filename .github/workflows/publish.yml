@@ -4,7 +4,7 @@ on:
     branches:
       - "main"
 
-concurrrency: ${{ github.workflow }}-${{ github.ref}}
+concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
   build:
@@ -23,4 +23,7 @@ jobs:
       id: changesets
       uses: changesets/action@v1
       with: 
-        publish: yarn run build
+        publish: yarn release
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+        NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
