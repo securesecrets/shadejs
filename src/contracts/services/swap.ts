@@ -187,14 +187,13 @@ function parsePairInfo(
     token0Amount: pairInfo.amount_0,
     token1Amount: pairInfo.amount_1,
     lpTokenAmount: pairInfo.total_liquidity,
-    priceRatio: stableInfo ? stableInfo.p : null,
     pairSettings: {
-      lpFee: fees.lp_fee.nom / fees.lp_fee.denom,
-      daoFee: fees.shade_dao_fee.nom / fees.shade_dao_fee.denom,
-      stableLpFee: fees.stable_lp_fee.nom / fees.stable_lp_fee.denom,
-      stableDaoFee: fees.stable_shade_dao_fee.nom / fees.stable_shade_dao_fee.denom,
-
+      lpFee: pairInfo.pair[2] ? fees.stable_lp_fee.nom / fees.stable_lp_fee.denom
+        : fees.lp_fee.nom / fees.lp_fee.denom,
+      daoFee: pairInfo.pair[2] ? fees.stable_shade_dao_fee.nom / fees.stable_shade_dao_fee.denom
+        : fees.shade_dao_fee.nom / fees.shade_dao_fee.denom,
       stableParams: stableInfo ? {
+        priceRatio: stableInfo.p!, // if stable params exist, we know price ratio will be available
         alpha: stableInfo.stable_params.a,
         gamma1: stableInfo.stable_params.gamma1,
         gamma2: stableInfo.stable_params.gamma2,

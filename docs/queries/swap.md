@@ -327,18 +327,16 @@ type PairInfo = {
   isStable: boolean,
   token0Amount: string,
   token1Amount: string,
-  priceRatio: string | null,
   pairSettings: {
     lpFee: number,
     daoFee: number,
-    stableLpFee: number,
-    stableDaoFee: number,
     stableParams: StableParams | null
   },
   contractVersion: number,
 }
 
 type StableParams = {
+  priceRatio: string,
   alpha: string,
   gamma1: string,
   gamma2: string,
@@ -413,7 +411,6 @@ console.log(output)
             "token0Amount": "4268251730565",
             "token1Amount": "365239579269",
             "lpTokenAmount": "487393298891",
-            "priceRatio": null,
             "pairSettings": {
                 "lpFee": 0.0029,
                 "daoFee": 0.0001,
@@ -448,7 +445,6 @@ console.log(output)
             "token0Amount": "95199329571",
             "token1Amount": "377657768",
             "lpTokenAmount": "5708789507",
-            "priceRatio": null,
             "pairSettings": {
                 "lpFee": 0.0029,
                 "daoFee": 0.0001,

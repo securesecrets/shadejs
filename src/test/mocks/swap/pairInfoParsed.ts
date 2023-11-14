@@ -22,13 +22,11 @@ const pairInfoParsed: PairInfo = {
   token0Amount: '3218142110921700343525',
   token1Amount: '6366867216411002795778',
   lpTokenAmount: '4783477681443035000237',
-  priceRatio: '1.08921896906564985',
   pairSettings: {
     lpFee: 0.0005,
     daoFee: 0.0005,
-    stableLpFee: 0.0005,
-    stableDaoFee: 0.0005,
     stableParams: {
+      priceRatio: '1.08921896906564985',
       alpha: '150',
       gamma1: '6',
       gamma2: '50',

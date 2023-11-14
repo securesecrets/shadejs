@@ -1,3 +1,6 @@
+import BigNumber from 'bignumber.js';
+import { TokensConfig } from '~/types/shared';
+
 const encodeJsonToB64 = (toEncode:any) : string => Buffer.from(JSON.stringify(toEncode), 'utf8').toString('base64');
 
 const decodeB64ToJson = (encodedData: string) => JSON.parse(Buffer.from(encodedData, 'base64').toString('utf8'));
@@ -20,8 +23,53 @@ const randomPadding = ():string => {
   return result;
 };
 
+/**
+ * Convert from uDenom to the human readable equivalent as BigNumber type
+ */
+const convertCoinFromUDenom = (
+  amount: number | string | BigNumber,
+  decimals:number,
+) => {
+  BigNumber.config({ DECIMAL_PLACES: 18 });
+  return BigNumber(
+    amount,
+  ).dividedBy(BigNumber(10).pow(decimals));
+};
+
+/**
+ * Convert BigNumber to the uDenom string type
+ */
+const convertCoinToUDenom = (
+  amount: BigNumber | number | string,
+  decimals:number,
+) => {
+  if (typeof amount === 'string' || typeof amount === 'number') {
+    return BigNumber(amount).multipliedBy(BigNumber(10).pow(decimals)).toFixed(0);
+  }
+  return amount.multipliedBy(BigNumber(10).pow(decimals)).toFixed(0);
+};
+
+function getTokenDecimalsByTokenConfig(tokenContractAddress: string, tokens: TokensConfig) {
+  const tokenConfigArr = tokens.filter(
+    (token) => token.tokenContractAddress === tokenContractAddress,
+  );
+
+  if (tokenConfigArr.length === 0) {
+    throw new Error(`token ${tokenContractAddress} not available`);
+  }
+
+  if (tokenConfigArr.length > 1) {
+    throw new Error(`Duplicate ${tokenContractAddress} tokens found`);
+  }
+  // at this point we have determined there is a single match
+  return tokenConfigArr[0].decimals;
+}
+
 export {
   encodeJsonToB64,
   decodeB64ToJson,
   randomPadding,
+  convertCoinFromUDenom,
+  convertCoinToUDenom,
+  getTokenDecimalsByTokenConfig,
 };
