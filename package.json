@@ -1,5 +1,6 @@
 {
   "name": "@shadeprotocol/shadejs",
+  "description": "The Typescript SDK for Shade Protocol",
   "version": "1.0.0",
   "author": "Secure Secrets",
   "bugs": {

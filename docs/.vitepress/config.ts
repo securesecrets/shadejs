@@ -4,6 +4,7 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   title: "ShadeJS",
   description: "A ShadeJS Site",
+  ignoreDeadLinks: true,
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
