@@ -414,8 +414,6 @@ console.log(output)
             "pairSettings": {
                 "lpFee": 0.0029,
                 "daoFee": 0.0001,
-                "stableLpFee": 0.000483,
-                "stableDaoFee": 0.000017,
                 "stableParams": null
             },
             "contractVersion": 1
@@ -448,8 +446,6 @@ console.log(output)
             "pairSettings": {
                 "lpFee": 0.0029,
                 "daoFee": 0.0001,
-                "stableLpFee": 0.000483,
-                "stableDaoFee": 0.000017,
                 "stableParams": null
             },
             "contractVersion": 1
