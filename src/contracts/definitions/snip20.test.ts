@@ -136,13 +136,15 @@ test('it checks the shape of the snip20 increase allowance', () => {
 
 test('it checks the shape of the snip20 viewing', () => {
   const viewingKey = 'MOCK_VIEWING_KEY';
+  const padding = 'PADDING';
 
   const output = {
     msg: {
       set_viewing_key: {
         key: viewingKey,
+        padding,
       },
     },
   };
-  expect(snip20.messages.createViewingKey(viewingKey)).toStrictEqual(output);
+  expect(snip20.messages.createViewingKey(viewingKey, padding)).toStrictEqual(output);
 });

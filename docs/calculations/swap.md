@@ -2,6 +2,9 @@
 
 This page demonstrates how to calculate outputs of a single pair swap on ShadeSwap
 
+## BigNumber.js
+<a href="https://github.com/MikeMcl/bignumber.js" target="_blank">bignumber.js</a> is used on all computations to prevent loss of precision that normally happens with standard javascript math
+
 ## Constant Product (CPMM)
 
 ### Forward Swap
@@ -47,7 +50,7 @@ function constantProductSwapToken1for0({
 ```
 
 ### Reverse Swap
-Backwards calcuation for determining a token input amount for a given output amount.
+Backwards calculation for determining a token input amount for a given output amount.
 ```ts
 /**
 * returns input of a simulated swap from token0 to token1 using the constant
@@ -162,7 +165,7 @@ function stableSwapToken1for0({
 ```
 
 ### Reverse Swap
-Backwards calcuation for determining a token input amount for a given output amount.
+Backwards calculation for determining a token input amount for a given output amount.
 ```ts
 /**
 * returns input of a simulated swap of token0 for 

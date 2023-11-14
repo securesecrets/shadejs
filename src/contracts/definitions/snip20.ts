@@ -29,7 +29,7 @@ const snip20 = {
       recipientCodeHash?: string,
       amount: string,
       handleMsg: any,
-      padding: string,
+      padding?: string,
     }): Snip20MessageRequest {
       const msg = {
         send: {
@@ -52,7 +52,7 @@ const snip20 = {
     }: {
       recipient: string,
       amount: string,
-      padding: string,
+      padding?: string,
     }): Snip20MessageRequest {
       const msg = {
         transfer: {
@@ -85,7 +85,7 @@ const snip20 = {
     }:{
       amount: string,
       denom: string,
-      padding: string,
+      padding?: string,
     }): Snip20MessageRequest {
       const msg = {
         redeem: {
@@ -108,7 +108,7 @@ const snip20 = {
       spender: string,
       amount: string,
       expiration?: number,
-      padding: string,
+      padding?: string,
     }): Snip20MessageRequest {
       const msg = {
         increase_allowance: {
@@ -123,10 +123,11 @@ const snip20 = {
       };
     },
 
-    createViewingKey(viewingKey: string): Snip20MessageRequest {
+    createViewingKey(viewingKey: string, padding?: string): Snip20MessageRequest {
       const msg = {
         set_viewing_key: {
           key: viewingKey,
+          padding,
         },
       };
       return {
