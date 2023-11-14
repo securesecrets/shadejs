@@ -1,5 +1,7 @@
 # ShadeJS  
-<img src="./docs/logo.svg" alt="ShadeJS Logo" width="150" height="150" />
+
+
+<img src="./docs/logo.svg" alt="ShadeJS Logo" width="150" height="150"  style="background-color: #0d1117"/>
 <p align="center">
   <img alt="npm" src="https://img.shields.io/npm/v/shadejs" />
   <img alt="ci" style="margin-left: 0.3em" src="https://github.com/securesecrets/shadejs/actions/workflows/test.yml/badge.svg?branch=main" />
