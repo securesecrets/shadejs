@@ -100,7 +100,7 @@ function getPossiblePaths({
 * calculates the estimated output of swapping through a route given an input token amount
 * and also transforms the data collected in each pool into the Route data model
 */
-function forwardCalculateRoute({
+function calculateRoute({
   inputTokenAmount,
   inputTokenContractAddress,
   path,
@@ -371,7 +371,7 @@ function getRoutes({
 
   const routes = possiblePaths.reduce((prev, path) => {
     try {
-      const newRoute = forwardCalculateRoute({
+      const newRoute = calculateRoute({
         inputTokenAmount,
         inputTokenContractAddress,
         path,
@@ -401,6 +401,6 @@ function getRoutes({
 }
 export {
   getPossiblePaths,
-  forwardCalculateRoute,
+  calculateRoute,
   getRoutes,
 };

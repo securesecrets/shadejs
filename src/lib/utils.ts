@@ -8,7 +8,7 @@ const decodeB64ToJson = (encodedData: string) => JSON.parse(Buffer.from(encodedD
 /**
 * Generates random string of characters, used to add entropy to TX data
 * */
-const randomPadding = ():string => {
+const generatePadding = ():string => {
   enum length {
     MAX = 15,
     MIN = 8
@@ -49,6 +49,10 @@ const convertCoinToUDenom = (
   return amount.multipliedBy(BigNumber(10).pow(decimals)).toFixed(0);
 };
 
+/**
+ * function used to determine the decimals of a token given the contract address and a list
+ * of token configs
+ */
 function getTokenDecimalsByTokenConfig(tokenContractAddress: string, tokens: TokensConfig) {
   const tokenConfigArr = tokens.filter(
     (token) => token.tokenContractAddress === tokenContractAddress,
@@ -68,7 +72,7 @@ function getTokenDecimalsByTokenConfig(tokenContractAddress: string, tokens: Tok
 export {
   encodeJsonToB64,
   decodeB64ToJson,
-  randomPadding,
+  generatePadding,
   convertCoinFromUDenom,
   convertCoinToUDenom,
   getTokenDecimalsByTokenConfig,

@@ -23,7 +23,7 @@ vi.mock('~/contracts/definitions/snip20', () => ({
 }));
 
 vi.mock('~/lib/utils', () => ({
-  randomPadding: vi.fn(() => 'RANDOM_PADDING'),
+  generatePadding: vi.fn(() => 'RANDOM_PADDING'),
 }));
 
 test('it tests the form of the query factory config msg', () => {

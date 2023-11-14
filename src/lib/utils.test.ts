@@ -7,7 +7,7 @@ import {
 import {
   encodeJsonToB64,
   decodeB64ToJson,
-  randomPadding,
+  generatePadding,
   convertCoinFromUDenom,
   convertCoinToUDenom,
 } from './utils';
@@ -31,15 +31,15 @@ test('It decodes a base64 string into JSON', () => {
 test('Generates random padding of length 8-15', () => {
   // checks midpoint
   vi.spyOn(global.Math, 'random').mockReturnValue(0.44351455);
-  expect(randomPadding()).toBe('bbbbbbbbbbb');
+  expect(generatePadding()).toBe('bbbbbbbbbbb');
 
   // checks upper bound
   vi.spyOn(global.Math, 'random').mockReturnValue(0.99999999);
-  expect(randomPadding()).toBe('999999999999999');
+  expect(generatePadding()).toBe('999999999999999');
 
   // checks lower bound
   vi.spyOn(global.Math, 'random').mockReturnValue(0);
-  expect(randomPadding()).toBe('AAAAAAAA');
+  expect(generatePadding()).toBe('AAAAAAAA');
 });
 
 test('It converts token from U denom V2', () => {

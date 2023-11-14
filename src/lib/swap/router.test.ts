@@ -4,7 +4,7 @@ import {
 } from 'vitest';
 import {
   getPossiblePaths,
-  forwardCalculateRoute,
+  calculateRoute,
   getRoutes,
 } from '~/lib/swap/router';
 import BigNumber from 'bignumber.js';
@@ -213,7 +213,7 @@ test('it can calculate the output of a single pool swap route', () => {
     path: ['CONTRACT_ADDRESS_PAIR_1'],
     gasMultiplier: GasMultiplier.CONSTANT_PRODUCT,
   };
-  expect(forwardCalculateRoute({
+  expect(calculateRoute({
     inputTokenAmount: BigNumber('1000000000'),
     inputTokenContractAddress: output.inputTokenContractAddress,
     path: ['CONTRACT_ADDRESS_PAIR_1'],
@@ -248,7 +248,7 @@ test('it can calculate the output of a multi-hop constant product swap route', (
   // liquidity provider Fee: 0.02
 
   // Pool A-B
-  const constantProductSwap1Output = forwardCalculateRoute({
+  const constantProductSwap1Output = calculateRoute({
     inputTokenAmount: BigNumber('1000000000'),
     inputTokenContractAddress: 'TOKEN_A_CONTRACT_ADDRESS',
     path: ['CONTRACT_ADDRESS_PAIR_1'],
@@ -257,7 +257,7 @@ test('it can calculate the output of a multi-hop constant product swap route', (
   }).quoteOutputAmount;
 
   // pool C-B
-  const constantProductSwap2Output = forwardCalculateRoute({
+  const constantProductSwap2Output = calculateRoute({
     inputTokenAmount: constantProductSwap1Output,
     inputTokenContractAddress: 'TOKEN_B_CONTRACT_ADDRESS',
     path: ['CONTRACT_ADDRESS_PAIR_2'],
@@ -266,7 +266,7 @@ test('it can calculate the output of a multi-hop constant product swap route', (
   }).quoteOutputAmount;
 
   // pool C-D
-  const constantProductSwap3Output = forwardCalculateRoute({
+  const constantProductSwap3Output = calculateRoute({
     inputTokenAmount: constantProductSwap2Output,
     inputTokenContractAddress: 'TOKEN_C_CONTRACT_ADDRESS',
     path: ['CONTRACT_ADDRESS_PAIR_3'],
@@ -275,7 +275,7 @@ test('it can calculate the output of a multi-hop constant product swap route', (
   }).quoteOutputAmount;
 
   // combine into multi-hop routing (FORWARD)
-  const calulatedRouteResult = forwardCalculateRoute({
+  const calulatedRouteResult = calculateRoute({
     inputTokenAmount: BigNumber('1000000000'),
     inputTokenContractAddress: 'TOKEN_A_CONTRACT_ADDRESS',
     path: [
@@ -350,7 +350,7 @@ test('it can calculate the output of a multi-hop stable swap route', () => {
   // First simulate indidual swaps using outputs as inputs of the following
 
   // Pool K-L
-  const stableSwap1Output = forwardCalculateRoute({
+  const stableSwap1Output = calculateRoute({
     inputTokenAmount: BigNumber('100000000'),
     inputTokenContractAddress: 'TOKEN_K_CONTRACT_ADDRESS',
     path: ['CONTRACT_ADDRESS_PAIR_10'],
@@ -359,7 +359,7 @@ test('it can calculate the output of a multi-hop stable swap route', () => {
   }).quoteOutputAmount;
 
   // pool M-L
-  const stableSwap2Output = forwardCalculateRoute({
+  const stableSwap2Output = calculateRoute({
     inputTokenAmount: stableSwap1Output,
     inputTokenContractAddress: 'TOKEN_L_CONTRACT_ADDRESS',
     path: ['CONTRACT_ADDRESS_PAIR_11'],
@@ -368,7 +368,7 @@ test('it can calculate the output of a multi-hop stable swap route', () => {
   }).quoteOutputAmount;
 
   // pool M-N
-  const stableSwap3Output = forwardCalculateRoute({
+  const stableSwap3Output = calculateRoute({
     inputTokenAmount: stableSwap2Output,
     inputTokenContractAddress: 'TOKEN_M_CONTRACT_ADDRESS',
     path: ['CONTRACT_ADDRESS_PAIR_12'],
@@ -377,7 +377,7 @@ test('it can calculate the output of a multi-hop stable swap route', () => {
   }).quoteOutputAmount;
 
   // combine into multi-hop routing
-  const calulatedStableRouteResult = forwardCalculateRoute({
+  const calulatedStableRouteResult = calculateRoute({
     inputTokenAmount: BigNumber('100000000'),
     inputTokenContractAddress: 'TOKEN_K_CONTRACT_ADDRESS',
     path: [
@@ -443,7 +443,7 @@ test('it can calculate the output of a multi-hop mixed swap route', () => {
   // First simulate indidual swaps using outputs as inputs of the following
   // Pool O-L
 
-  const mixedSwapConstantProduct1Output = forwardCalculateRoute({
+  const mixedSwapConstantProduct1Output = calculateRoute({
     inputTokenAmount: BigNumber('100000000'),
     inputTokenContractAddress: 'TOKEN_O_CONTRACT_ADDRESS',
     path: ['CONTRACT_ADDRESS_PAIR_13'],
@@ -452,7 +452,7 @@ test('it can calculate the output of a multi-hop mixed swap route', () => {
   }).quoteOutputAmount;
 
   // pool M-L
-  const mixedSwapStableSwapOutput = forwardCalculateRoute({
+  const mixedSwapStableSwapOutput = calculateRoute({
     inputTokenAmount: mixedSwapConstantProduct1Output,
     inputTokenContractAddress: 'TOKEN_L_CONTRACT_ADDRESS',
     path: ['CONTRACT_ADDRESS_PAIR_11'],
@@ -461,7 +461,7 @@ test('it can calculate the output of a multi-hop mixed swap route', () => {
   }).quoteOutputAmount;
 
   // pool M-P
-  const mixedSwapConstantProduct2Output = forwardCalculateRoute({
+  const mixedSwapConstantProduct2Output = calculateRoute({
     inputTokenAmount: mixedSwapStableSwapOutput,
     inputTokenContractAddress: 'TOKEN_M_CONTRACT_ADDRESS',
     path: ['CONTRACT_ADDRESS_PAIR_14'],
@@ -470,7 +470,7 @@ test('it can calculate the output of a multi-hop mixed swap route', () => {
   }).quoteOutputAmount;
 
   // combined multi-hop
-  const mixedMultiHopResult = forwardCalculateRoute({
+  const mixedMultiHopResult = calculateRoute({
     inputTokenAmount: BigNumber('100000000'),
     inputTokenContractAddress: 'TOKEN_O_CONTRACT_ADDRESS',
     path: [
