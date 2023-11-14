@@ -128,8 +128,6 @@ function forwardCalculateRoute({
     let swapAmountOutput;
     let swapPriceImpact;
     let poolMultiplier;
-    let daoFee;
-    let lpFee;
 
     const pairArr = pairs.filter(
       (pair) => pair.pairContractAddress === poolContractAddress,
@@ -151,8 +149,10 @@ function forwardCalculateRoute({
         token1Contract,
         token0Amount,
         token1Amount,
-        pairSettings,
+        lpFee,
+        daoFee,
         isStable,
+        stableParams,
       },
     } = pair;
     // Convert pool liquidity from human readable to raw number for
@@ -203,7 +203,6 @@ function forwardCalculateRoute({
     );
 
     // Stable Pool calculations
-    const { stableParams } = pairSettings;
     if (isStable && stableParams) {
       poolMultiplier = GasMultiplier.STABLE;
 
@@ -217,8 +216,8 @@ function forwardCalculateRoute({
           alpha: BigNumber(stableParams.alpha),
           gamma1: BigNumber(stableParams.gamma1),
           gamma2: BigNumber(stableParams.gamma2),
-          liquidityProviderFee: BigNumber(pairSettings.lpFee),
-          daoFee: BigNumber(pairSettings.daoFee),
+          liquidityProviderFee: BigNumber(lpFee),
+          daoFee: BigNumber(daoFee),
           minTradeSizeToken0For1: BigNumber(stableParams.minTradeSizeXForY),
           minTradeSizeToken1For0: BigNumber(stableParams.minTradeSizeYForX),
           priceImpactLimit: BigNumber(stableParams.maxPriceImpactAllowed),
@@ -241,8 +240,8 @@ function forwardCalculateRoute({
           alpha: BigNumber(stableParams.alpha),
           gamma1: BigNumber(stableParams.gamma1),
           gamma2: BigNumber(stableParams.gamma2),
-          liquidityProviderFee: BigNumber(pairSettings.lpFee),
-          daoFee: BigNumber(pairSettings.daoFee),
+          liquidityProviderFee: BigNumber(lpFee),
+          daoFee: BigNumber(daoFee),
           minTradeSizeToken0For1: BigNumber(stableParams.minTradeSizeXForY),
           minTradeSizeToken1For0: BigNumber(stableParams.minTradeSizeYForX),
           priceImpactLimit: BigNumber(stableParams.maxPriceImpactAllowed),
@@ -258,9 +257,6 @@ function forwardCalculateRoute({
       } else {
         throw Error('stableswap parameter error');
       }
-      // set fees
-      daoFee = BigNumber(pairSettings.daoFee);
-      lpFee = BigNumber(pairSettings.lpFee);
     } else {
       poolMultiplier = GasMultiplier.CONSTANT_PRODUCT;
       // non-stable pools using constant product rule math
@@ -270,7 +266,7 @@ function forwardCalculateRoute({
           token0LiquidityAmount: BigNumber(token0Amount),
           token1LiquidityAmount: BigNumber(token1Amount),
           token0InputAmount: inputAmount,
-          fee: BigNumber(pairSettings.lpFee).plus(pairSettings.daoFee),
+          fee: BigNumber(lpFee).plus(daoFee),
         });
 
         swapPriceImpact = constantProductPriceImpactToken0for1({
@@ -285,7 +281,7 @@ function forwardCalculateRoute({
           token0LiquidityAmount: BigNumber(token0Amount),
           token1LiquidityAmount: BigNumber(token1Amount),
           token1InputAmount: inputAmount,
-          fee: BigNumber(pairSettings.lpFee).plus(pairSettings.daoFee),
+          fee: BigNumber(lpFee).plus(daoFee),
         });
 
         swapPriceImpact = constantProductPriceImpactToken1for0({
@@ -296,8 +292,6 @@ function forwardCalculateRoute({
       } else {
         throw Error('constant product rule swap parameter error');
       }
-      daoFee = BigNumber(pairSettings.daoFee);
-      lpFee = BigNumber(pairSettings.lpFee);
     }
 
     // output data for the reduce function

@@ -187,38 +187,37 @@ function parsePairInfo(
     token0Amount: pairInfo.amount_0,
     token1Amount: pairInfo.amount_1,
     lpTokenAmount: pairInfo.total_liquidity,
-    pairSettings: {
-      lpFee: pairInfo.pair[2] ? fees.stable_lp_fee.nom / fees.stable_lp_fee.denom
-        : fees.lp_fee.nom / fees.lp_fee.denom,
-      daoFee: pairInfo.pair[2] ? fees.stable_shade_dao_fee.nom / fees.stable_shade_dao_fee.denom
-        : fees.shade_dao_fee.nom / fees.shade_dao_fee.denom,
-      stableParams: stableInfo ? {
-        priceRatio: stableInfo.p!, // if stable params exist, we know price ratio will be available
-        alpha: stableInfo.stable_params.a,
-        gamma1: stableInfo.stable_params.gamma1,
-        gamma2: stableInfo.stable_params.gamma2,
-        oracle: {
-          address: stableInfo.stable_params.oracle.address,
-          codeHash: stableInfo.stable_params.oracle.code_hash,
-        },
-        token0Data: {
-          oracleKey: stableInfo.stable_token0_data.oracle_key,
-          decimals: stableInfo.stable_token0_data.decimals,
-        },
-        token1Data: {
-          oracleKey: stableInfo.stable_token1_data.oracle_key,
-          decimals: stableInfo.stable_token1_data.decimals,
-        },
-        minTradeSizeXForY: stableInfo.stable_params.min_trade_size_x_for_y,
-        minTradeSizeYForX: stableInfo.stable_params.min_trade_size_y_for_x,
-        maxPriceImpactAllowed: stableInfo.stable_params.max_price_impact_allowed,
-        customIterationControls: stableInfo.stable_params.custom_iteration_controls ? {
-          epsilon: stableInfo.stable_params.custom_iteration_controls.epsilon,
-          maxIteratorNewton: stableInfo.stable_params.custom_iteration_controls.max_iter_newton,
-          maxIteratorBisect: stableInfo.stable_params.custom_iteration_controls.max_iter_bisect,
-        } : null,
+    lpFee: pairInfo.pair[2] ? fees.stable_lp_fee.nom / fees.stable_lp_fee.denom
+      : fees.lp_fee.nom / fees.lp_fee.denom,
+    daoFee: pairInfo.pair[2] ? fees.stable_shade_dao_fee.nom / fees.stable_shade_dao_fee.denom
+      : fees.shade_dao_fee.nom / fees.shade_dao_fee.denom,
+    stableParams: stableInfo ? {
+      priceRatio: stableInfo.p!, // if stable params exist, we know price ratio will be available
+      alpha: stableInfo.stable_params.a,
+      gamma1: stableInfo.stable_params.gamma1,
+      gamma2: stableInfo.stable_params.gamma2,
+      oracle: {
+        address: stableInfo.stable_params.oracle.address,
+        codeHash: stableInfo.stable_params.oracle.code_hash,
+      },
+      token0Data: {
+        oracleKey: stableInfo.stable_token0_data.oracle_key,
+        decimals: stableInfo.stable_token0_data.decimals,
+      },
+      token1Data: {
+        oracleKey: stableInfo.stable_token1_data.oracle_key,
+        decimals: stableInfo.stable_token1_data.decimals,
+      },
+      minTradeSizeXForY: stableInfo.stable_params.min_trade_size_x_for_y,
+      minTradeSizeYForX: stableInfo.stable_params.min_trade_size_y_for_x,
+      maxPriceImpactAllowed: stableInfo.stable_params.max_price_impact_allowed,
+      customIterationControls: stableInfo.stable_params.custom_iteration_controls ? {
+        epsilon: stableInfo.stable_params.custom_iteration_controls.epsilon,
+        maxIteratorNewton: stableInfo.stable_params.custom_iteration_controls.max_iter_newton,
+        maxIteratorBisect: stableInfo.stable_params.custom_iteration_controls.max_iter_bisect,
       } : null,
-    },
+    } : null,
+
     contractVersion: pairInfo.contract_version,
   };
 }

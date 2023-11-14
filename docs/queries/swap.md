@@ -327,11 +327,9 @@ type PairInfo = {
   isStable: boolean,
   token0Amount: string,
   token1Amount: string,
-  pairSettings: {
-    lpFee: number,
-    daoFee: number,
-    stableParams: StableParams | null
-  },
+  lpFee: number,
+  daoFee: number,
+  stableParams: StableParams | null
   contractVersion: number,
 }
 
@@ -411,11 +409,9 @@ console.log(output)
             "token0Amount": "4268251730565",
             "token1Amount": "365239579269",
             "lpTokenAmount": "487393298891",
-            "pairSettings": {
-                "lpFee": 0.0029,
-                "daoFee": 0.0001,
-                "stableParams": null
-            },
+            "lpFee": 0.0029,
+            "daoFee": 0.0001,
+            "stableParams": null
             "contractVersion": 1
         }
     },
@@ -443,11 +439,9 @@ console.log(output)
             "token0Amount": "95199329571",
             "token1Amount": "377657768",
             "lpTokenAmount": "5708789507",
-            "pairSettings": {
-                "lpFee": 0.0029,
-                "daoFee": 0.0001,
-                "stableParams": null
-            },
+            "lpFee": 0.0029,
+            "daoFee": 0.0001,
+            "stableParams": null
             "contractVersion": 1
         }
     }

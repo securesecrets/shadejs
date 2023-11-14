@@ -83,11 +83,9 @@ type PairInfo = {
   isStable: boolean,
   token0Amount: string,
   token1Amount: string,
-  pairSettings: {
-    lpFee: number,
-    daoFee: number,
-    stableParams: StableParams | null
-  },
+  lpFee: number,
+  daoFee: number,
+  stableParams: StableParams | null
   contractVersion: number,
 }
 
