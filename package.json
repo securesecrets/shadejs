@@ -2,6 +2,12 @@
   "name": "shadejs",
   "version": "0.0.0",
   "author": "Secure Secrets",
+  "bugs": {
+    "url": "https://github.com/securesecrets/shadejs/issues"
+  },
+  "repository": {
+    "url": "https://github.com/securesecrets/shadejs"
+  },
   "license": "MIT",
   "type": "module",
   "main": "./dist/shadejs.cjs",
