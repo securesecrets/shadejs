@@ -5,11 +5,11 @@
 ::: code-group
 
 ```sh [npm]
-$ npm add TBD_LIBRARY_NAME
+$ npm i @shadeprotocol/shadejs
 ```
 
 ```sh [yarn]
-$ yarn add TBD_LIBRARY_NAME
+$ yarn add @shadeprotocol/shadejs
 ```
 :::
 
