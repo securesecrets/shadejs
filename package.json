@@ -1,7 +1,13 @@
 {
   "name": "shadejs",
-  "version": "0.0.3",
+  "version": "0.0.0",
   "author": "Secure Secrets",
+  "bugs": {
+    "url": "https://github.com/securesecrets/shadejs/issues"
+  },
+  "repository": {
+    "url": "https://github.com/securesecrets/shadejs"
+  },
   "license": "MIT",
   "type": "module",
   "main": "./dist/shadejs.cjs",
@@ -14,9 +20,7 @@
     }
   },
   "files": [
-    [
-      "dist"
-    ]
+    "dist"
   ],
   "scripts": {
     "build": "tsc && vite build",
@@ -32,28 +36,29 @@
     "docs:preview": "vitepress preview docs"
   },
   "dependencies": {
+    "bignumber.js": "^9.1.2",
+    "rxjs": "^7.8.1",
+    "secretjs": "^1.12.1",
+    "vite": "^4.5.0",
+    "whatwg-fetch": "^3.6.19"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.26.2",
     "@commitlint/cli": "^17.7.2",
     "@commitlint/config-conventional": "^17.7.0",
-    "bignumber.js": "^9.1.2",
+    "@typescript-eslint/eslint-plugin": "^6.7.4",
+    "@typescript-eslint/parser": "^6.7.4",
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "^8.51.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-import-resolver-typescript": "^3.6.1",
     "eslint-plugin-import": "^2.28.1",
     "lefthook": "^1.5.2",
-    "rxjs": "^7.8.1",
-    "secretjs": "^1.11.1",
     "typescript": "^5.2.2",
-    "vite": "^4.4.11",
-    "vitepress": "^1.0.0-rc.24",
-    "vitest": "^0.34.6",
-    "whatwg-fetch": "^3.6.19"
-  },
-  "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^6.7.4",
-    "@typescript-eslint/parser": "^6.7.4",
     "vite-plugin-dts": "^3.6.0",
-    "vite-plugin-node-polyfills": "^0.15.0"
+    "vite-plugin-node-polyfills": "^0.15.0",
+    "vitepress": "^1.0.0-rc.24",
+    "vitest": "^0.34.6"
   },
   "config": {
     "commitizen": {

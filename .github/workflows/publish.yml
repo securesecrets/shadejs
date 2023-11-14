@@ -1,7 +1,13 @@
-name: Test
-on: [push]
+name: Publish
+on: 
+  push: 
+    branches:
+      - "main"
+
+concurrrency: ${{ github.workflow }}-${{ github.ref}}
+
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
@@ -13,5 +19,8 @@ jobs:
         cache: yarn
     - name: Install Dependencies
       run: yarn install --frozen-lockfile
-    - name: Test
-      run: yarn test
+    - name: Create Release Pull Request or Publish
+      id: changesets
+      uses: changesets/action@v1
+      with: 
+        publish: yarn run build
