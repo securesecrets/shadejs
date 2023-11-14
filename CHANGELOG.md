@@ -1,5 +1,11 @@
 # shadejs
 
+## 1.0.2
+
+### Patch Changes
+
+- 46a970c: update shadejs image background and fix links
+
 ## 1.0.1
 
 ### Patch Changes
