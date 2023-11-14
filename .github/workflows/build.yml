@@ -11,7 +11,7 @@ jobs:
     - name: Node Version
       uses: actions/setup-node@v3
       with:
-        node-version: 18.16.0
+        node-version: 20.9.0
         cache: yarn
     - name: Install Dependencies
       run: yarn install --frozen-lockfile
