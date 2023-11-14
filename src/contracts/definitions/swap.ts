@@ -3,7 +3,7 @@ import {
   Path,
   Paths,
 } from '~/types/contracts/swap/model';
-import { randomPadding } from '~/lib/utils';
+import { generatePadding } from '~/lib/utils';
 import { snip20 } from './snip20';
 
 /**
@@ -75,7 +75,7 @@ function msgSwap({
     recipientCodeHash: routerCodeHash,
     amount: sendAmount,
     handleMsg: swapParamsMessage,
-    padding: randomPadding(),
+    padding: generatePadding(),
   }).msg;
 }
 
