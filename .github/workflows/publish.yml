@@ -24,6 +24,6 @@ jobs:
       uses: changesets/action@v1
       with: 
         publish: yarn release
-      env: # More info about the environment variables in the README
+      env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
         NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
