@@ -19,6 +19,10 @@ Hi! We're really excited that you are interested in contributing to ShadeJS. Bef
 
 - Commit messages must follow the [commit message convention](./COMMIT_CONVENTION.md).
 - Ensure that the documentation [site](./.vitepress/config.ts) is updated to reflect your changes in the pull request.
+- Please generate a [changeset](https://github.com/changesets/changesets/blob/main/docs/adding-a-changeset.md) for any PRs that impact the core ShadeJS code. The purpose of this is to automate version control and releases. This is not required for documentation changes only. You can run the following command for this: 
+```
+$ yarn changeset
+```
 
 ## Development Setup
 
