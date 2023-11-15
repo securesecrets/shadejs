@@ -1,7 +1,7 @@
 {
   "name": "@shadeprotocol/shadejs",
   "description": "The Typescript SDK for Shade Protocol",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "author": "Secure Secrets",
   "bugs": {
     "url": "https://github.com/securesecrets/shadejs/issues"
@@ -16,6 +16,7 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/shadejs.js",
       "require": "./dist/shadejs.cjs"
     }
