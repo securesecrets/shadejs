@@ -95,9 +95,9 @@ export declare function batchQueryPairsInfo({ queryRouterContractAddress, queryR
     pairsContracts: Contract_2[];
 }): Promise<BatchPairsInfo>;
 
-declare type BatchQueryParsedResponse = BatchQueryParsedResponseItem[];
+export declare type BatchQueryParsedResponse = BatchQueryParsedResponseItem[];
 
-declare type BatchQueryParsedResponseItem = {
+export declare type BatchQueryParsedResponseItem = {
     id: string | number;
     response: any;
 };
