@@ -10,3 +10,4 @@ export {
   convertCoinFromUDenom,
   convertCoinToUDenom,
 } from '~/lib/utils';
+export * from './types';
