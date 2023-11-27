@@ -36,7 +36,7 @@ function calculateRoute({
   pairs,
   tokens,
 }:{
-  inputTokenAmount: BigNumber,
+  inputTokenAmount: BigNumber, // amount in uDenom
   inputTokenContractAddress: string,
   path: string[], // path determined by getPossiblePaths
   pairs: BatchPairsInfo,
@@ -46,6 +46,9 @@ function calculateRoute({
 
 ::: tip
 We pass in a list of all possible tokens (TokensConfig) so that we have access to their decimals for uDenom conversions. This is not the most elegant solution as it may be preferrable to reference your own data store for token data. In that case, you can create your own route calculator and use the ShadeJS one as a guide.
+:::
+::: warning
+Ensure tokenConfig contains no duplicate tokens as this will trigger an error in order to prevent a bad config from being used.
 :::
 ```ts
 type TokenConfig = {
@@ -98,5 +101,8 @@ function getRoutes({
 
 ::: warning
 This function optimizes for maximizing the output token amount only. It does NOT factor in the value of the gas for the extra hops (i.e. gas multiplier) relative to the value of tokens received. This will especially impact small trades where there is perceived arbitrage opportunities through certain paths, without factoring in the gas cost to perform the arbitrage. It is recommended that you create your own route calculator to handle token values and use the one provided here as a guide.
+:::
+::: tip
+Any errors encountered during a route calculation (ex: stableswap price impact tolerance exceeded, bad token config, missing pair data, etc.) will result in skipping this route as an option in the output. Errors in all possible routes will return an empty array, meaning that no successful route exists. You are encouraged to modify this example router if you wish to collect specific errors on each possible route and do something with that error data.
 :::
 
