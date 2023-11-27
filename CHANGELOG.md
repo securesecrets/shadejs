@@ -1,5 +1,17 @@
 # shadejs
 
+## 1.0.4
+
+### Patch Changes
+
+- af89f58: type exports added
+
+## 1.0.3
+
+### Patch Changes
+
+- 352f79d: add missing types field in package.json#exports
+
 ## 1.0.2
 
 ### Patch Changes
