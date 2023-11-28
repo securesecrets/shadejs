@@ -113,7 +113,7 @@ type PairInfoResponse = {
   }
 }
 
-type RewardTokenInfo = {
+type RewardTokenInfoResponse = {
   token: Contract,
   decimals: number,
   reward_per_second: string,
@@ -128,7 +128,7 @@ type StakingConfigResponse = {
   admin_auth: Contract,
   query_auth: Contract | null,
   total_amount_staked: string,
-  reward_tokens: RewardTokenInfo[],
+  reward_tokens: RewardTokenInfoResponse[],
 }
 
 export type {
