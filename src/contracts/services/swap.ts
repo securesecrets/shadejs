@@ -15,6 +15,7 @@ import {
 } from '~/types/contracts/swap/response';
 import {
   BatchPairsInfo,
+  BatchPairsConfig,
   BatchStakingInfo,
   FactoryConfig,
   FactoryPairs,
@@ -233,6 +234,12 @@ const parseBatchQueryPairInfoResponse = (
   pairInfo: parsePairInfo(item.response),
 }));
 
+const parseBatchQueryPairConfigResponse = (
+  response: BatchQueryParsedResponse,
+): BatchPairsConfig => response.map((item) => ({
+  pairContractAddress: item.id as string,
+  pairConfig: parsePairConfig(item.response),
+}));
 /**
  * parses the single staking info response
  */
@@ -547,6 +554,61 @@ async function batchQueryPairsInfo({
   }));
 }
 
+function batchQueryPairsConfig$({
+  queryRouterContractAddress,
+  queryRouterCodeHash,
+  lcdEndpoint,
+  chainId,
+  pairsContracts,
+}:{
+  queryRouterContractAddress: string,
+  queryRouterCodeHash?: string,
+  lcdEndpoint?: string,
+  chainId?: string,
+  pairsContracts: Contract[]
+}) {
+  const queries:BatchQuery[] = pairsContracts.map((contract) => ({
+    id: contract.address,
+    contract: {
+      address: contract.address,
+      codeHash: contract.codeHash,
+    },
+    queryMsg: msgQueryPairConfig(),
+  }));
+  return batchQuery$({
+    contractAddress: queryRouterContractAddress,
+    codeHash: queryRouterCodeHash,
+    lcdEndpoint,
+    chainId,
+    queries,
+  }).pipe(
+    map(parseBatchQueryPairConfigResponse),
+    first(),
+  );
+}
+
+async function batchQueryPairsConfig({
+  queryRouterContractAddress,
+  queryRouterCodeHash,
+  lcdEndpoint,
+  chainId,
+  pairsContracts,
+}:{
+  queryRouterContractAddress: string,
+  queryRouterCodeHash?: string,
+  lcdEndpoint?: string,
+  chainId?: string,
+  pairsContracts: Contract[]
+}) {
+  return lastValueFrom(batchQueryPairsConfig$({
+    queryRouterContractAddress,
+    queryRouterCodeHash,
+    lcdEndpoint,
+    chainId,
+    pairsContracts,
+  }));
+}
+
 /**
  * query the staking info for multiple staking contracts at one time
  */
@@ -622,6 +684,8 @@ export {
   queryPairConfig,
   batchQueryPairsInfo$,
   batchQueryPairsInfo,
+  batchQueryPairsConfig$,
+  batchQueryPairsConfig,
   batchQueryStakingInfo$,
   batchQueryStakingInfo,
   parseSwapResponse,
