@@ -234,6 +234,10 @@ const parseBatchQueryPairInfoResponse = (
   pairInfo: parsePairInfo(item.response),
 }));
 
+/**
+ * parses the pair config response from a batch query of
+ * multiple pair contracts
+ */
 const parseBatchQueryPairConfigResponse = (
   response: BatchQueryParsedResponse,
 ): BatchPairsConfig => response.map((item) => ({
@@ -554,6 +558,9 @@ async function batchQueryPairsInfo({
   }));
 }
 
+/**
+ * query the pair config for multiple pools at one time
+ */
 function batchQueryPairsConfig$({
   queryRouterContractAddress,
   queryRouterCodeHash,
@@ -587,6 +594,9 @@ function batchQueryPairsConfig$({
   );
 }
 
+/**
+ * query the pair config for multiple pools at one time
+ */
 async function batchQueryPairsConfig({
   queryRouterContractAddress,
   queryRouterCodeHash,
