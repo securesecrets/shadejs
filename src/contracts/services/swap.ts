@@ -498,7 +498,7 @@ async function queryPairConfig({
 }
 
 /**
- * query the pair info for multiple pools at one time
+ * query the info for multiple pairs at one time
  */
 function batchQueryPairsInfo$({
   queryRouterContractAddress,
@@ -534,7 +534,7 @@ function batchQueryPairsInfo$({
 }
 
 /**
- * query the pair info for multiple pools at one time
+ * query the info for multiple pairs at one time
  */
 async function batchQueryPairsInfo({
   queryRouterContractAddress,
@@ -559,7 +559,7 @@ async function batchQueryPairsInfo({
 }
 
 /**
- * query the pair config for multiple pools at one time
+ * query the config for multiple pairs at one time
  */
 function batchQueryPairsConfig$({
   queryRouterContractAddress,
@@ -595,7 +595,7 @@ function batchQueryPairsConfig$({
 }
 
 /**
- * query the pair config for multiple pools at one time
+ * query the config for multiple pairs at one time
  */
 async function batchQueryPairsConfig({
   queryRouterContractAddress,
