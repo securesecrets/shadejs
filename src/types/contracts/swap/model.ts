@@ -96,6 +96,13 @@ type BatchPairInfo = {
 
 type BatchPairsInfo = BatchPairInfo[]
 
+type BatchPairConfig = {
+  pairContractAddress: string,
+  pairConfig: PairConfig,
+}
+
+type BatchPairsConfig = BatchPairConfig[]
+
 type RewardTokenInfo = {
   token: Contract,
   rewardPerSecond: string,
@@ -138,6 +145,7 @@ type ParsedSwapResponse = {
 export type {
   FactoryPairs,
   PairConfig,
+  BatchPairsConfig,
   FactoryConfig,
   PairInfo,
   BatchPairsInfo,

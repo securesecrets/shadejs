@@ -15,6 +15,7 @@ import {
 } from '~/types/contracts/swap/response';
 import {
   BatchPairsInfo,
+  BatchPairsConfig,
   BatchStakingInfo,
   FactoryConfig,
   FactoryPairs,
@@ -148,7 +149,7 @@ function parsePairConfig(response: PairConfigResponse): PairConfig {
     isStable: pair[2],
     fee: customFee ? {
       lpFee: customFee.lp_fee.nom / customFee.lp_fee.denom,
-      daoFee: customFee.lp_fee.nom / customFee.lp_fee.denom,
+      daoFee: customFee.shade_dao_fee.nom / customFee.shade_dao_fee.denom,
     } : null,
   };
 }
@@ -233,6 +234,16 @@ const parseBatchQueryPairInfoResponse = (
   pairInfo: parsePairInfo(item.response),
 }));
 
+/**
+ * parses the pair config response from a batch query of
+ * multiple pair contracts
+ */
+const parseBatchQueryPairConfigResponse = (
+  response: BatchQueryParsedResponse,
+): BatchPairsConfig => response.map((item) => ({
+  pairContractAddress: item.id as string,
+  pairConfig: parsePairConfig(item.response),
+}));
 /**
  * parses the single staking info response
  */
@@ -487,7 +498,7 @@ async function queryPairConfig({
 }
 
 /**
- * query the pair info for multiple pools at one time
+ * query the info for multiple pairs at one time
  */
 function batchQueryPairsInfo$({
   queryRouterContractAddress,
@@ -523,7 +534,7 @@ function batchQueryPairsInfo$({
 }
 
 /**
- * query the pair info for multiple pools at one time
+ * query the info for multiple pairs at one time
  */
 async function batchQueryPairsInfo({
   queryRouterContractAddress,
@@ -539,6 +550,67 @@ async function batchQueryPairsInfo({
   pairsContracts: Contract[]
 }) {
   return lastValueFrom(batchQueryPairsInfo$({
+    queryRouterContractAddress,
+    queryRouterCodeHash,
+    lcdEndpoint,
+    chainId,
+    pairsContracts,
+  }));
+}
+
+/**
+ * query the config for multiple pairs at one time
+ */
+function batchQueryPairsConfig$({
+  queryRouterContractAddress,
+  queryRouterCodeHash,
+  lcdEndpoint,
+  chainId,
+  pairsContracts,
+}:{
+  queryRouterContractAddress: string,
+  queryRouterCodeHash?: string,
+  lcdEndpoint?: string,
+  chainId?: string,
+  pairsContracts: Contract[]
+}) {
+  const queries:BatchQuery[] = pairsContracts.map((contract) => ({
+    id: contract.address,
+    contract: {
+      address: contract.address,
+      codeHash: contract.codeHash,
+    },
+    queryMsg: msgQueryPairConfig(),
+  }));
+  return batchQuery$({
+    contractAddress: queryRouterContractAddress,
+    codeHash: queryRouterCodeHash,
+    lcdEndpoint,
+    chainId,
+    queries,
+  }).pipe(
+    map(parseBatchQueryPairConfigResponse),
+    first(),
+  );
+}
+
+/**
+ * query the config for multiple pairs at one time
+ */
+async function batchQueryPairsConfig({
+  queryRouterContractAddress,
+  queryRouterCodeHash,
+  lcdEndpoint,
+  chainId,
+  pairsContracts,
+}:{
+  queryRouterContractAddress: string,
+  queryRouterCodeHash?: string,
+  lcdEndpoint?: string,
+  chainId?: string,
+  pairsContracts: Contract[]
+}) {
+  return lastValueFrom(batchQueryPairsConfig$({
     queryRouterContractAddress,
     queryRouterCodeHash,
     lcdEndpoint,
@@ -622,9 +694,12 @@ export {
   queryPairConfig,
   batchQueryPairsInfo$,
   batchQueryPairsInfo,
+  batchQueryPairsConfig$,
+  batchQueryPairsConfig,
   batchQueryStakingInfo$,
   batchQueryStakingInfo,
   parseSwapResponse,
   parseBatchQueryPairInfoResponse,
   parseBatchQueryStakingInfoResponse,
+  parseBatchQueryPairConfigResponse,
 };
