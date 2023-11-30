@@ -149,7 +149,7 @@ function parsePairConfig(response: PairConfigResponse): PairConfig {
     isStable: pair[2],
     fee: customFee ? {
       lpFee: customFee.lp_fee.nom / customFee.lp_fee.denom,
-      daoFee: customFee.lp_fee.nom / customFee.lp_fee.denom,
+      daoFee: customFee.shade_dao_fee.nom / customFee.shade_dao_fee.denom,
     } : null,
   };
 }
@@ -701,4 +701,5 @@ export {
   parseSwapResponse,
   parseBatchQueryPairInfoResponse,
   parseBatchQueryStakingInfoResponse,
+  parseBatchQueryPairConfigResponse,
 };

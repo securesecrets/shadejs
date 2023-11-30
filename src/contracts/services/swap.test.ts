@@ -19,10 +19,13 @@ import {
   parseSwapResponse,
   parseBatchQueryPairInfoResponse,
   parseBatchQueryStakingInfoResponse,
+  parseBatchQueryPairConfigResponse,
   batchQueryPairsInfo,
   batchQueryPairsInfo$,
   batchQueryStakingInfo,
   batchQueryStakingInfo$,
+  batchQueryPairsConfig,
+  batchQueryPairsConfig$,
 } from '~/contracts/services/swap';
 import factoryConfigResponse from '~/test/mocks/swap/factoryConfig.json';
 import factoryPairsResponse from '~/test/mocks/swap/factoryPairs.json';
@@ -49,6 +52,8 @@ import { pairsInfoResponseUnparsed } from '~/test/mocks/swap/batchPairsInfoRespo
 import { pairsInfoParsed } from '~/test/mocks/swap/batchPairsInfoParsed';
 import { batchStakingConfigUnparsed } from '~/test/mocks/swap/batchStakingConfigUnparsed';
 import { batchStakingConfigParsed } from '~/test/mocks/swap/batchStakingConfigParsed';
+import { batchPairsConfigResponseUnparsed } from '~/test/mocks/swap/batchPairsConfigResponseUnparsed';
+import { batchPairsConfigParsed } from '~/test/mocks/swap/batchPairsConfigParsed';
 
 const sendSecretClientContractQuery$ = vi.hoisted(() => vi.fn());
 const batchQuery$ = vi.hoisted(() => vi.fn());
@@ -119,6 +124,12 @@ test('it can parse the batch staking response', () => {
   expect(parseBatchQueryStakingInfoResponse(
     batchStakingConfigUnparsed,
   )).toStrictEqual(batchStakingConfigParsed);
+});
+
+test('it can parse the batch pair config response', () => {
+  expect(parseBatchQueryPairConfigResponse(
+    batchPairsConfigResponseUnparsed,
+  )).toStrictEqual(batchPairsConfigParsed);
 });
 
 test('it can call the query factory config service', async () => {
@@ -353,4 +364,62 @@ test('it can call the batch staking info query service', async () => {
     }],
   });
   expect(response).toStrictEqual(batchStakingConfigParsed);
+});
+
+test('it can call the batch pair config query service', async () => {
+  const input = {
+    queryRouterContractAddress: 'CONTRACT_ADDRESS',
+    queryRouterCodeHash: 'CODE_HASH',
+    lcdEndpoint: 'LCD_ENDPOINT',
+    chainId: 'CHAIN_ID',
+    pairsContracts: [{
+      address: 'PAIR_ADDRESS',
+      codeHash: 'PAIR_CODE_HASH',
+    }],
+  };
+
+  // observables function
+  batchQuery$.mockReturnValueOnce(of(batchPairsConfigResponseUnparsed));
+  let output;
+  batchQueryPairsConfig$(input).subscribe({
+    next: (response) => {
+      output = response;
+    },
+  });
+
+  expect(batchQuery$).toHaveBeenCalledWith({
+    contractAddress: input.queryRouterContractAddress,
+    codeHash: input.queryRouterCodeHash,
+    lcdEndpoint: input.lcdEndpoint,
+    chainId: input.chainId,
+    queries: [{
+      id: input.pairsContracts[0].address,
+      contract: {
+        address: input.pairsContracts[0].address,
+        codeHash: input.pairsContracts[0].codeHash,
+      },
+      queryMsg: 'PAIR_CONFIG_MSG',
+    }],
+  });
+
+  expect(output).toStrictEqual(batchPairsConfigParsed);
+
+  // async/await function
+  batchQuery$.mockReturnValueOnce(of(batchPairsConfigResponseUnparsed));
+  const response = await batchQueryPairsConfig(input);
+  expect(batchQuery$).toHaveBeenCalledWith({
+    contractAddress: input.queryRouterContractAddress,
+    codeHash: input.queryRouterCodeHash,
+    lcdEndpoint: input.lcdEndpoint,
+    chainId: input.chainId,
+    queries: [{
+      id: input.pairsContracts[0].address,
+      contract: {
+        address: input.pairsContracts[0].address,
+        codeHash: input.pairsContracts[0].codeHash,
+      },
+      queryMsg: 'PAIR_CONFIG_MSG',
+    }],
+  });
+  expect(response).toStrictEqual(batchPairsConfigParsed);
 });
