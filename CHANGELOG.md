@@ -1,5 +1,13 @@
 # shadejs
 
+## 1.0.5
+
+### Patch Changes
+
+- b55aadb: update the reward token staking response type since we had a duplicate type
+- 9b246b0: Batch Pair Config Queries
+- 9b5d199: fix duplicate type exports for contract data
+
 ## 1.0.4
 
 ### Patch Changes
