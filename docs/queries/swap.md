@@ -194,7 +194,7 @@ console.log(output)
 ```
 
 ## Pair Config
-query the configuration of the pair
+query the configuration of a single pair
 
 **input**
 
@@ -281,11 +281,139 @@ console.log(output)
 };
 ```
 
-## Pairs Info
-Query the info for multiple pairs
+## Pairs Config
+Query the pair config  for multiple pairs
 ::: info
 This query uses a smart contract batch query router to allow you to query many pairs in a single http request. This is a highly efficient method of interacting with the chain an minimizes the load on the LCD endpoint.
 :::
+
+**input**
+
+```ts
+async function batchQueryPairsConfig({
+  queryRouterContractAddress,
+  queryRouterCodeHash,
+  lcdEndpoint,
+  chainId,
+  pairsContracts,
+}:{
+  queryRouterContractAddress: string,
+  queryRouterCodeHash?: string,
+  lcdEndpoint?: string,
+  chainId?: string,
+  pairsContracts: Contract[]
+}): Promise<BatchPairsConfig>
+```
+
+**output**
+
+```ts
+type BatchPairsConfig = BatchPairConfig[]
+
+type BatchPairConfig = {
+  pairContractAddress: string,
+  pairConfig: PairConfig,
+}
+
+type CustomFee = {
+  daoFee: number,
+  lpFee: number,
+}
+
+type PairConfig = {
+  factoryContract: Contract | null,
+  lpTokenContract: Contract | null,
+  stakingContract: Contract | null,
+  token0Contract: Contract,
+  token1Contract: Contract,
+  isStable: boolean,
+  fee: CustomFee | null,
+}
+
+```
+
+**example use**
+
+```ts
+const output = await batchQueryPairsConfig({
+  queryRouterContractAddress: '[QUERY_ROUTER_CONTRACT_ADDRESS]',
+  queryRouterCodeHash: '[QUERY_ROUTER_CODE_HASH]',
+  pairsContracts: [{
+    address: '[PAIR_1_ADDRESS]',
+    codeHash: '[PAIR_1_CODE_HASH]',
+  },
+  {
+    address: '[PAIR_2_ADDRESS]',
+    codeHash: '[PAIR_2_CODE_HASH]',
+  }]
+})
+console.log(output)
+```
+***console***
+```md
+[
+    {
+        "pairContractAddress": "secret1qyt4l47yq3x43ezle4nwlh5q0sn6f9sesat7ap",
+        "pairConfig": {
+            "factoryContract": {
+                "address": "secret1ja0hcwvy76grqkpgwznxukgd7t8a8anmmx05pp",
+                "codeHash": "2ad4ed2a4a45fd6de3daca9541ba82c26bb66c76d1c3540de39b509abd26538e"
+            },
+            "lpTokenContract": {
+                "address": "secret10egcg03euavu336fzed87m4zdx8jkgzzz7zgmh",
+                "codeHash": "b0c2048d28a0ca0b92274549b336703622ecb24a8c21f417e70c03aa620fcd7b"
+            },
+            "stakingContract": {
+                "address": "secret1vgtmfvzdn7ztn7kcrqd7p6f2z97wvauavp3udh",
+                "codeHash": "a83f0fdc6e5bcdb1f59e39200a084401309fc5338dbb2e54a2bcdc08fa3eaf49"
+            },
+            "token0Contract": {
+                "address": "secret153wu605vvp934xhd4k9dtd640zsep5jkesstdm",
+                "codeHash": "638a3e1d50175fbcb8373cf801565283e3eb23d88a9b7b7f99fcc5eb1e6b561e"
+            },
+            "token1Contract": {
+                "address": "secret1k6u0cy4feepm6pehnz804zmwakuwdapm69tuc4",
+                "codeHash": "f6be719b3c6feb498d3554ca0398eb6b7e7db262acb33f84a8f12106da6bbb09"
+            },
+            "isStable": false,
+            "fee": null
+        }
+    },
+    {
+        "pairContractAddress": "secret1l34fyc9g23fnlk896693nw57phevnyha7pt6gj",
+        "pairConfig": {
+            "factoryContract": {
+                "address": "secret1ja0hcwvy76grqkpgwznxukgd7t8a8anmmx05pp",
+                "codeHash": "2ad4ed2a4a45fd6de3daca9541ba82c26bb66c76d1c3540de39b509abd26538e"
+            },
+            "lpTokenContract": {
+                "address": "secret1zw9gwj6kx7vd3xax7wf45y6dmawkj3pd3dk7wt",
+                "codeHash": "b0c2048d28a0ca0b92274549b336703622ecb24a8c21f417e70c03aa620fcd7b"
+            },
+            "stakingContract": {
+                "address": "secret13j4n5gj8857h2j4cnempdkfygrw9snasx4yzw2",
+                "codeHash": "a83f0fdc6e5bcdb1f59e39200a084401309fc5338dbb2e54a2bcdc08fa3eaf49"
+            },
+            "token0Contract": {
+                "address": "secret1fl449muk5yq8dlad7a22nje4p5d2pnsgymhjfd",
+                "codeHash": "638a3e1d50175fbcb8373cf801565283e3eb23d88a9b7b7f99fcc5eb1e6b561e"
+            },
+            "token1Contract": {
+                "address": "secret153wu605vvp934xhd4k9dtd640zsep5jkesstdm",
+                "codeHash": "638a3e1d50175fbcb8373cf801565283e3eb23d88a9b7b7f99fcc5eb1e6b561e"
+            },
+            "isStable": false,
+            "fee": {
+                "lpFee": 0,
+                "daoFee": 0.003
+            }
+        }
+    }
+]
+```
+
+## Pairs Info
+Query the info for multiple pairs
 
 **input**
 
