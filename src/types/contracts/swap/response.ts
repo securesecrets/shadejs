@@ -1,3 +1,5 @@
+import { ContractData } from '~/types/contracts/shared';
+
 type CustomToken = {
   custom_token:{
      contract_addr: string,
@@ -17,10 +19,6 @@ type ContractInstantiationInfo = {
   code_hash: string,
   id: number,
 }
-type Contract = {
-  address: string,
-  code_hash:string,
-}
 
 type Fee = {
   nom: number,
@@ -32,7 +30,7 @@ type AMMSettings = {
   shade_dao_fee: Fee,
   stable_lp_fee: Fee,
   stable_shade_dao_fee: Fee,
-  shade_dao_address: Contract,
+  shade_dao_address: ContractData,
 }
 
 type FactoryConfigResponse = {
@@ -40,8 +38,8 @@ type FactoryConfigResponse = {
     pair_contract: ContractInstantiationInfo,
     amm_settings: AMMSettings,
     lp_token_contract: ContractInstantiationInfo,
-   authenticator: Contract | null,
-   admin_auth: Contract,
+   authenticator: ContractData | null,
+   admin_auth: ContractData,
   }
 }
 
@@ -58,9 +56,9 @@ type CustomFee = {
 
 type PairConfigResponse = {
   get_config:{
-     factory_contract: Contract | null,
-     lp_token: Contract | null,
-     staking_contract: Contract | null
+     factory_contract: ContractData | null,
+     lp_token: ContractData | null,
+     staking_contract: ContractData | null
      pair: TokenPair,
      custom_fee: CustomFee | null
   }
@@ -82,7 +80,7 @@ type StableInfo = {
     a: string,
     gamma1: string,
     gamma2: string,
-    oracle: Contract,
+    oracle: ContractData,
     min_trade_size_x_for_y: string,
     min_trade_size_y_for_x: string,
     max_price_impact_allowed: string
@@ -95,8 +93,8 @@ type StableInfo = {
 
 type PairInfoResponse = {
   get_pair_info:{
-    liquidity_token: Contract,
-    factory: Contract | null,
+    liquidity_token: ContractData,
+    factory: ContractData | null,
     pair: TokenPair,
     amount_0: string,
     amount_1: string,
@@ -114,7 +112,7 @@ type PairInfoResponse = {
 }
 
 type RewardTokenInfoResponse = {
-  token: Contract,
+  token: ContractData,
   decimals: number,
   reward_per_second: string,
   reward_per_staked_token: string,
@@ -123,10 +121,10 @@ type RewardTokenInfoResponse = {
 }
 
 type StakingConfigResponse = {
-  lp_token: Contract,
+  lp_token: ContractData,
   amm_pair: string,
-  admin_auth: Contract,
-  query_auth: Contract | null,
+  admin_auth: ContractData,
+  query_auth: ContractData | null,
   total_amount_staked: string,
   reward_tokens: RewardTokenInfoResponse[],
 }
