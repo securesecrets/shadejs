@@ -475,6 +475,7 @@ const queryPairConfig$ = ({
   first(),
 );
 
+
 /**
  * query the config for a pair
  */
@@ -490,6 +491,52 @@ async function queryPairConfig({
   chainId?: string,
 }) {
   return lastValueFrom(queryPairConfig$({
+    contractAddress,
+    codeHash,
+    lcdEndpoint,
+    chainId,
+  }));
+}
+
+/**
+ * query the config for a pair
+ */
+const queryPairInfo$ = ({
+  contractAddress,
+  codeHash,
+  lcdEndpoint,
+  chainId,
+}:{
+  contractAddress: string,
+  codeHash?: string,
+  lcdEndpoint?: string,
+  chainId?: string,
+}) => getActiveQueryClient$(lcdEndpoint, chainId).pipe(
+  switchMap(({ client }) => sendSecretClientContractQuery$({
+    queryMsg: msgQueryPairInfo(),
+    client,
+    contractAddress,
+    codeHash,
+  })),
+  map((response) => parsePairInfo(response as PairInfoResponse)),
+  first(),
+);
+
+/**
+ * query the info for a pair
+ */
+async function queryPairInfo({
+  contractAddress,
+  codeHash,
+  lcdEndpoint,
+  chainId,
+}:{
+  contractAddress: string,
+  codeHash?: string,
+  lcdEndpoint?: string,
+  chainId?: string,
+}) {
+  return lastValueFrom(queryPairInfo$({
     contractAddress,
     codeHash,
     lcdEndpoint,
@@ -692,6 +739,8 @@ export {
   queryFactoryPairs,
   queryPairConfig$,
   queryPairConfig,
+  queryPairInfo$,
+  queryPairInfo,
   batchQueryPairsInfo$,
   batchQueryPairsInfo,
   batchQueryPairsConfig$,
