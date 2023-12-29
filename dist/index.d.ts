@@ -15,13 +15,18 @@ declare type AMMSettings = {
     shade_dao_fee: Fee;
     stable_lp_fee: Fee;
     stable_shade_dao_fee: Fee;
-    shade_dao_address: Contract;
+    shade_dao_address: ContractData;
 };
 
-declare type BalanceResponse = {
+export declare type BalanceResponse = {
     balance: {
         amount: string;
     };
+};
+
+declare type BatchPairConfig = {
+    pairContractAddress: string;
+    pairConfig: PairConfig;
 };
 
 declare type BatchPairInfo = {
@@ -29,7 +34,9 @@ declare type BatchPairInfo = {
     pairInfo: PairInfo;
 };
 
-declare type BatchPairsInfo = BatchPairInfo[];
+export declare type BatchPairsConfig = BatchPairConfig[];
+
+export declare type BatchPairsInfo = BatchPairInfo[];
 
 /**
  * batch query of multiple contracts/message at a time
@@ -39,17 +46,8 @@ export declare const batchQuery$: ({ contractAddress, codeHash, lcdEndpoint, cha
     codeHash?: string | undefined;
     lcdEndpoint?: string | undefined;
     chainId?: string | undefined;
-    queries: BatchQuery[];
+    queries: BatchQueryParams[];
 }) => Observable<BatchQueryParsedResponse>;
-
-declare type BatchQuery = {
-    id: string | number;
-    contract: {
-        address: string;
-        codeHash: string;
-    };
-    queryMsg: any;
-};
 
 /**
  * batch query of multiple contracts/message at a time
@@ -59,10 +57,76 @@ export declare function batchQuery({ contractAddress, codeHash, lcdEndpoint, cha
     codeHash?: string;
     lcdEndpoint?: string;
     chainId?: string;
-    queries: BatchQuery[];
+    queries: BatchQueryParams[];
 }): Promise<BatchQueryParsedResponse>;
 
-declare type BatchQuery_2 = {
+/**
+ * query the config for multiple pairs at one time
+ */
+export declare function batchQueryPairsConfig$({ queryRouterContractAddress, queryRouterCodeHash, lcdEndpoint, chainId, pairsContracts, }: {
+    queryRouterContractAddress: string;
+    queryRouterCodeHash?: string;
+    lcdEndpoint?: string;
+    chainId?: string;
+    pairsContracts: Contract[];
+}): Observable<BatchPairsConfig>;
+
+/**
+ * query the config for multiple pairs at one time
+ */
+export declare function batchQueryPairsConfig({ queryRouterContractAddress, queryRouterCodeHash, lcdEndpoint, chainId, pairsContracts, }: {
+    queryRouterContractAddress: string;
+    queryRouterCodeHash?: string;
+    lcdEndpoint?: string;
+    chainId?: string;
+    pairsContracts: Contract[];
+}): Promise<BatchPairsConfig>;
+
+/**
+ * query the info for multiple pairs at one time
+ */
+export declare function batchQueryPairsInfo$({ queryRouterContractAddress, queryRouterCodeHash, lcdEndpoint, chainId, pairsContracts, }: {
+    queryRouterContractAddress: string;
+    queryRouterCodeHash?: string;
+    lcdEndpoint?: string;
+    chainId?: string;
+    pairsContracts: Contract[];
+}): Observable<BatchPairsInfo>;
+
+/**
+ * query the info for multiple pairs at one time
+ */
+export declare function batchQueryPairsInfo({ queryRouterContractAddress, queryRouterCodeHash, lcdEndpoint, chainId, pairsContracts, }: {
+    queryRouterContractAddress: string;
+    queryRouterCodeHash?: string;
+    lcdEndpoint?: string;
+    chainId?: string;
+    pairsContracts: Contract[];
+}): Promise<BatchPairsInfo>;
+
+export declare type BatchQueryParams = {
+    id: string | number;
+    contract: {
+        address: string;
+        codeHash: string;
+    };
+    queryMsg: any;
+};
+
+export declare type BatchQueryParsedResponse = BatchQueryParsedResponseItem[];
+
+export declare type BatchQueryParsedResponseItem = {
+    id: string | number;
+    response: any;
+};
+
+export declare type BatchQueryResponse = {
+    batch: {
+        responses: BatchQueryResponseItem[];
+    };
+};
+
+declare type BatchQueryResponseItem = {
     id: string;
     contract: {
         address: string;
@@ -74,41 +138,6 @@ declare type BatchQuery_2 = {
 };
 
 /**
- * query the pair info for multiple pools at one time
- */
-export declare function batchQueryPairsInfo$({ queryRouterContractAddress, queryRouterCodeHash, lcdEndpoint, chainId, pairsContracts, }: {
-    queryRouterContractAddress: string;
-    queryRouterCodeHash?: string;
-    lcdEndpoint?: string;
-    chainId?: string;
-    pairsContracts: Contract_2[];
-}): Observable<BatchPairsInfo>;
-
-/**
- * query the pair info for multiple pools at one time
- */
-export declare function batchQueryPairsInfo({ queryRouterContractAddress, queryRouterCodeHash, lcdEndpoint, chainId, pairsContracts, }: {
-    queryRouterContractAddress: string;
-    queryRouterCodeHash?: string;
-    lcdEndpoint?: string;
-    chainId?: string;
-    pairsContracts: Contract_2[];
-}): Promise<BatchPairsInfo>;
-
-declare type BatchQueryParsedResponse = BatchQueryParsedResponseItem[];
-
-declare type BatchQueryParsedResponseItem = {
-    id: string | number;
-    response: any;
-};
-
-declare type BatchQueryResponse = {
-    batch: {
-        responses: BatchQuery_2[];
-    };
-};
-
-/**
  * query the staking info for multiple staking contracts at one time
  */
 export declare function batchQueryStakingInfo$({ queryRouterContractAddress, queryRouterCodeHash, lcdEndpoint, chainId, stakingContracts, }: {
@@ -116,7 +145,7 @@ export declare function batchQueryStakingInfo$({ queryRouterContractAddress, que
     queryRouterCodeHash?: string;
     lcdEndpoint?: string;
     chainId?: string;
-    stakingContracts: Contract_2[];
+    stakingContracts: Contract[];
 }): Observable<BatchStakingInfo>;
 
 /**
@@ -127,15 +156,15 @@ export declare function batchQueryStakingInfo({ queryRouterContractAddress, quer
     queryRouterCodeHash?: string;
     lcdEndpoint?: string;
     chainId?: string;
-    stakingContracts: Contract_2[];
+    stakingContracts: Contract[];
 }): Promise<BatchStakingInfo>;
 
-declare type BatchSingleStakingInfo = {
+export declare type BatchSingleStakingInfo = {
     stakingContractAddress: string;
     stakingInfo: StakingInfo;
 };
 
-declare type BatchStakingInfo = BatchSingleStakingInfo[];
+export declare type BatchStakingInfo = BatchSingleStakingInfo[];
 
 /**
  * calculates the estimated output of swapping through a route given an input token amount
@@ -149,7 +178,7 @@ export declare function calculateRoute({ inputTokenAmount, inputTokenContractAdd
     tokens: TokensConfig;
 }): Route;
 
-declare type ClientData = {
+export declare type ClientData = {
     client: SecretNetworkClient;
     endpoint: string;
     chainId: string;
@@ -238,14 +267,14 @@ export declare function constantProductSwapToken1for0({ token0LiquidityAmount, t
     fee: BigNumber;
 }): BigNumber;
 
-declare type Contract = {
-    address: string;
-    code_hash: string;
-};
-
-declare type Contract_2 = {
+export declare type Contract = {
     address: string;
     codeHash: string;
+};
+
+export declare type ContractData = {
+    address: string;
+    code_hash: string;
 };
 
 declare type ContractInstantiationInfo = {
@@ -301,45 +330,45 @@ export declare const decodeB64ToJson: (encodedData: string) => any;
 
 export declare const encodeJsonToB64: (toEncode: any) => string;
 
-declare type FactoryConfig = {
+export declare type FactoryConfig = {
     pairContractInstatiationInfo: ContractInstantiationInfo_2;
     lpTokenContractInstatiationInfo: ContractInstantiationInfo_2;
-    adminAuthContract: Contract_2;
-    authenticatorContract: Contract_2 | null;
+    adminAuthContract: Contract;
+    authenticatorContract: Contract | null;
     defaultPairSettings: {
         lpFee: number;
         daoFee: number;
         stableLpFee: number;
         stableDaoFee: number;
-        daoContract: Contract_2;
+        daoContract: Contract;
     };
 };
 
-declare type FactoryConfigResponse = {
+export declare type FactoryConfigResponse = {
     get_config: {
         pair_contract: ContractInstantiationInfo;
         amm_settings: AMMSettings;
         lp_token_contract: ContractInstantiationInfo;
-        authenticator: Contract | null;
-        admin_auth: Contract;
+        authenticator: ContractData | null;
+        admin_auth: ContractData;
     };
 };
 
 declare type FactoryPair = {
-    pairContract: Contract_2;
-    token0Contract: Contract_2;
-    token1Contract: Contract_2;
+    pairContract: Contract;
+    token0Contract: Contract;
+    token1Contract: Contract;
     isStable: boolean;
     isEnabled: boolean;
 };
 
-declare type FactoryPairs = {
+export declare type FactoryPairs = {
     pairs: FactoryPair[];
     startIndex: number;
     endIndex: number;
 };
 
-declare type FactoryPairsResponse = {
+export declare type FactoryPairsResponse = {
     list_a_m_m_pairs: {
         amm_pairs: AMMPair[];
     };
@@ -349,6 +378,11 @@ declare type Fee = {
     nom: number;
     denom: number;
 };
+
+export declare enum GasMultiplier {
+    STABLE = 2.7,
+    CONSTANT_PRODUCT = 1
+}
 
 /**
  * Generates random string of characters, used to add entropy to TX data
@@ -399,12 +433,12 @@ export declare const getSecretNetworkClient$: ({ lcdEndpoint, chainId, walletAcc
     walletAccount?: WalletAccount | undefined;
 }) => Observable<ClientData>;
 
-declare type HandleMsg = Record<string, unknown>;
+export declare type HandleMsg = Record<string, unknown>;
 
 /**
  * batch query multiple contracts/messages at one time
  */
-export declare const msgBatchQuery: (queries: BatchQuery[]) => {
+export declare const msgBatchQuery: (queries: BatchQueryParams[]) => {
     batch: {
         queries: {
             id: string;
@@ -490,7 +524,7 @@ export declare function msgSwap({ routerContractAddress, routerCodeHash, sendAmo
     path: Paths;
 }): HandleMsg;
 
-declare type OraclePriceResponse = {
+export declare type OraclePriceResponse = {
     key: string;
     data: {
         rate: string;
@@ -499,34 +533,34 @@ declare type OraclePriceResponse = {
     };
 };
 
-declare type OraclePricesResponse = OraclePriceResponse[];
+export declare type OraclePricesResponse = OraclePriceResponse[];
 
-declare type PairConfig = {
-    factoryContract: Contract_2 | null;
-    lpTokenContract: Contract_2 | null;
-    stakingContract: Contract_2 | null;
-    token0Contract: Contract_2;
-    token1Contract: Contract_2;
+export declare type PairConfig = {
+    factoryContract: Contract | null;
+    lpTokenContract: Contract | null;
+    stakingContract: Contract | null;
+    token0Contract: Contract;
+    token1Contract: Contract;
     isStable: boolean;
     fee: CustomFee_2 | null;
 };
 
-declare type PairConfigResponse = {
+export declare type PairConfigResponse = {
     get_config: {
-        factory_contract: Contract | null;
-        lp_token: Contract | null;
-        staking_contract: Contract | null;
+        factory_contract: ContractData | null;
+        lp_token: ContractData | null;
+        staking_contract: ContractData | null;
         pair: TokenPair;
         custom_fee: CustomFee | null;
     };
 };
 
-declare type PairInfo = {
+export declare type PairInfo = {
     lpTokenAmount: string;
-    lpTokenContract: Contract_2;
-    token0Contract: Contract_2;
-    token1Contract: Contract_2;
-    factoryContract: Contract_2 | null;
+    lpTokenContract: Contract;
+    token0Contract: Contract;
+    token1Contract: Contract;
+    factoryContract: Contract | null;
     daoContractAddress: string;
     isStable: boolean;
     token0Amount: string;
@@ -537,10 +571,10 @@ declare type PairInfo = {
     contractVersion: number;
 };
 
-declare type PairInfoResponse = {
+export declare type PairInfoResponse = {
     get_pair_info: {
-        liquidity_token: Contract;
-        factory: Contract | null;
+        liquidity_token: ContractData;
+        factory: ContractData | null;
         pair: TokenPair;
         amount_0: string;
         amount_1: string;
@@ -565,6 +599,12 @@ export declare const parseBalance: (response: BalanceResponse) => string;
 export declare function parseBatchQuery(response: BatchQueryResponse): BatchQueryParsedResponse;
 
 /**
+ * parses the pair config response from a batch query of
+ * multiple pair contracts
+ */
+export declare const parseBatchQueryPairConfigResponse: (response: BatchQueryParsedResponse) => BatchPairsConfig;
+
+/**
  * parses the pair info reponse from a batch query of
  * multiple pair contracts
  */
@@ -576,18 +616,18 @@ export declare const parseBatchQueryPairInfoResponse: (response: BatchQueryParse
  */
 export declare const parseBatchQueryStakingInfoResponse: (response: BatchQueryParsedResponse) => BatchStakingInfo;
 
-declare type ParsedOraclePriceResponse = {
+export declare type ParsedOraclePriceResponse = {
     oracleKey: string;
     rate: string;
     lastUpdatedBase: number;
     lastUpdatedQuote: number;
 };
 
-declare type ParsedOraclePricesResponse = {
+export declare type ParsedOraclePricesResponse = {
     [oracleKey: string]: ParsedOraclePriceResponse;
 };
 
-declare type ParsedSwapResponse = {
+export declare type ParsedSwapResponse = {
     txHash: string;
     inputTokenAddress: string | undefined;
     outputTokenAddress: string | undefined;
@@ -641,12 +681,19 @@ export declare const parseSwapResponse: (response: TxResponse) => ParsedSwapResp
 
 export declare const parseTokenInfo: (response: TokenInfoResponse) => TokenInfo;
 
-declare type Path = {
+export declare type Path = {
     poolContractAddress: string;
     poolCodeHash: string;
 };
 
-declare type Paths = Path[];
+declare type PathContractFormatted = {
+    addr: string;
+    code_hash: string;
+};
+
+export declare type Paths = Path[];
+
+export declare type PathsContractFormatted = PathContractFormatted[];
 
 /**
  * query the factory config
@@ -802,6 +849,14 @@ export declare function querySnip20TokenInfo({ snip20ContractAddress, snip20Code
 
 declare type RewardTokenInfo = {
     token: Contract;
+    rewardPerSecond: string;
+    rewardPerStakedToken: string;
+    validTo: number;
+    lastUpdated: number;
+};
+
+declare type RewardTokenInfoResponse = {
+    token: ContractData;
     decimals: number;
     reward_per_second: string;
     reward_per_staked_token: string;
@@ -809,15 +864,7 @@ declare type RewardTokenInfo = {
     last_updated: number;
 };
 
-declare type RewardTokenInfo_2 = {
-    token: Contract_2;
-    rewardPerSecond: string;
-    rewardPerStakedToken: string;
-    validTo: number;
-    lastUpdated: number;
-};
-
-declare type Route = {
+export declare type Route = {
     inputAmount: BigNumber;
     quoteOutputAmount: BigNumber;
     quoteShadeDaoFee: BigNumber;
@@ -870,7 +917,7 @@ export declare const snip20: {
     };
 };
 
-declare type Snip20MessageRequest = {
+export declare type Snip20MessageRequest = {
     msg: HandleMsg;
     transferAmount?: Coin;
 };
@@ -880,7 +927,7 @@ declare type StableInfo = {
         a: string;
         gamma1: string;
         gamma2: string;
-        oracle: Contract;
+        oracle: ContractData;
         min_trade_size_x_for_y: string;
         min_trade_size_y_for_x: string;
         max_price_impact_allowed: string;
@@ -896,7 +943,7 @@ declare type StableParams = {
     alpha: string;
     gamma1: string;
     gamma2: string;
-    oracle: Contract_2;
+    oracle: Contract;
     token0Data: StableTokenData_2;
     token1Data: StableTokenData_2;
     minTradeSizeXForY: string;
@@ -942,6 +989,11 @@ export declare function stableReverseSwapToken1for0({ outputToken0Amount, poolTo
     minTradeSizeToken1For0: BigNumber;
     priceImpactLimit: BigNumber;
 }): BigNumber;
+
+export declare enum StableswapCalculationErrorType {
+    LIQUIDITY = "liquidity error",
+    MIN_TRADE_SIZE = "min trade size"
+}
 
 /**
  * returns price impact of a simulated swap of token0 for token1
@@ -1029,22 +1081,22 @@ declare type StableTokenData_2 = {
     decimals: number;
 };
 
-declare type StakingConfigResponse = {
-    lp_token: Contract;
+export declare type StakingConfigResponse = {
+    lp_token: ContractData;
     amm_pair: string;
-    admin_auth: Contract;
-    query_auth: Contract | null;
+    admin_auth: ContractData;
+    query_auth: ContractData | null;
     total_amount_staked: string;
-    reward_tokens: RewardTokenInfo[];
+    reward_tokens: RewardTokenInfoResponse[];
 };
 
-declare type StakingInfo = {
-    lpTokenContract: Contract_2;
+export declare type StakingInfo = {
+    lpTokenContract: Contract;
     pairContractAddress: string;
-    adminAuthContract: Contract_2;
-    queryAuthContract: Contract_2 | null;
+    adminAuthContract: Contract;
+    queryAuthContract: Contract | null;
     totalStakedAmount: string;
-    rewardTokens: RewardTokenInfo_2[];
+    rewardTokens: RewardTokenInfo[];
 };
 
 declare type TokenConfig = {
@@ -1052,14 +1104,14 @@ declare type TokenConfig = {
     decimals: number;
 };
 
-declare type TokenInfo = {
+export declare type TokenInfo = {
     name: string;
     symbol: string;
     decimals: number;
     totalSupply: string;
 };
 
-declare type TokenInfoResponse = {
+export declare type TokenInfoResponse = {
     token_info: {
         name: string;
         symbol: string;
@@ -1070,9 +1122,9 @@ declare type TokenInfoResponse = {
 
 declare type TokenPair = [CustomToken, CustomToken, boolean];
 
-declare type TokensConfig = TokenConfig[];
+export declare type TokensConfig = TokenConfig[];
 
-declare type WalletAccount = WalletSigner & WalletAddress;
+export declare type WalletAccount = WalletSigner & WalletAddress;
 
 declare type WalletAddress = {
     walletAddress: string;
