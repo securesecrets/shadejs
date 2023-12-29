@@ -1,4 +1,4 @@
-type BatchQuery = {
+type BatchQueryParams = {
   id: string | number,
   contract: {
     address: string,
@@ -15,7 +15,7 @@ type BatchQueryParsedResponseItem = {
 type BatchQueryParsedResponse = BatchQueryParsedResponseItem[]
 
 export type {
-  BatchQuery,
+  BatchQueryParams,
   BatchQueryParsedResponseItem,
   BatchQueryParsedResponse,
 };

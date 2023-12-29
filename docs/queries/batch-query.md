@@ -26,7 +26,7 @@ not yet determined. There is also an unknown variable of the quality of the infr
 **input**
 
 ```ts
-type BatchQuery = {
+type BatchQueryParams = {
   id: string | number,
   contract: {
     address: string,
@@ -46,7 +46,7 @@ async function batchQuery({
   codeHash?: string,
   lcdEndpoint?: string,
   chainId?: string,
-  queries: BatchQuery[]
+  queries: BatchQueryParams[]
 }): Promise<BatchQueryParsedResponse> 
 ```
 

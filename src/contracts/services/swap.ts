@@ -32,7 +32,10 @@ import {
   msgQueryStakingConfig,
 } from '~/contracts/definitions/swap';
 import { Contract } from '~/types/contracts/shared';
-import { BatchQuery, BatchQueryParsedResponse } from '~/types/contracts/batchQuery/model';
+import {
+  BatchQueryParams,
+  BatchQueryParsedResponse,
+} from '~/types/contracts/batchQuery/model';
 import { TxResponse } from 'secretjs';
 import { Attribute } from 'secretjs/dist/protobuf/cosmos/base/abci/v1beta1/abci';
 import { batchQuery$ } from './batchQuery';
@@ -513,7 +516,7 @@ function batchQueryPairsInfo$({
   chainId?: string,
   pairsContracts: Contract[]
 }) {
-  const queries:BatchQuery[] = pairsContracts.map((contract) => ({
+  const queries:BatchQueryParams[] = pairsContracts.map((contract) => ({
     id: contract.address,
     contract: {
       address: contract.address,
@@ -574,7 +577,7 @@ function batchQueryPairsConfig$({
   chainId?: string,
   pairsContracts: Contract[]
 }) {
-  const queries:BatchQuery[] = pairsContracts.map((contract) => ({
+  const queries:BatchQueryParams[] = pairsContracts.map((contract) => ({
     id: contract.address,
     contract: {
       address: contract.address,
@@ -635,7 +638,7 @@ function batchQueryStakingInfo$({
   chainId?: string,
   stakingContracts: Contract[]
 }) {
-  const queries:BatchQuery[] = stakingContracts.map((contract) => ({
+  const queries:BatchQueryParams[] = stakingContracts.map((contract) => ({
     id: contract.address,
     contract: {
       address: contract.address,

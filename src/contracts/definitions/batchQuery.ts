@@ -1,10 +1,10 @@
 import { encodeJsonToB64 } from '~/lib/utils';
-import { BatchQuery } from '~/types/contracts/batchQuery/model';
+import { BatchQueryParams } from '~/types/contracts/batchQuery/model';
 
 /**
  * batch query multiple contracts/messages at one time
  */
-const msgBatchQuery = (queries: BatchQuery[]) => ({
+const msgBatchQuery = (queries: BatchQueryParams[]) => ({
   batch: {
     queries: queries.map((batchQuery) => ({
       id: encodeJsonToB64(batchQuery.id),

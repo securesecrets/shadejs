@@ -5,11 +5,11 @@ import {
 import {
   msgBatchQuery,
 } from '~/contracts/definitions/batchQuery';
-import { BatchQuery } from '~/types/contracts/batchQuery/model';
+import { BatchQueryParams } from '~/types/contracts/batchQuery/model';
 import { encodeJsonToB64 } from '~/lib/utils';
 
 test('it test the form of the query oracle msg', () => {
-  const input: BatchQuery[] = [{
+  const input: BatchQueryParams[] = [{
     id: 'ID',
     contract: {
       address: 'CONTRACT_ADDRESS',
