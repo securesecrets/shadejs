@@ -1,0 +1,13 @@
+{
+  "fee_info":{
+     "staking":{
+        "rate":100,
+        "decimal_places":4
+     },
+     "unbonding":{
+        "rate":200,
+        "decimal_places":4
+     },
+     "collector":"secret1fz7ugsneqqru9pex7h4pjyn77s4fsmcp7sycyl"
+  }
+}
