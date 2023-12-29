@@ -8,7 +8,7 @@ import {
 import { of } from 'rxjs';
 import batchPairConfigResponse from '~/test/mocks/batchQuery/batchPairConfigResponse.json';
 import { batchPairConfigParsed } from '~/test/mocks/batchQuery/batchPairConfigParsed';
-import { BatchQuery } from '~/types/contracts/batchQuery/model';
+import { BatchQueryParams } from '~/types/contracts/batchQuery/model';
 import { msgBatchQuery } from '~/contracts/definitions/batchQuery';
 import {
   parseBatchQuery,
@@ -48,7 +48,7 @@ test('it can call the batch query service', async () => {
     codeHash: 'CODE_HASH',
     lcdEndpoint: 'LCD_ENDPOINT',
     chainId: 'CHAIN_ID',
-    queries: ['BATCH_QUERY' as unknown as BatchQuery],
+    queries: ['BATCH_QUERY' as unknown as BatchQueryParams],
   };
   // observables function
   sendSecretClientContractQuery$.mockReturnValueOnce(of(batchPairConfigResponse));

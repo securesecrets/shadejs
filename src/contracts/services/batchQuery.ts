@@ -8,7 +8,7 @@ import { sendSecretClientContractQuery$ } from '~/client/services/clientServices
 import { getActiveQueryClient$ } from '~/client';
 import { msgBatchQuery } from '~/contracts/definitions/batchQuery';
 import {
-  BatchQuery,
+  BatchQueryParams,
   BatchQueryParsedResponseItem,
   BatchQueryParsedResponse,
 } from '~/types/contracts/batchQuery/model';
@@ -40,7 +40,7 @@ const batchQuery$ = ({
   codeHash?: string,
   lcdEndpoint?: string,
   chainId?: string,
-  queries: BatchQuery[]
+  queries: BatchQueryParams[]
 }) => getActiveQueryClient$(lcdEndpoint, chainId).pipe(
   switchMap(({ client }) => sendSecretClientContractQuery$({
     queryMsg: msgBatchQuery(queries),
@@ -66,7 +66,7 @@ async function batchQuery({
   codeHash?: string,
   lcdEndpoint?: string,
   chainId?: string,
-  queries: BatchQuery[]
+  queries: BatchQueryParams[]
 }) {
   return lastValueFrom(batchQuery$({
     contractAddress,

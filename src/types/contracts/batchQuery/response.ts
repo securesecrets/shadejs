@@ -1,4 +1,4 @@
-type BatchQuery = {
+type BatchQueryResponseItem = {
   id: string,
   contract: {
     address: string,
@@ -11,7 +11,7 @@ type BatchQuery = {
 
 type BatchQueryResponse = {
   batch: {
-    responses: BatchQuery[],
+    responses: BatchQueryResponseItem[],
   }
 }
 
