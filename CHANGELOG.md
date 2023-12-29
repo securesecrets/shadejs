@@ -1,5 +1,11 @@
 # shadejs
 
+## 1.0.6
+
+### Patch Changes
+
+- 41c01ba: update typescript for batch query params which is causing build issues in a front end app
+
 ## 1.0.5
 
 ### Patch Changes
