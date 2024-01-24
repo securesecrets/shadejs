@@ -196,7 +196,7 @@ function parsePairInfo(
     daoFee: pairInfo.pair[2] ? fees.stable_shade_dao_fee.nom / fees.stable_shade_dao_fee.denom
       : fees.shade_dao_fee.nom / fees.shade_dao_fee.denom,
     stableParams: stableInfo ? {
-      priceRatio: stableInfo.p!, // if stable params exist, we know price ratio will be available
+      priceRatio: stableInfo.p,
       alpha: stableInfo.stable_params.a,
       gamma1: stableInfo.stable_params.gamma1,
       gamma2: stableInfo.stable_params.gamma2,

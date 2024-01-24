@@ -462,7 +462,9 @@ type PairInfo = {
 }
 
 type StableParams = {
-  priceRatio: string,
+  priceRatio: string | null, // Null priceRatio caused by 
+  // oracle issues, typically stale oracle data. Swaps are not possible 
+  // while priceRatio is null
   alpha: string,
   gamma1: string,
   gamma2: string,
