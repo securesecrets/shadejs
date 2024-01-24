@@ -738,7 +738,7 @@ export class StableConfig {
       initialGuessNewton: tvl,
       upperBoundBisect: tvl,
       ignoreNegativeResult: true,
-      lazyLowerBoundBisect: this.geometricMeanDoubled,
+      lazyLowerBoundBisect: this.geometricMeanDoubled.bind(this),
       lowerBoundBisect: undefined,
     });
   }
