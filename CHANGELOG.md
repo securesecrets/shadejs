@@ -1,5 +1,12 @@
 # shadejs
 
+## 1.0.7
+
+### Patch Changes
+
+- 066773d: handle null stableswap price ratio
+- 51ff8cf: fix unbound function in stableswap math
+
 ## 1.0.6
 
 ### Patch Changes
