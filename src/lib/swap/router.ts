@@ -206,6 +206,10 @@ function calculateRoute({
     if (isStable && stableParams) {
       poolMultiplier = GasMultiplier.STABLE;
 
+      if (!stableParams.priceRatio) {
+        throw new Error('PriceRatio not available: Oracle Error');
+      }
+
       // token0 as the input
       if (currentTokenContractAddress === token0Contract.address) {
         const swapParams = {

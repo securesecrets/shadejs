@@ -60,7 +60,7 @@ type StableTokenData = {
 }
 
 type StableParams = {
-  priceRatio: string,
+  priceRatio: string | null,
   alpha: string,
   gamma1: string,
   gamma2: string,
