@@ -7,9 +7,15 @@ type BatchQueryParams = {
   queryMsg: any,
 }
 
+enum BatchItemResponseStatus {
+  SUCCESS = 'success',
+  ERROR = 'error',
+}
+
 type BatchQueryParsedResponseItem = {
   id: string | number,
   response: any,
+  status?: BatchItemResponseStatus
 }
 
 type BatchQueryParsedResponse = BatchQueryParsedResponseItem[]
@@ -18,4 +24,8 @@ export type {
   BatchQueryParams,
   BatchQueryParsedResponseItem,
   BatchQueryParsedResponse,
+};
+
+export {
+  BatchItemResponseStatus,
 };

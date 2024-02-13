@@ -55,9 +55,15 @@ async function batchQuery({
 ```ts
 type BatchQueryParsedResponse = BatchQueryParsedResponseItem[]
 
+enum BatchItemResponseStatus {
+  SUCCESS = 'success',
+  ERROR = 'error',
+}
+
 type BatchQueryParsedResponseItem = {
   id: string | number,
   response: any,
+  status?: BatchItemResponseStatus
 }
 
 
