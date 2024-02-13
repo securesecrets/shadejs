@@ -11,7 +11,13 @@ import {
   TokenInfoResponse,
   BalanceResponse,
 } from '~/types/contracts/snip20/response';
-import { TokenInfo } from '~/types/contracts/snip20/model';
+import { TokenInfo, BatchTokensInfo } from '~/types/contracts/snip20/model';
+import {
+  Contract,
+  BatchQueryParams,
+  BatchQueryParsedResponse,
+} from '~/types';
+import { batchQuery$ } from './batchQuery';
 
 const parseTokenInfo = (response: TokenInfoResponse): TokenInfo => ({
   name: response.token_info.name,
@@ -19,6 +25,17 @@ const parseTokenInfo = (response: TokenInfoResponse): TokenInfo => ({
   decimals: response.token_info.decimals,
   totalSupply: response.token_info.total_supply,
 });
+
+/**
+ * parses the token info reponse from a batch query of
+ * multiple token contracts
+ */
+const parseBatchQueryTokensInfo = (
+  response: BatchQueryParsedResponse,
+): BatchTokensInfo => response.map((item) => ({
+  tokenContractAddress: item.id as string,
+  tokenInfo: parseTokenInfo(item.response),
+}));
 
 const parseBalance = (response: BalanceResponse): string => response.balance.amount;
 
@@ -65,6 +82,67 @@ async function querySnip20TokenInfo({
     snip20CodeHash,
     lcdEndpoint,
     chainId,
+  }));
+}
+
+/**
+ * query the info for multiple tokens at one time
+ */
+function batchQuerySnip20TokensInfo$({
+  queryRouterContractAddress,
+  queryRouterCodeHash,
+  lcdEndpoint,
+  chainId,
+  tokenContracts,
+}:{
+  queryRouterContractAddress: string,
+  queryRouterCodeHash?: string,
+  lcdEndpoint?: string,
+  chainId?: string,
+  tokenContracts: Contract[]
+}) {
+  const queries:BatchQueryParams[] = tokenContracts.map((contract) => ({
+    id: contract.address,
+    contract: {
+      address: contract.address,
+      codeHash: contract.codeHash,
+    },
+    queryMsg: snip20.queries.tokenInfo(),
+  }));
+  return batchQuery$({
+    contractAddress: queryRouterContractAddress,
+    codeHash: queryRouterCodeHash,
+    lcdEndpoint,
+    chainId,
+    queries,
+  }).pipe(
+    map(parseBatchQueryTokensInfo),
+    first(),
+  );
+}
+
+/**
+ * query the info for multiple tokens at one time
+ */
+function batchQuerySnip20TokensInfo({
+  queryRouterContractAddress,
+  queryRouterCodeHash,
+  lcdEndpoint,
+  chainId,
+  tokenContracts,
+}:{
+  queryRouterContractAddress: string,
+  queryRouterCodeHash?: string,
+  lcdEndpoint?: string,
+  chainId?: string,
+  tokenContracts: Contract[]
+}) {
+  return lastValueFrom(batchQuerySnip20TokensInfo$({
+    queryRouterContractAddress,
+    queryRouterCodeHash,
+    lcdEndpoint,
+    chainId,
+    tokenContracts,
   }));
 }
 
@@ -131,4 +209,7 @@ export {
   querySnip20TokenInfo,
   querySnip20Balance$,
   querySnip20Balance,
+  parseBatchQueryTokensInfo,
+  batchQuerySnip20TokensInfo$,
+  batchQuerySnip20TokensInfo,
 };
