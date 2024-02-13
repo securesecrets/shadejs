@@ -5,7 +5,8 @@ type BatchQueryResponseItem = {
     code_hash: string,
   },
   response: {
-    response: string,
+    response?: string,
+    system_err?: string,
   },
 }
 

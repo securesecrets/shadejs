@@ -1,4 +1,4 @@
-import { BatchQueryParsedResponse } from '~/types/contracts/batchQuery/model';
+import { BatchItemResponseStatus, BatchQueryParsedResponse } from '~/types/contracts/batchQuery/model';
 
 const batchPairConfigParsed: BatchQueryParsedResponse = [{
   id: 1,
@@ -43,6 +43,7 @@ const batchPairConfigParsed: BatchQueryParsedResponse = [{
       },
     },
   },
+  status: BatchItemResponseStatus.SUCCESS,
 },
 {
   id: 2,
@@ -87,6 +88,7 @@ const batchPairConfigParsed: BatchQueryParsedResponse = [{
       },
     },
   },
+  status: BatchItemResponseStatus.SUCCESS,
 }];
 
 export {

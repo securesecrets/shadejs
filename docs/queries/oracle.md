@@ -120,3 +120,56 @@ console.log(output)
   },
 }
 ```
+
+## Batch Query Individual Prices
+
+**input**
+
+```ts
+/**
+ * queries individual prices utilizing a batch query.
+ * This is a less efficient version of the multi-price query in the oracle
+ * contract, however the benefits are that an error in any single price
+ * will not cause all prices to fail. The recommended use would be to fall
+ * back on this query when the standard queryPrices fails so that you
+ * can determine which key is having issues, while also still getting
+ * data back for the good keys.
+ */
+async function batchQueryIndividualPrices({
+  queryRouterContractAddress,
+  queryRouterCodeHash,
+  lcdEndpoint,
+  chainId,
+  oracleContractAddress,
+  oracleCodeHash,
+  oracleKeys,
+}:{
+  queryRouterContractAddress: string,
+  queryRouterCodeHash?: string,
+  lcdEndpoint?: string,
+  chainId?: string,
+  oracleContractAddress: string
+  oracleCodeHash: string
+  oracleKeys: string[],
+}) : Promise<ParsedOraclePricesResponse> 
+```
+
+**output**
+
+```ts
+type ParsedOraclePricesResponse = {
+  [oracleKey: string]: ParsedOraclePriceResponse
+}
+
+// type reference below
+
+type ParsedOraclePriceResponse = {
+  oracleKey: string,
+  rate?: string,
+  lastUpdatedBase?: number,
+  lastUpdatedQuote?: number,
+  error?: {
+    type: OracleErrorType,
+    msg: any,
+  }
+}

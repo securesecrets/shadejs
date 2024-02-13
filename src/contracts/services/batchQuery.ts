@@ -11,6 +11,7 @@ import {
   BatchQueryParams,
   BatchQueryParsedResponseItem,
   BatchQueryParsedResponse,
+  BatchItemResponseStatus,
 } from '~/types/contracts/batchQuery/model';
 import { BatchQueryResponse } from '~/types/contracts/batchQuery/response';
 import { decodeB64ToJson } from '~/lib/utils';
@@ -20,10 +21,25 @@ import { decodeB64ToJson } from '~/lib/utils';
  */
 function parseBatchQuery(response: BatchQueryResponse): BatchQueryParsedResponse {
   const { responses } = response.batch;
-  return responses.map((item): BatchQueryParsedResponseItem => ({
-    id: decodeB64ToJson(item.id),
-    response: decodeB64ToJson(item.response.response),
-  }));
+  return responses.map((item): BatchQueryParsedResponseItem => {
+    // handle error state
+    if (item.response.system_err) {
+      return {
+        id: decodeB64ToJson(item.id),
+        response: item.response.system_err, // response is not B64 encoded
+        status: BatchItemResponseStatus.ERROR,
+      };
+    }
+
+    // handle success state
+    return {
+      id: decodeB64ToJson(item.id),
+      // non-null asertation used here because non-error states will have
+      // a response available.
+      response: decodeB64ToJson(item.response.response!),
+      status: BatchItemResponseStatus.SUCCESS,
+    };
+  });
 }
 
 /**

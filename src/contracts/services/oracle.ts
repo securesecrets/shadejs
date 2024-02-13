@@ -5,6 +5,7 @@ import {
 import {
   ParsedOraclePriceResponse,
   ParsedOraclePricesResponse,
+  OracleErrorType,
 } from '~/types/contracts/oracle/model';
 import {
   switchMap,
@@ -15,6 +16,12 @@ import {
 import { sendSecretClientContractQuery$ } from '~/client/services/clientServices';
 import { getActiveQueryClient$ } from '~/client';
 import { msgQueryOraclePrice, msgQueryOraclePrices } from '~/contracts/definitions/oracle';
+import {
+  BatchItemResponseStatus,
+  BatchQueryParams,
+  BatchQueryParsedResponse,
+} from '~/types';
+import { batchQuery$ } from './batchQuery';
 
 /**
 * Parses the contract price query into the app data model
@@ -40,6 +47,41 @@ function parsePricesFromContract(pricesResponse: OraclePricesResponse) {
     } as ParsedOraclePriceResponse,
   }), {} as ParsedOraclePricesResponse);
 }
+
+/**
+ * parses the reponse from a batch query of
+ * multiple individual prices
+ */
+const parseBatchQueryIndividualPrices = (
+  response: BatchQueryParsedResponse,
+): ParsedOraclePricesResponse => response.reduce((
+  prev,
+  item,
+) => {
+  if (
+    item.status
+    && item.status === BatchItemResponseStatus.ERROR) {
+    let errorType = OracleErrorType.UNKNOWN;
+    if (item.response.includes('Derivative rate is stale')) {
+      errorType = OracleErrorType.STALE_DERIVATIVE_RATE;
+    }
+
+    return {
+      ...prev,
+      [item.id as string]: {
+        oracleKey: item.id as string,
+        error: {
+          type: errorType,
+          msg: item.response,
+        },
+      },
+    };
+  }
+  return {
+    ...prev,
+    [item.id as string]: parsePriceFromContract(item.response),
+  };
+}, {});
 
 /**
  * query the price of an asset using the oracle key
@@ -143,6 +185,89 @@ async function queryPrices({
   }));
 }
 
+/**
+ * queries individual prices utilizing a batch query.
+ * This is a less efficient version of the multi-price query in the oracle
+ * contract, however the benefits are that an error in any single price
+ * will not cause all prices to fail. The recommended use would be to fall
+ * back on this query when the standard queryPrices fails so that you
+ * can determine which key is having issues, while also still getting
+ * data back for the good keys.
+ */
+function batchQueryIndividualPrices$({
+  queryRouterContractAddress,
+  queryRouterCodeHash,
+  lcdEndpoint,
+  chainId,
+  oracleContractAddress,
+  oracleCodeHash,
+  oracleKeys,
+}:{
+  queryRouterContractAddress: string,
+  queryRouterCodeHash?: string,
+  lcdEndpoint?: string,
+  chainId?: string,
+  oracleContractAddress: string
+  oracleCodeHash: string
+  oracleKeys: string[],
+}) {
+  const queries:BatchQueryParams[] = oracleKeys.map((key) => ({
+    id: key,
+    contract: {
+      address: oracleContractAddress,
+      codeHash: oracleCodeHash,
+    },
+    queryMsg: msgQueryOraclePrice(key),
+  }));
+  return batchQuery$({
+    contractAddress: queryRouterContractAddress,
+    codeHash: queryRouterCodeHash,
+    lcdEndpoint,
+    chainId,
+    queries,
+  }).pipe(
+    map(parseBatchQueryIndividualPrices),
+    first(),
+  );
+}
+
+/**
+ * queries individual prices utilizing a batch query.
+ * This is a less efficient version of the multi-price query in the oracle
+ * contract, however the benefits are that an error in any single price
+ * will not cause all prices to fail. The recommended use would be to fall
+ * back on this query when the standard queryPrices fails so that you
+ * can determine which key is having issues, while also still getting
+ * data back for the good keys.
+ */
+async function batchQueryIndividualPrices({
+  queryRouterContractAddress,
+  queryRouterCodeHash,
+  lcdEndpoint,
+  chainId,
+  oracleContractAddress,
+  oracleCodeHash,
+  oracleKeys,
+}:{
+  queryRouterContractAddress: string,
+  queryRouterCodeHash?: string,
+  lcdEndpoint?: string,
+  chainId?: string,
+  oracleContractAddress: string
+  oracleCodeHash: string
+  oracleKeys: string[],
+}) {
+  return lastValueFrom(batchQueryIndividualPrices$({
+    queryRouterContractAddress,
+    queryRouterCodeHash,
+    lcdEndpoint,
+    chainId,
+    oracleContractAddress,
+    oracleCodeHash,
+    oracleKeys,
+  }));
+}
+
 export {
   parsePriceFromContract,
   parsePricesFromContract,
@@ -150,4 +275,7 @@ export {
   queryPrices$,
   queryPrice,
   queryPrices,
+  parseBatchQueryIndividualPrices,
+  batchQueryIndividualPrices$,
+  batchQueryIndividualPrices,
 };
