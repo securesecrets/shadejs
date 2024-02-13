@@ -1,5 +1,11 @@
 # shadejs
 
+## 1.0.8
+
+### Patch Changes
+
+- 1344e21: snip20 token info batch query
+
 ## 1.0.7
 
 ### Patch Changes
