@@ -1,0 +1,27 @@
+{
+  "batch": {
+    "responses": [
+      {
+        "id": "IkJUQyI=",
+        "contract": {
+          "address": "secret10n2xl5jmez6r9umtdrth78k0vwmce0l5m9f5dm",
+          "code_hash": "32c4710842b97a526c243a68511b15f58d6e72a388af38a7221ff3244c754e91"
+        },
+        "response": {
+          "response": "eyJrZXkiOiJCVEMiLCJkYXRhIjp7InJhdGUiOiI0OTUyMTg0MzcwODgwMDAwMDAwMDAwMCIsImxhc3RfdXBkYXRlZF9iYXNlIjoxNzA3ODU4NDgyLCJsYXN0X3VwZGF0ZWRfcXVvdGUiOjE4NDQ2NzQ0MDczNzA5NTUxNjE1fX0gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIA=="
+        }
+      },
+      {
+        "id": "IlF1aWNrc2lsdmVyIEFUT00i",
+        "contract": {
+          "address": "secret10n2xl5jmez6r9umtdrth78k0vwmce0l5m9f5dm",
+          "code_hash": "32c4710842b97a526c243a68511b15f58d6e72a388af38a7221ff3244c754e91"
+        },
+        "response": {
+          "system_err": "Cannot parse response: expected value at line 1 column 1 in: Generic error: Querier system error: Cannot parse response: expected value at line 1 column 1 in: Generic error: Derivative rate is stale. Last updated 1704806636. Current time 1707858606."
+        }
+      }
+    ]
+  }
+}
+

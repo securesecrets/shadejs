@@ -10,6 +10,8 @@ import batchPairConfigResponse from '~/test/mocks/batchQuery/batchPairConfigResp
 import { batchPairConfigParsed } from '~/test/mocks/batchQuery/batchPairConfigParsed';
 import { BatchQueryParams } from '~/types/contracts/batchQuery/model';
 import { msgBatchQuery } from '~/contracts/definitions/batchQuery';
+import batchPricesWithError from '~/test/mocks/batchQuery/batchIndividualPricesWithErrorResponse.json';
+import { batchPricesWithErrorParsed } from '~/test/mocks/batchQuery/batchPricesWithErrorParsed';
 import {
   parseBatchQuery,
   batchQuery$,
@@ -36,10 +38,16 @@ afterAll(() => {
   vi.clearAllMocks();
 });
 
-test('it can parse the batch query response', () => {
+test('it can parse the batch query success response', () => {
   expect(parseBatchQuery(
     batchPairConfigResponse,
   )).toStrictEqual(batchPairConfigParsed);
+});
+
+test('it can parse the batch query mixed succes/error response', () => {
+  expect(parseBatchQuery(
+    batchPricesWithError,
+  )).toStrictEqual(batchPricesWithErrorParsed);
 });
 
 test('it can call the batch query service', async () => {
