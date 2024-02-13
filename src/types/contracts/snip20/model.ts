@@ -17,8 +17,16 @@ type TokenInfo = {
   totalSupply: string,
 }
 
+type BatchTokensInfoItem = {
+  tokenContractAddress: string,
+  tokenInfo: TokenInfo,
+}
+
+type BatchTokensInfo = BatchTokensInfoItem[]
+
 export type {
   HandleMsg,
   Snip20MessageRequest,
   TokenInfo,
+  BatchTokensInfo,
 };
