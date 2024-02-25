@@ -1,6 +1,6 @@
 # Oracle Examples
 
-This page demonstrates how to query the Shade Oracle Router, which serves price feeds from various sources inluding: Band Protocol, ShadeSwap pools, derivative redemption rates, and others.
+This page demonstrates how to query the Shade Oracle Router, which serves price feeds from various sources including: Band Protocol, ShadeSwap pools, derivative redemption rates, and others.
 ## Single Oracle Price
 
 **input**
