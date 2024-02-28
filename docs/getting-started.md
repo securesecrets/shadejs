@@ -49,7 +49,7 @@ try{
 
 Under the hood, ShadeJS uses <a href="https://rxjs.dev/" target="_blank">RxJS</a> as an observables library to build asynchronous functions. The async functions provided for interacting with the blockchain have an RxJS version as an alternative, and users can decide which one to use based on their preference. 
 ::: tip
-The standard async/await syntax funcion is designed as a simple wrapper function around the RxJS, so either way you are calling the RxJS version!
+The standard async/await syntax function is designed as a simple wrapper function around the RxJS, so either way you are calling the RxJS version!
 :::
 
 ```ts

@@ -21,7 +21,7 @@ features:
   - title: TypeScript Support
     details: Seamlessly integrate into your javascript projects.
   - title: Shade Smart Contracts
-    details: Query and execute message interfaces defined for interating with Shade Protocol
+    details: Query and execute message interfaces defined for interacting with Shade Protocol
   - title: Secret.js Wrapper
     details: Wraps Secret Network's javascript SDK to simplify the developer experience
 

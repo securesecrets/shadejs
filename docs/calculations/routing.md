@@ -45,7 +45,7 @@ function calculateRoute({
 ```
 
 ::: tip
-We pass in a list of all possible tokens (TokensConfig) so that we have access to their decimals for uDenom conversions. This is not the most elegant solution as it may be preferrable to reference your own data store for token data. In that case, you can create your own route calculator and use the ShadeJS one as a guide.
+We pass in a list of all possible tokens (TokensConfig) so that we have access to their decimals for uDenom conversions. This is not the most elegant solution as it may be preferable to reference your own data store for token data. In that case, you can create your own route calculator and use the ShadeJS one as a guide.
 :::
 ::: warning
 Ensure tokenConfig contains no duplicate tokens as this will trigger an error in order to prevent a bad config from being used.
