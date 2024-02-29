@@ -1,0 +1,23 @@
+{
+  "staking_info": {
+    "unbonding_time": "60",
+    "bonded_shd": "0",
+    "available_shd": "0",
+    "rewards": "0",
+    "total_derivative_token_supply": "0",
+    "price": "100000000",
+    "fee_info": {
+      "staking": {
+        "rate": 1,
+        "decimal_places": 2
+      },
+      "unbonding": {
+        "rate": 1,
+        "decimal_places": 2
+      },
+      "collector": "secret1fz7ugsneqqru9pex7h4pjyn77s4fsmcp7sycyl"
+    },
+    "status": "normal_run"
+  }
+}
+

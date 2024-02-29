@@ -48,13 +48,57 @@ function msgDerivativeShdStake({
   derivativeShdContractAddress: string,
   derivativeShdCodeHash?: string,
   sendAmount: string,
-  minExpectedReturnAmount: string, // param doesn't exist in the contract yet
+  minExpectedReturnAmount?: string, // param doesn't exist in the contract yet
 }) {
   return snip20.messages.send({
     recipient: derivativeShdContractAddress,
     recipientCodeHash: derivativeShdCodeHash,
     amount: sendAmount,
-    handleMsg: {}, // TBD for minExpectedReturn
+    handleMsg: { stake: {} }, // TBD for minExpectedReturn
+    padding: generatePadding(),
+  }).msg;
+}
+
+/**
+ * message to stake shd to receive derivative shade
+ */
+function msgDerivativeShdUnbond({
+  derivativeShdContractAddress,
+  derivativeShdCodeHash,
+  sendAmount,
+}: {
+  derivativeShdContractAddress: string,
+  derivativeShdCodeHash?: string,
+  sendAmount: string,
+}) {
+  return snip20.messages.send({
+    recipient: derivativeShdContractAddress,
+    recipientCodeHash: derivativeShdCodeHash,
+    amount: sendAmount,
+    handleMsg: { unbond: {} },
+    padding: generatePadding(),
+  }).msg;
+}
+
+/**
+ * message to stake shd to receive derivative shade
+ */
+function msgDerivativeShdTransferStaked({
+  derivativeShdContractAddress,
+  derivativeShdCodeHash,
+  sendAmount,
+  receiver,
+}: {
+  derivativeShdContractAddress: string,
+  derivativeShdCodeHash?: string,
+  sendAmount: string,
+  receiver: string,
+}) {
+  return snip20.messages.send({
+    recipient: derivativeShdContractAddress,
+    recipientCodeHash: derivativeShdCodeHash,
+    amount: sendAmount,
+    handleMsg: { transfer_staked: { receiver } },
     padding: generatePadding(),
   }).msg;
 }
@@ -66,4 +110,6 @@ export {
   msgQueryUserHoldings,
   msgQueryUserUnbondings,
   msgDerivativeShdStake,
+  msgDerivativeShdUnbond,
+  msgDerivativeShdTransferStaked,
 };
