@@ -5,8 +5,8 @@ import {
 } from 'vitest';
 import {
   msgQueryStakingInfo,
-  msgQueryUserHoldings,
-  msgQueryUserUnbondings,
+  msgQueryUserHoldingsWithViewingKey,
+  msgQueryUserUnbondingsWithViewingKey,
   msgDerivativeShdStake,
   msgDerivativeShdUnbond,
   msgDerivativeShdTransferStaked,
@@ -40,7 +40,7 @@ test('it tests the form of the query user holdings msg', () => {
       viewing_key: 'VIEWING_KEY',
     },
   };
-  expect(msgQueryUserHoldings('USER_ADDR', 'VIEWING_KEY')).toStrictEqual(output);
+  expect(msgQueryUserHoldingsWithViewingKey('USER_ADDR', 'VIEWING_KEY')).toStrictEqual(output);
 });
 
 test('it tests the form of the query user holdings msg with permit', () => {
@@ -68,7 +68,7 @@ test('it tests the form of the query user unbondings msg', () => {
       viewing_key: 'VIEWING_KEY',
     },
   };
-  expect(msgQueryUserUnbondings('USER_ADDR', 'VIEWING_KEY')).toStrictEqual(output);
+  expect(msgQueryUserUnbondingsWithViewingKey('USER_ADDR', 'VIEWING_KEY')).toStrictEqual(output);
 });
 
 test('it tests the form of the query user unbondings msg', () => {

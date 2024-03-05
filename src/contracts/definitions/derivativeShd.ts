@@ -12,7 +12,7 @@ const msgQueryStakingInfo = () => ({ staking_info: {} });
  * Query the users private holdings
  * NOT FOR PRODUCTION USE, CONTRACT IS IN DEVELOPMENT ON TESTNET ONLY
  */
-const msgQueryUserHoldings = (userAddress: string, viewingKey: string) => ({
+const msgQueryUserHoldingsWithViewingKey = (userAddress: string, viewingKey: string) => ({
   holdings: {
     address: userAddress,
     viewing_key: viewingKey,
@@ -36,7 +36,7 @@ const msgQueryUserHoldingsWithPermit = (permit: AccountPermit) => ({
  * Query the users private unbondings
  * NOT FOR PRODUCTION USE, CONTRACT IS IN DEVELOPMENT ON TESTNET ONLY
  */
-const msgQueryUserUnbondings = (userAddress: string, viewingKey: string) => ({
+const msgQueryUserUnbondingsWithViewingKey = (userAddress: string, viewingKey: string) => ({
   unbondings: {
     address: userAddress,
     viewing_key: viewingKey,
@@ -128,8 +128,8 @@ function msgDerivativeShdTransferStaked({
 
 export {
   msgQueryStakingInfo,
-  msgQueryUserHoldings,
-  msgQueryUserUnbondings,
+  msgQueryUserHoldingsWithViewingKey,
+  msgQueryUserUnbondingsWithViewingKey,
   msgQueryUserHoldingsWithPermit,
   msgQueryUserUnbondingsWithPermit,
   msgDerivativeShdStake,
