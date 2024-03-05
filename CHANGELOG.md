@@ -1,5 +1,15 @@
 # shadejs
 
+## 1.1.0
+
+### Minor Changes
+
+- f6a4f4f: Added dSHD contract interface and query services TESTNET ONLY
+
+### Patch Changes
+
+- fb41cf0: Corrected some typographical errors
+
 ## 1.0.9
 
 ### Patch Changes
