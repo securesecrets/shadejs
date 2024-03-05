@@ -5,13 +5,13 @@ import {
 } from 'vitest';
 import {
   msgQueryStakingInfo,
-  msgQueryFeeInfo,
-  msgQueryContractStatus,
   msgQueryUserHoldings,
   msgQueryUserUnbondings,
   msgDerivativeShdStake,
   msgDerivativeShdUnbond,
   msgDerivativeShdTransferStaked,
+  msgQueryUserHoldingsWithPermit,
+  msgQueryUserUnbondingsWithPermit,
 } from '~/contracts/definitions/derivativeShd';
 import { snip20 } from './snip20';
 
@@ -32,16 +32,6 @@ test('it tests the form of the query staking info msg', () => {
   expect(msgQueryStakingInfo()).toStrictEqual(output);
 });
 
-test('it tests the form of the query fee info msg', () => {
-  const output = { fee_info: {} };
-  expect(msgQueryFeeInfo()).toStrictEqual(output);
-});
-
-test('it tests the form of the query contract status msg', () => {
-  const output = { contract_status: {} };
-  expect(msgQueryContractStatus()).toStrictEqual(output);
-});
-
 test('it tests the form of the query user holdings msg', () => {
   const output = {
     holdings: {
@@ -52,6 +42,23 @@ test('it tests the form of the query user holdings msg', () => {
   expect(msgQueryUserHoldings('USER_ADDR', 'VIEWING_KEY')).toStrictEqual(output);
 });
 
+test('it tests the form of the query user holdings msg with permit', () => {
+  const permit = {
+    params: {
+      data: 'FAKE_B64=',
+      key: 'SHADE_MASTER_PERMIT',
+    },
+    signature: 'MOCK_SIGNATURE',
+  };
+  const output = {
+    with_permit: {
+      permit,
+      query: { holdings: { } },
+    },
+  };
+  expect(msgQueryUserHoldingsWithPermit(permit)).toStrictEqual(output);
+});
+
 test('it tests the form of the query user unbondings msg', () => {
   const output = {
     unbondings: {
@@ -60,6 +67,23 @@ test('it tests the form of the query user unbondings msg', () => {
     },
   };
   expect(msgQueryUserUnbondings('USER_ADDR', 'VIEWING_KEY')).toStrictEqual(output);
+});
+
+test('it tests the form of the query user unbondings msg', () => {
+  const permit = {
+    params: {
+      data: 'FAKE_B64=',
+      key: 'SHADE_MASTER_PERMIT',
+    },
+    signature: 'MOCK_SIGNATURE',
+  };
+  const output = {
+    with_permit: {
+      permit,
+      query: { unbondings: { } },
+    },
+  };
+  expect(msgQueryUserUnbondingsWithPermit(permit)).toStrictEqual(output);
 });
 
 test('it tests the form of the stake execute msg', () => {
@@ -99,7 +123,7 @@ test('it tests the form of the unbond execute msg', () => {
   });
 });
 
-test('it tests the form of the unbond execute msg', () => {
+test('it tests the form of the transfer staked msg', () => {
   const stakeInput = {
     derivativeShdContractAddress: 'SHD_DERIVATIVE_CONTRACT_ADDRESS',
     derivativeShdCodeHash: 'SHD_DERIVATIVE_CODE_HASH',

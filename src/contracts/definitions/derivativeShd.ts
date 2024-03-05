@@ -1,20 +1,11 @@
 import { snip20 } from '~/contracts/definitions/snip20';
 import { generatePadding } from '~/lib/utils';
+import { Permit } from '~/types/shared';
 
 /**
  * Query the public contract staking info
  */
 const msgQueryStakingInfo = () => ({ staking_info: {} });
-
-/**
- * Query the fee info
- */
-const msgQueryFeeInfo = () => ({ fee_info: {} });
-
-/**
- * Query the contract status
- */
-const msgQueryContractStatus = () => ({ contract_status: {} });
 
 /**
  * Query the users private holdings
@@ -27,12 +18,36 @@ const msgQueryUserHoldings = (userAddress: string, viewingKey: string) => ({
 });
 
 /**
+ * Query the users private holdings with a permit
+ */
+const msgQueryUserHoldingsWithPermit = (permit: Permit) => ({
+  with_permit: {
+    permit,
+    query: {
+      holdings: {},
+    },
+  },
+});
+
+/**
  * Query the users private unbondings
  */
 const msgQueryUserUnbondings = (userAddress: string, viewingKey: string) => ({
   unbondings: {
     address: userAddress,
     viewing_key: viewingKey,
+  },
+});
+
+/**
+ * Query the users private unbondings with a permit
+ */
+const msgQueryUserUnbondingsWithPermit = (permit: Permit) => ({
+  with_permit: {
+    permit,
+    query: {
+      unbondings: {},
+    },
   },
 });
 
@@ -60,7 +75,7 @@ function msgDerivativeShdStake({
 }
 
 /**
- * message to stake shd to receive derivative shade
+ * message to unbond derivate shd to receive shade
  */
 function msgDerivativeShdUnbond({
   derivativeShdContractAddress,
@@ -81,7 +96,7 @@ function msgDerivativeShdUnbond({
 }
 
 /**
- * message to stake shd to receive derivative shade
+ * message to transfer derivate shd to staked shade
  */
 function msgDerivativeShdTransferStaked({
   derivativeShdContractAddress,
@@ -105,10 +120,10 @@ function msgDerivativeShdTransferStaked({
 
 export {
   msgQueryStakingInfo,
-  msgQueryFeeInfo,
-  msgQueryContractStatus,
   msgQueryUserHoldings,
   msgQueryUserUnbondings,
+  msgQueryUserHoldingsWithPermit,
+  msgQueryUserUnbondingsWithPermit,
   msgDerivativeShdStake,
   msgDerivativeShdUnbond,
   msgDerivativeShdTransferStaked,

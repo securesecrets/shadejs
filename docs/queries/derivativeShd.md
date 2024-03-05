@@ -1,5 +1,6 @@
 # Shade Derivative Examples
 
+This contract and its services are currently in development and on testnet, not mainnet
 This page demonstrates how to query the Shade derivative contracts
 
 
