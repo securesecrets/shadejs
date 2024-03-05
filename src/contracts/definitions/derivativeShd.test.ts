@@ -13,6 +13,7 @@ import {
   msgQueryUserHoldingsWithPermit,
   msgQueryUserUnbondingsWithPermit,
 } from '~/contracts/definitions/derivativeShd';
+import { StdSignature } from 'secretjs';
 import { snip20 } from './snip20';
 
 vi.mock('~/contracts/definitions/snip20', () => ({
@@ -48,7 +49,8 @@ test('it tests the form of the query user holdings msg with permit', () => {
       data: 'FAKE_B64=',
       key: 'SHADE_MASTER_PERMIT',
     },
-    signature: 'MOCK_SIGNATURE',
+    signature: 'MOCK_SIGNATURE' as unknown as StdSignature,
+    chain_id: 'MOCK_CHAIN_ID',
   };
   const output = {
     with_permit: {
@@ -75,7 +77,8 @@ test('it tests the form of the query user unbondings msg', () => {
       data: 'FAKE_B64=',
       key: 'SHADE_MASTER_PERMIT',
     },
-    signature: 'MOCK_SIGNATURE',
+    signature: 'MOCK_SIGNATURE' as unknown as StdSignature,
+    chain_id: 'MOCK_CHAIN_ID',
   };
   const output = {
     with_permit: {

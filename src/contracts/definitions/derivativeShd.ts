@@ -1,14 +1,16 @@
 import { snip20 } from '~/contracts/definitions/snip20';
 import { generatePadding } from '~/lib/utils';
-import { Permit } from '~/types/shared';
+import { AccountPermit } from '~/types/permit';
 
 /**
  * Query the public contract staking info
+ * NOT FOR PRODUCTION USE, CONTRACT IS IN DEVELOPMENT ON TESTNET ONLY
  */
 const msgQueryStakingInfo = () => ({ staking_info: {} });
 
 /**
  * Query the users private holdings
+ * NOT FOR PRODUCTION USE, CONTRACT IS IN DEVELOPMENT ON TESTNET ONLY
  */
 const msgQueryUserHoldings = (userAddress: string, viewingKey: string) => ({
   holdings: {
@@ -19,8 +21,9 @@ const msgQueryUserHoldings = (userAddress: string, viewingKey: string) => ({
 
 /**
  * Query the users private holdings with a permit
+ * NOT FOR PRODUCTION USE, CONTRACT IS IN DEVELOPMENT ON TESTNET ONLY
  */
-const msgQueryUserHoldingsWithPermit = (permit: Permit) => ({
+const msgQueryUserHoldingsWithPermit = (permit: AccountPermit) => ({
   with_permit: {
     permit,
     query: {
@@ -31,6 +34,7 @@ const msgQueryUserHoldingsWithPermit = (permit: Permit) => ({
 
 /**
  * Query the users private unbondings
+ * NOT FOR PRODUCTION USE, CONTRACT IS IN DEVELOPMENT ON TESTNET ONLY
  */
 const msgQueryUserUnbondings = (userAddress: string, viewingKey: string) => ({
   unbondings: {
@@ -41,8 +45,9 @@ const msgQueryUserUnbondings = (userAddress: string, viewingKey: string) => ({
 
 /**
  * Query the users private unbondings with a permit
+ * NOT FOR PRODUCTION USE, CONTRACT IS IN DEVELOPMENT ON TESTNET ONLY
  */
-const msgQueryUserUnbondingsWithPermit = (permit: Permit) => ({
+const msgQueryUserUnbondingsWithPermit = (permit: AccountPermit) => ({
   with_permit: {
     permit,
     query: {
@@ -53,6 +58,7 @@ const msgQueryUserUnbondingsWithPermit = (permit: Permit) => ({
 
 /**
  * message to stake shd to receive derivative shade
+ * NOT FOR PRODUCTION USE, CONTRACT IS IN DEVELOPMENT ON TESTNET ONLY
  */
 function msgDerivativeShdStake({
   derivativeShdContractAddress,
@@ -76,6 +82,7 @@ function msgDerivativeShdStake({
 
 /**
  * message to unbond derivate shd to receive shade
+ * NOT FOR PRODUCTION USE, CONTRACT IS IN DEVELOPMENT ON TESTNET ONLY
  */
 function msgDerivativeShdUnbond({
   derivativeShdContractAddress,
@@ -97,6 +104,7 @@ function msgDerivativeShdUnbond({
 
 /**
  * message to transfer derivate shd to staked shade
+ * NOT FOR PRODUCTION USE, CONTRACT IS IN DEVELOPMENT ON TESTNET ONLY
  */
 function msgDerivativeShdTransferStaked({
   derivativeShdContractAddress,

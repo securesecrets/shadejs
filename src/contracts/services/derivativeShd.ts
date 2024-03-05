@@ -20,6 +20,7 @@ const DERIVATE_PRICE_DECIMALS = 6;
 
 /**
 * Parses the staking info query into a cleaner data model
+ * NOT FOR PRODUCTION USE, CONTRACT IS IN DEVELOPMENT ON TESTNET ONLY
 */
 const parseDerivativeShdStakingInfo = (
   response: StakingInfoResponse,
@@ -47,6 +48,7 @@ const parseDerivativeShdStakingInfo = (
 
 /**
  * query the staking info
+ * NOT FOR PRODUCTION USE, CONTRACT IS IN DEVELOPMENT ON TESTNET ONLY
  */
 const queryDerivativeShdStakingInfo$ = ({
   contractAddress,
@@ -71,6 +73,7 @@ const queryDerivativeShdStakingInfo$ = ({
 
 /**
  * query the staking info
+ * NOT FOR PRODUCTION USE, CONTRACT IS IN DEVELOPMENT ON TESTNET ONLY
  */
 async function queryDerivativeShdStakingInfo({
   contractAddress,
