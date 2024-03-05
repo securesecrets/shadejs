@@ -284,7 +284,7 @@ console.log(output)
 ## Pairs Config
 Query the pair config  for multiple pairs
 ::: info
-This query uses a smart contract batch query router to allow you to query many pairs in a single http request. This is a highly efficient method of interacting with the chain an minimizes the load on the LCD endpoint.
+This query uses a smart contract batch query router to allow you to query many pairs in a single http request. This is a highly efficient method of interacting with the chain and minimizes the load on the LCD endpoint.
 :::
 
 **input**

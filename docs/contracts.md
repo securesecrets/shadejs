@@ -11,7 +11,7 @@ This page contains a list of deployed contracts.
 | Oracle             	| secret10n2xl5jmez6r9umtdrth78k0vwmce0l5m9f5dm 	| 32c4710842b97a526c243a68511b15f58d6e72a388af38a7221ff3244c754e91 	|
 
 ::: tip
-The ShadeSwap pairs contracts are accessable via the factory registered pairs query.
+The ShadeSwap pairs contracts are accessible via the factory registered pairs query.
 :::
 
 ## Pulsar-3 Testnet
