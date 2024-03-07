@@ -6,13 +6,16 @@ import { AccountPermit } from '~/types/permit';
  * Query the public contract staking info
  * NOT FOR PRODUCTION USE, CONTRACT IS IN DEVELOPMENT ON TESTNET ONLY
  */
-const msgQueryStakingInfo = () => ({ staking_info: {} });
+const msgQueryShdDerivativeStakingInfo = () => ({ staking_info: {} });
 
 /**
  * Query the users private holdings
  * NOT FOR PRODUCTION USE, CONTRACT IS IN DEVELOPMENT ON TESTNET ONLY
  */
-const msgQueryUserHoldingsWithViewingKey = (userAddress: string, viewingKey: string) => ({
+const msgQueryShdDerivativeUserHoldingsWithViewingKey = (
+  userAddress: string,
+  viewingKey: string,
+) => ({
   holdings: {
     address: userAddress,
     viewing_key: viewingKey,
@@ -23,7 +26,7 @@ const msgQueryUserHoldingsWithViewingKey = (userAddress: string, viewingKey: str
  * Query the users private holdings with a permit
  * NOT FOR PRODUCTION USE, CONTRACT IS IN DEVELOPMENT ON TESTNET ONLY
  */
-const msgQueryUserHoldingsWithPermit = (permit: AccountPermit) => ({
+const msgQueryShdDerivativeUserHoldingsWithPermit = (permit: AccountPermit) => ({
   with_permit: {
     permit,
     query: {
@@ -36,7 +39,10 @@ const msgQueryUserHoldingsWithPermit = (permit: AccountPermit) => ({
  * Query the users private unbondings
  * NOT FOR PRODUCTION USE, CONTRACT IS IN DEVELOPMENT ON TESTNET ONLY
  */
-const msgQueryUserUnbondingsWithViewingKey = (userAddress: string, viewingKey: string) => ({
+const msgQueryShdDerivativeUserUnbondingsWithViewingKey = (
+  userAddress: string,
+  viewingKey: string,
+) => ({
   unbondings: {
     address: userAddress,
     viewing_key: viewingKey,
@@ -47,7 +53,7 @@ const msgQueryUserUnbondingsWithViewingKey = (userAddress: string, viewingKey: s
  * Query the users private unbondings with a permit
  * NOT FOR PRODUCTION USE, CONTRACT IS IN DEVELOPMENT ON TESTNET ONLY
  */
-const msgQueryUserUnbondingsWithPermit = (permit: AccountPermit) => ({
+const msgQueryShdDerivativeUserUnbondingsWithPermit = (permit: AccountPermit) => ({
   with_permit: {
     permit,
     query: {
@@ -127,11 +133,11 @@ function msgDerivativeShdTransferStaked({
 }
 
 export {
-  msgQueryStakingInfo,
-  msgQueryUserHoldingsWithViewingKey,
-  msgQueryUserUnbondingsWithViewingKey,
-  msgQueryUserHoldingsWithPermit,
-  msgQueryUserUnbondingsWithPermit,
+  msgQueryShdDerivativeStakingInfo,
+  msgQueryShdDerivativeUserHoldingsWithViewingKey,
+  msgQueryShdDerivativeUserUnbondingsWithViewingKey,
+  msgQueryShdDerivativeUserHoldingsWithPermit,
+  msgQueryShdDerivativeUserUnbondingsWithPermit,
   msgDerivativeShdStake,
   msgDerivativeShdUnbond,
   msgDerivativeShdTransferStaked,

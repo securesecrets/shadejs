@@ -13,7 +13,7 @@ import {
   ParsedStakingInfoResponse,
 } from '~/types/contracts/derivativeShd/model';
 import { convertCoinFromUDenom } from '~/lib/utils';
-import { msgQueryStakingInfo } from '~/contracts/definitions/derivativeShd';
+import { msgQueryShdDerivativeStakingInfo } from '~/contracts/definitions/derivativeShd';
 
 // Contract returns price as a rate of dSHD/SHD with 6 decimals
 const DERIVATE_PRICE_DECIMALS = 6;
@@ -62,7 +62,7 @@ const queryDerivativeShdStakingInfo$ = ({
   chainId?: string,
 }) => getActiveQueryClient$(lcdEndpoint, chainId).pipe(
   switchMap(({ client }) => sendSecretClientContractQuery$({
-    queryMsg: msgQueryStakingInfo(),
+    queryMsg: msgQueryShdDerivativeStakingInfo(),
     client,
     contractAddress,
     codeHash,

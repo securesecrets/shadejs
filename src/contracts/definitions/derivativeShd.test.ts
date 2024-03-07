@@ -4,14 +4,14 @@ import {
   vi,
 } from 'vitest';
 import {
-  msgQueryStakingInfo,
-  msgQueryUserHoldingsWithViewingKey,
-  msgQueryUserUnbondingsWithViewingKey,
+  msgQueryShdDerivativeStakingInfo,
+  msgQueryShdDerivativeUserHoldingsWithViewingKey,
+  msgQueryShdDerivativeUserUnbondingsWithViewingKey,
   msgDerivativeShdStake,
   msgDerivativeShdUnbond,
   msgDerivativeShdTransferStaked,
-  msgQueryUserHoldingsWithPermit,
-  msgQueryUserUnbondingsWithPermit,
+  msgQueryShdDerivativeUserHoldingsWithPermit,
+  msgQueryShdDerivativeUserUnbondingsWithPermit,
 } from '~/contracts/definitions/derivativeShd';
 import { StdSignature } from 'secretjs';
 import { snip20 } from './snip20';
@@ -30,7 +30,7 @@ vi.mock('~/lib/utils', () => ({
 
 test('it tests the form of the query staking info msg', () => {
   const output = { staking_info: {} };
-  expect(msgQueryStakingInfo()).toStrictEqual(output);
+  expect(msgQueryShdDerivativeStakingInfo()).toStrictEqual(output);
 });
 
 test('it tests the form of the query user holdings msg', () => {
@@ -40,7 +40,7 @@ test('it tests the form of the query user holdings msg', () => {
       viewing_key: 'VIEWING_KEY',
     },
   };
-  expect(msgQueryUserHoldingsWithViewingKey('USER_ADDR', 'VIEWING_KEY')).toStrictEqual(output);
+  expect(msgQueryShdDerivativeUserHoldingsWithViewingKey('USER_ADDR', 'VIEWING_KEY')).toStrictEqual(output);
 });
 
 test('it tests the form of the query user holdings msg with permit', () => {
@@ -58,7 +58,7 @@ test('it tests the form of the query user holdings msg with permit', () => {
       query: { holdings: { } },
     },
   };
-  expect(msgQueryUserHoldingsWithPermit(permit)).toStrictEqual(output);
+  expect(msgQueryShdDerivativeUserHoldingsWithPermit(permit)).toStrictEqual(output);
 });
 
 test('it tests the form of the query user unbondings msg', () => {
@@ -68,7 +68,7 @@ test('it tests the form of the query user unbondings msg', () => {
       viewing_key: 'VIEWING_KEY',
     },
   };
-  expect(msgQueryUserUnbondingsWithViewingKey('USER_ADDR', 'VIEWING_KEY')).toStrictEqual(output);
+  expect(msgQueryShdDerivativeUserUnbondingsWithViewingKey('USER_ADDR', 'VIEWING_KEY')).toStrictEqual(output);
 });
 
 test('it tests the form of the query user unbondings msg', () => {
@@ -86,7 +86,7 @@ test('it tests the form of the query user unbondings msg', () => {
       query: { unbondings: { } },
     },
   };
-  expect(msgQueryUserUnbondingsWithPermit(permit)).toStrictEqual(output);
+  expect(msgQueryShdDerivativeUserUnbondingsWithPermit(permit)).toStrictEqual(output);
 });
 
 test('it tests the form of the stake execute msg', () => {
