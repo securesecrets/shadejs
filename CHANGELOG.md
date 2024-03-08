@@ -1,5 +1,11 @@
 # shadejs
 
+## 1.1.1
+
+### Patch Changes
+
+- 13d0684: Missed an export for the shade derviative implementation'
+
 ## 1.1.0
 
 ### Minor Changes
