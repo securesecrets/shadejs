@@ -1,5 +1,11 @@
 # shadejs
 
+## 1.1.2
+
+### Patch Changes
+
+- 56713e2: missed more exports on the derivative shd pr
+
 ## 1.1.1
 
 ### Patch Changes
