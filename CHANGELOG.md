@@ -1,5 +1,11 @@
 # shadejs
 
+## 1.1.3
+
+### Patch Changes
+
+- 5c24f98: Fix build issues on client side applications
+
 ## 1.1.2
 
 ### Patch Changes
