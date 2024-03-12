@@ -11,14 +11,14 @@
   },
   "license": "MIT",
   "type": "module",
-  "main": "./dist/shadejs.cjs",
-  "module": "./dist/shadejs.js",
+  "main": "./dist/index.umd.cjs",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/shadejs.js",
-      "require": "./dist/shadejs.cjs"
+      "import": "./dist/index.js",
+      "require": "./dist/index.umd.cjs"
     }
   },
   "files": [
