@@ -1,7 +1,8 @@
 import { defineConfig } from 'vite';
 import path from 'path';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import dts from 'vite-plugin-dts';
+import { nodePolyfills } from 'vite-plugin-node-polyfills';
+
 // https://vitejs.dev/config/
 export default defineConfig({
     // @ts-ignore
@@ -9,20 +10,30 @@ export default defineConfig({
     test: {
         globals: true,
     },
+
     resolve: {
         alias: {
             '~': `${path.resolve(__dirname, 'src')}`,
         },
     },
+
     build: {
         manifest: true,
         minify: true,
         reportCompressedSize: true,
         lib: {
             entry: path.resolve(__dirname, 'src/index.ts'),
-            name: 'index',
-            formats: ['es', 'cjs'],
+            name: 'shadejs',
+            fileName: 'index',
         },
     },
-    plugins: [dts({ rollupTypes: true })],
+    plugins: [
+        dts({ rollupTypes: true }),
+        nodePolyfills({
+            include: ['path', 'buffer'],
+            globals: {
+                Buffer: true,
+            },
+        }),
+    ],
 });
