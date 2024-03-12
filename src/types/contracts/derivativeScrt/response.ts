@@ -1,9 +1,9 @@
-type StakingDerivativesValidator = {
+type DerivativeScrtValidatorResponse = {
   validator: string,
   weight: number,
 }
 
-type StakingDerivativesInfoResponse = {
+type DerivativeScrtStakingInfoResponse = {
   staking_info: {
     available_scrt: string,
     batch_unbond_in_progress: boolean,
@@ -16,11 +16,11 @@ type StakingDerivativesInfoResponse = {
     unbond_amount_of_next_batch: string,
     unbonding_batch_interval: number,
     unbonding_time: number,
-    validators: StakingDerivativesValidator[],
+    validators: DerivativeScrtValidatorResponse[],
   },
 };
 
-type StakingDerivativesFeesResponse = {
+type DerivativeScrtFeeInfoResponse = {
   fee_info: {
     fee_collector: string,
     deposit: number,
@@ -29,7 +29,7 @@ type StakingDerivativesFeesResponse = {
 }
 
 export type {
-  StakingDerivativesValidator,
-  StakingDerivativesInfoResponse,
-  StakingDerivativesFeesResponse,
+  DerivativeScrtValidatorResponse,
+  DerivativeScrtStakingInfoResponse,
+  DerivativeScrtFeeInfoResponse,
 };

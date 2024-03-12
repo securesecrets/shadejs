@@ -1,20 +1,36 @@
-import { StakingDerivativesValidator } from './response';
+type DerivativeScrtValidator = {
+  validatorAddress: string,
+  weight: number;
+}
 
-type StakingDerivativesInfo = {
-  validators: StakingDerivativesValidator[],
-  supply: number,
+type DerivativeScrtStakingInfo = {
+  validators: DerivativeScrtValidator[],
+  supply: string,
   exchangeRate: number,
-  communityRewards: number,
-  nextUnboundAmount: number,
+  communityRewards: string,
+  nextUnboundAmount: string,
   nextUnbondingBatchEstimatedTime: number,
 }
 
-type StakingDerivativesFee = {
+type DerivativeScrtFeeInfo = {
+  depositFee: number,
+  withdrawFee: number,
+}
+
+type DerivativeScrtInfo = {
+  validators: DerivativeScrtValidator[],
+  supply: string,
+  exchangeRate: number,
+  communityRewards: string,
+  nextUnboundAmount: string,
+  nextUnbondingBatchEstimatedTime: number,
   depositFee: number,
   withdrawFee: number,
 }
 
 export type {
-  StakingDerivativesInfo,
-  StakingDerivativesFee,
+  DerivativeScrtValidator,
+  DerivativeScrtStakingInfo,
+  DerivativeScrtFeeInfo,
+  DerivativeScrtInfo,
 };
