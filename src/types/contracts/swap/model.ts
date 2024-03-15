@@ -155,4 +155,5 @@ export type {
   Path,
   Paths,
   ParsedSwapResponse,
+  RewardTokenInfo,
 };
