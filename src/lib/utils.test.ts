@@ -42,7 +42,7 @@ test('Generates random padding of length 8-15', () => {
   expect(generatePadding()).toBe('AAAAAAAA');
 });
 
-test('It converts token from U denom V2', () => {
+test('It converts token from U denom', () => {
   expect(convertCoinFromUDenom(1000, 2)).toStrictEqual(BigNumber(10));
   expect(convertCoinFromUDenom('1000', 2)).toStrictEqual(BigNumber(10));
   expect(convertCoinFromUDenom('1000000000000000000000000000', 2)).toStrictEqual(BigNumber('10000000000000000000000000'));
@@ -52,7 +52,7 @@ test('It converts token from U denom V2', () => {
   expect(convertCoinFromUDenom(BigNumber('987654321987654321987654321'), 18)).toStrictEqual(BigNumber('987654321.987654321987654321'));
 });
 
-test('It converts token to U denom V2', () => {
+test('It converts token to U denom', () => {
   const testBigNumber1 = BigNumber(1000);
   expect(convertCoinToUDenom(testBigNumber1, 2)).toBe('100000');
   const testBigNumber2 = BigNumber('0.123456789123456789');
