@@ -1,5 +1,3 @@
-import '~/polyfills/index';
-
 export * from '~/contracts';
 export * from '~/client';
 export * from '~/lib/swap';
