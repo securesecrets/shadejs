@@ -1,5 +1,11 @@
 # shadejs
 
+## 1.1.4
+
+### Patch Changes
+
+- 031fa8d: export type for reward tokens, update test description
+
 ## 1.1.3
 
 ### Patch Changes
