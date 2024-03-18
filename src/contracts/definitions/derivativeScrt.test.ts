@@ -69,7 +69,7 @@ test('it tests the form of the unbond execute msg', () => {
   expect(msgDerivativeScrtUnbond(output.unbond.redeem_amount)).toStrictEqual(output);
 });
 
-test('it tests the form of the transfer staked msg', () => {
+test('it tests the form of the claim msg', () => {
   const output = {
     claim: {
       padding: 'RANDOM_PADDING',
