@@ -18,7 +18,8 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
-      "require": "./dist/index.umd.cjs"
+      "require": "./dist/index.umd.cjs",
+      "default": "./dist/shadejs.umd.cjs"
     }
   },
   "files": [
@@ -59,7 +60,6 @@
     "lefthook": "^1.5.2",
     "typescript": "^5.2.2",
     "vite-plugin-dts": "^3.6.0",
-    "vite-plugin-node-polyfills": "^0.15.0",
     "vitepress": "^1.0.0-rc.24",
     "vitest": "^0.34.6"
   },
