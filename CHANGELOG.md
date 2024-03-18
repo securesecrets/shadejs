@@ -1,5 +1,11 @@
 # shadejs
 
+## 1.1.5
+
+### Patch Changes
+
+- 80271e5: Fix umd exports and removed polyfill
+
 ## 1.1.4
 
 ### Patch Changes
