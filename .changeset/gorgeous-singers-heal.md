@@ -2,4 +2,4 @@
 "@shadeprotocol/shadejs": patch
 ---
 
-Fix umd exports
+Fix umd exports and removed polyfill 
