@@ -1,9 +1,9 @@
 {
-   "communityRewards": "22.865023",
+   "communityRewards": "22865023",
    "exchangeRate": 3.932046,
    "nextUnbondingBatchEstimatedTime": 1695844838000,
    "nextUnboundAmount": "0",
-   "supply": "7.8",
+   "supply": "7800000",
    "validators": [
       {
        "validatorAddress": "secretvaloper14y56hayzwrf8c24g8hzk7h9ge0ax7g80tqaf32",

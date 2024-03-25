@@ -15,14 +15,15 @@ import stakingInfoResponseParsed from '~/test/mocks/derivativeScrt/stakingInfoRe
 import feeInfoResponse from '~/test/mocks/derivativeScrt/feeInfoResponse.json';
 import feeInfoResponseParsed from '~/test/mocks/derivativeScrt/feeInfoResponseParsed.json';
 import { BatchQueryParsedResponse } from '~/types/contracts/batchQuery/model';
+import { BatchRouterKeys } from '~/types/contracts/derivativeScrt/model';
 
 const batchQueryResponse = [
   {
-    id: 'staking_info',
+    id: BatchRouterKeys.STAKING_INFO,
     response: stakingInfoResponse,
   },
   {
-    id: 'fee_info',
+    id: BatchRouterKeys.FEE_INFO,
     response: feeInfoResponse,
   },
 ];
