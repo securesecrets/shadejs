@@ -28,9 +28,17 @@ type DerivativeScrtInfo = {
   withdrawFee: number,
 }
 
+enum BatchRouterKeys {
+  FEE_INFO = 'FEE_INFO',
+  STAKING_INFO = 'STAKING_INFO',
+}
+
 export type {
   DerivativeScrtValidator,
   DerivativeScrtStakingInfo,
   DerivativeScrtFeeInfo,
   DerivativeScrtInfo,
+};
+export {
+  BatchRouterKeys,
 };

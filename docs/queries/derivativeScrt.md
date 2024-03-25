@@ -2,74 +2,54 @@
 
 This page demonstrates how to query the stkd Scrt derivative contracts
 
-
-## Staking Info
+## Derivative Info
 
 **input**
 
 ```ts
 /**
- * query derivative contract for the staking info
+ * query both the staking info and the fee info
+ *
+ * queryTimeSeconds is a paramater to query the contract
+ * at a specific time in seconds from the UNIX Epoch
  */
-async function queryDerivativeScrtStakingInfo({
+const queryDerivativeScrtInfo = ({
+  queryRouterContractAddress,
+  queryRouterCodeHash,
   contractAddress,
   codeHash,
   lcdEndpoint,
   chainId,
+  queryTimeSeconds,
 }: {
+  queryRouterContractAddress: string,
+  queryRouterCodeHash?: string,
   contractAddress: string,
-  codeHash?: string,
+  codeHash: string,
   lcdEndpoint?: string,
   chainId?: string,
-}): Promise<StakingDerivativesInfo> 
+  queryTimeSeconds?: number,
+}): Promise<DerivativeScrtInfo>
 ```
 
 **output**
 
 ```ts
-type StakingDerivativesInfo = {
-  validators: StakingDerivativesValidator[],
-  supply: number,
+type DerivativeScrtInfo = {
+  validators: DerivativeScrtValidator[],
+  supply: string,
   exchangeRate: number,
-  communityRewards: number,
-  nextUnboundAmount: number,
+  communityRewards: string,
+  nextUnboundAmount: string,
   nextUnbondingBatchEstimatedTime: number,
+  depositFee: number,
+  withdrawFee: number,
 }
 
 // type references below
 
-type StakingDerivativesValidator = {
-  validator: string,
-  weight: number,
-}
-```
-
-## Fee Info
-
-**input**
-
-```ts
-/**
- * query derivative contract for the staking info
- */
-async function queryDerivativeScrtFeeInfo({
-  contractAddress,
-  codeHash,
-  lcdEndpoint,
-  chainId,
-}: {
-  contractAddress: string,
-  codeHash?: string,
-  lcdEndpoint?: string,
-  chainId?: string,
-}): Promise<StakingDerivativesFee> 
-```
-
-**output**
-
-```ts
-type StakingDerivativesFee = {
-  depositFee: number,
-  withdrawFee: number,
+type DerivativeScrtValidator = {
+  validatorAddress: string,
+  weight: number;
 }
 ```

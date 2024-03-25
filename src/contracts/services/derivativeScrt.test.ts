@@ -6,19 +6,9 @@ import {
 } from 'vitest';
 import { of } from 'rxjs';
 import {
-  DerivativeScrtFeeInfoResponse,
-  DerivativeScrtStakingInfoResponse,
-} from '~/types/contracts/derivativeScrt/response';
-import {
-  parseDerivativeScrtFeeInfo,
-  parseDerivativeScrtStakingInfo,
-  parseDerivativeScrtAllInfo,
-  queryDerivativeScrtFeeInfo,
-  queryDerivativeScrtFeeInfo$,
-  queryDerivativeScrtStakingInfo,
-  queryDerivativeScrtStakingInfo$,
-  queryDerivativeScrtAllInfo,
-  queryDerivativeScrtAllInfo$,
+  parseDerivativeScrtInfo,
+  queryDerivativeScrtInfo,
+  queryDerivativeScrtInfo$,
 } from '~/contracts/services/derivativeScrt';
 import stakingInfoResponse from '~/test/mocks/derivativeScrt/stakingInfoResponse.json';
 import stakingInfoResponseParsed from '~/test/mocks/derivativeScrt/stakingInfoResponseParsed.json';
@@ -58,102 +48,8 @@ beforeAll(() => {
   }));
 });
 
-test('it can parse the staking info', () => {
-  expect(parseDerivativeScrtStakingInfo(
-    stakingInfoResponse as DerivativeScrtStakingInfoResponse,
-  )).toStrictEqual(stakingInfoResponseParsed);
-});
-
-test('it can call the query staking info service', async () => {
-  // observables function
-  sendSecretClientContractQuery$.mockReturnValueOnce(of(stakingInfoResponse));
-
-  const input = {
-    contractAddress: 'CONTRACT_ADDRESS',
-    codeHash: 'CODE_HASH',
-    lcdEndpoint: 'LCD_ENDPOINT',
-    chainId: 'CHAIN_ID',
-  };
-
-  let output;
-  queryDerivativeScrtStakingInfo$(input).subscribe({
-    next: (response: any) => {
-      output = response;
-    },
-  });
-
-  expect(sendSecretClientContractQuery$).toHaveBeenCalledWith({
-    queryMsg: 'STAKING_INFO_MSG',
-    client: 'CLIENT',
-    contractAddress: input.contractAddress,
-    codeHash: input.codeHash,
-  });
-
-  expect(output).toStrictEqual(stakingInfoResponseParsed);
-
-  // async/await function
-  sendSecretClientContractQuery$.mockReturnValueOnce(of(stakingInfoResponse));
-  const output2 = await queryDerivativeScrtStakingInfo(input);
-
-  expect(sendSecretClientContractQuery$).toHaveBeenCalledWith({
-    queryMsg: 'STAKING_INFO_MSG',
-    client: 'CLIENT',
-    contractAddress: input.contractAddress,
-    codeHash: input.codeHash,
-  });
-
-  expect(output2).toStrictEqual(stakingInfoResponseParsed);
-});
-
-test('it can parse the fee info', () => {
-  expect(parseDerivativeScrtFeeInfo(
-    feeInfoResponse as DerivativeScrtFeeInfoResponse,
-  )).toStrictEqual(feeInfoResponseParsed);
-});
-
-test('it can call the query fees info service', async () => {
-  // observables function
-  sendSecretClientContractQuery$.mockReturnValueOnce(of(feeInfoResponse));
-
-  const input = {
-    contractAddress: 'CONTRACT_ADDRESS',
-    codeHash: 'CODE_HASH',
-    lcdEndpoint: 'LCD_ENDPOINT',
-    chainId: 'CHAIN_ID',
-  };
-
-  let output;
-  queryDerivativeScrtFeeInfo$(input).subscribe({
-    next: (response: any) => {
-      output = response;
-    },
-  });
-
-  expect(sendSecretClientContractQuery$).toHaveBeenCalledWith({
-    queryMsg: 'FEE_INFO_MSG',
-    client: 'CLIENT',
-    contractAddress: input.contractAddress,
-    codeHash: input.codeHash,
-  });
-
-  expect(output).toStrictEqual(feeInfoResponseParsed);
-
-  // async/await function
-  sendSecretClientContractQuery$.mockReturnValueOnce(of(feeInfoResponse));
-  const output2 = await queryDerivativeScrtFeeInfo(input);
-
-  expect(sendSecretClientContractQuery$).toHaveBeenCalledWith({
-    queryMsg: 'FEE_INFO_MSG',
-    client: 'CLIENT',
-    contractAddress: input.contractAddress,
-    codeHash: input.codeHash,
-  });
-
-  expect(output2).toStrictEqual(feeInfoResponseParsed);
-});
-
 test('it can parse the batch query resonse', () => {
-  expect(parseDerivativeScrtAllInfo(
+  expect(parseDerivativeScrtInfo(
     batchQueryResponse as BatchQueryParsedResponse,
   )).toStrictEqual({
     ...feeInfoResponseParsed,
@@ -172,7 +68,7 @@ test('it can call the query all info service', async () => {
   };
 
   let output;
-  queryDerivativeScrtAllInfo$(input).subscribe({
+  queryDerivativeScrtInfo$(input).subscribe({
     next: (response: any) => {
       output = response;
     },
@@ -185,7 +81,7 @@ test('it can call the query all info service', async () => {
 
   // async/await function
   sendSecretClientContractQuery$.mockReturnValueOnce(of(feeInfoResponse));
-  const output2 = await queryDerivativeScrtAllInfo(input);
+  const output2 = await queryDerivativeScrtInfo(input);
 
   expect(output2).toStrictEqual({
     ...feeInfoResponseParsed,

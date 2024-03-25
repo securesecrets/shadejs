@@ -1,11 +1,8 @@
-import { getActiveQueryClient$ } from '~/client';
 import {
-  switchMap,
   first,
   map,
   lastValueFrom,
 } from 'rxjs';
-import { sendSecretClientContractQuery$ } from '~/client/services/clientServices';
 import { convertCoinFromUDenom } from '~/lib/utils';
 import {
   msgQueryScrtDerivativeFees,
@@ -19,6 +16,7 @@ import {
   DerivativeScrtFeeInfo,
   DerivativeScrtStakingInfo,
   DerivativeScrtInfo,
+  BatchRouterKeys,
 } from '~/types/contracts/derivativeScrt/model';
 import {
   BatchQueryParsedResponse,
@@ -52,61 +50,13 @@ function parseDerivativeScrtStakingInfo(
 
   return {
     validators,
-    supply: convertCoinFromUDenom(supply, DERIVATE_PRICE_DECIMALS).toString(),
+    supply,
     exchangeRate: convertCoinFromUDenom(exchangeRate, DERIVATE_PRICE_DECIMALS).toNumber(),
-    communityRewards: convertCoinFromUDenom(communityRewards, DERIVATE_PRICE_DECIMALS).toString(),
-    nextUnboundAmount: convertCoinFromUDenom(nextUnboundAmount, DERIVATE_PRICE_DECIMALS).toString(),
+    communityRewards,
+    nextUnboundAmount,
     // Seconds to Miliseconds
     nextUnbondingBatchEstimatedTime: nextUnbondingBatchEstimatedTime * 1000,
   };
-}
-
-/**
- * query the staking info
- */
-const queryDerivativeScrtStakingInfo$ = ({
-  contractAddress,
-  codeHash,
-  lcdEndpoint,
-  chainId,
-}: {
-  contractAddress: string,
-  codeHash?: string,
-  lcdEndpoint?: string,
-  chainId?: string,
-}) => getActiveQueryClient$(lcdEndpoint, chainId).pipe(
-  switchMap(({ client }: {client:any}) => sendSecretClientContractQuery$({
-    queryMsg: msgQueryScrtDerivativeStakingInfo(Math.round(new Date().getTime() / 1000)),
-    client,
-    contractAddress,
-    codeHash,
-  })),
-  map((response: any) => parseDerivativeScrtStakingInfo(
-    response as DerivativeScrtStakingInfoResponse,
-  )),
-  first(),
-);
-
-/**
- * query the staking info
- */
-async function queryDerivativeScrtStakingInfo({
-  contractAddress,
-  codeHash,
-  lcdEndpoint,
-  chainId,
-}: {
-  contractAddress: string,
-  codeHash?: string,
-  lcdEndpoint?: string,
-  chainId?: string,
-}) {
-  return lastValueFrom(queryDerivativeScrtStakingInfo$({
-    contractAddress,
-    codeHash,
-    lcdEndpoint,
-    chainId,
-  }));
 }
 
 /**
@@ -122,14 +72,16 @@ const parseDerivativeScrtFeeInfo = (
 /**
  * parse the response from the batch query contract
  */
-const parseDerivativeScrtAllInfo = (
+const parseDerivativeScrtInfo = (
   response: BatchQueryParsedResponse,
 ): DerivativeScrtInfo => {
   const stakingInfoResponse = response.find(
-    (nextBatchItem: BatchQueryParsedResponseItem) => nextBatchItem.id === 'staking_info',
+    (
+      nextBatchItem: BatchQueryParsedResponseItem,
+    ) => nextBatchItem.id === BatchRouterKeys.STAKING_INFO,
   );
   const feeInfoResponse = response.find(
-    (nextBatchItem: BatchQueryParsedResponseItem) => nextBatchItem.id === 'fee_info',
+    (nextBatchItem: BatchQueryParsedResponseItem) => nextBatchItem.id === BatchRouterKeys.FEE_INFO,
   );
   if (!stakingInfoResponse || !feeInfoResponse) {
     throw new Error(`Unable to parse batch query response: ${response}`);
@@ -141,61 +93,19 @@ const parseDerivativeScrtAllInfo = (
 };
 
 /**
- * query the fee info
- */
-const queryDerivativeScrtFeeInfo$ = ({
-  contractAddress,
-  codeHash,
-  lcdEndpoint,
-  chainId,
-}: {
-  contractAddress: string,
-  codeHash?: string,
-  lcdEndpoint?: string,
-  chainId?: string,
-}) => getActiveQueryClient$(lcdEndpoint, chainId).pipe(
-  switchMap(({ client }: { client: any }) => sendSecretClientContractQuery$({
-    queryMsg: msgQueryScrtDerivativeFees(),
-    client,
-    contractAddress,
-    codeHash,
-  })),
-  map((response: any) => parseDerivativeScrtFeeInfo(response as DerivativeScrtFeeInfoResponse)),
-  first(),
-);
-
-/**
- * query the fee info
- */
-async function queryDerivativeScrtFeeInfo({
-  contractAddress,
-  codeHash,
-  lcdEndpoint,
-  chainId,
-}: {
-  contractAddress: string,
-  codeHash?: string,
-  lcdEndpoint?: string,
-  chainId?: string,
-}) {
-  return lastValueFrom(queryDerivativeScrtFeeInfo$({
-    contractAddress,
-    codeHash,
-    lcdEndpoint,
-    chainId,
-  }));
-}
-
-/**
  * query both the staking info and the fee info
+ *
+ * queryTimeSeconds is a paramater to query the contract
+ * at a specific time in seconds from the UNIX Epoch
  */
-const queryDerivativeScrtAllInfo$ = ({
+const queryDerivativeScrtInfo$ = ({
   queryRouterContractAddress,
   queryRouterCodeHash,
   contractAddress,
   codeHash,
   lcdEndpoint,
   chainId,
+  queryTimeSeconds,
 }: {
   queryRouterContractAddress: string,
   queryRouterCodeHash?: string,
@@ -203,18 +113,21 @@ const queryDerivativeScrtAllInfo$ = ({
   codeHash: string,
   lcdEndpoint?: string,
   chainId?: string,
+  queryTimeSeconds?: number,
 }) => batchQuery$({
   queries: [
     {
-      id: 'staking_info',
+      id: BatchRouterKeys.STAKING_INFO,
       contract: {
         address: contractAddress,
         codeHash,
       },
-      queryMsg: msgQueryScrtDerivativeStakingInfo(Math.round(new Date().getTime() / 1000)),
+      queryMsg: msgQueryScrtDerivativeStakingInfo(
+        queryTimeSeconds ?? Math.round(new Date().getTime() / 1000),
+      ),
     },
     {
-      id: 'fee_info',
+      id: BatchRouterKeys.FEE_INFO,
       contract: {
         address: contractAddress,
         codeHash,
@@ -228,20 +141,24 @@ const queryDerivativeScrtAllInfo$ = ({
   codeHash: queryRouterCodeHash,
   chainId,
 }).pipe(
-  map((response: any) => parseDerivativeScrtAllInfo(response as BatchQueryParsedResponse)),
+  map((response: any) => parseDerivativeScrtInfo(response as BatchQueryParsedResponse)),
   first(),
 );
 
 /**
  * query the fee info and the staking info
-*/
-async function queryDerivativeScrtAllInfo({
+ *
+ * queryTimeSeconds is a paramater to query the contract
+ * at a specific time in seconds from the UNIX Epoch
+ */
+async function queryDerivativeScrtInfo({
   queryRouterContractAddress,
   queryRouterCodeHash,
   contractAddress,
   codeHash,
   lcdEndpoint,
   chainId,
+  queryTimeSeconds,
 }: {
   queryRouterContractAddress: string,
   queryRouterCodeHash?: string,
@@ -249,25 +166,21 @@ async function queryDerivativeScrtAllInfo({
   codeHash: string,
   lcdEndpoint?: string,
   chainId?: string,
+  queryTimeSeconds?: number,
 }) {
-  return lastValueFrom(queryDerivativeScrtAllInfo$({
+  return lastValueFrom(queryDerivativeScrtInfo$({
     queryRouterContractAddress,
     queryRouterCodeHash,
     contractAddress,
     codeHash,
     lcdEndpoint,
     chainId,
+    queryTimeSeconds,
   }));
 }
 
 export {
-  parseDerivativeScrtStakingInfo,
-  queryDerivativeScrtStakingInfo$,
-  queryDerivativeScrtStakingInfo,
-  parseDerivativeScrtFeeInfo,
-  queryDerivativeScrtFeeInfo$,
-  queryDerivativeScrtFeeInfo,
-  parseDerivativeScrtAllInfo,
-  queryDerivativeScrtAllInfo$,
-  queryDerivativeScrtAllInfo,
+  parseDerivativeScrtInfo,
+  queryDerivativeScrtInfo$,
+  queryDerivativeScrtInfo,
 };
