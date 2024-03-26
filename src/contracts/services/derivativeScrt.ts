@@ -54,7 +54,7 @@ function parseDerivativeScrtStakingInfo(
     exchangeRate: convertCoinFromUDenom(exchangeRate, DERIVATE_PRICE_DECIMALS).toNumber(),
     communityRewards,
     nextUnboundAmount,
-    // Seconds to Miliseconds
+    // Seconds to Milliseconds
     nextUnbondingBatchEstimatedTime: nextUnbondingBatchEstimatedTime * 1000,
   };
 }
@@ -97,6 +97,7 @@ const parseDerivativeScrtInfo = (
  *
  * queryTimeSeconds is a paramater to query the contract
  * at a specific time in seconds from the UNIX Epoch
+ * Optional and will default to current time
  */
 const queryDerivativeScrtInfo$ = ({
   queryRouterContractAddress,
@@ -150,6 +151,7 @@ const queryDerivativeScrtInfo$ = ({
  *
  * queryTimeSeconds is a paramater to query the contract
  * at a specific time in seconds from the UNIX Epoch
+ * Optional and will default to current time
  */
 async function queryDerivativeScrtInfo({
   queryRouterContractAddress,

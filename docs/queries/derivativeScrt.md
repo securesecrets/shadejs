@@ -12,6 +12,7 @@ This page demonstrates how to query the stkd Scrt derivative contracts
  *
  * queryTimeSeconds is a paramater to query the contract
  * at a specific time in seconds from the UNIX Epoch
+ * Optional and will default to current time
  */
 const queryDerivativeScrtInfo = ({
   queryRouterContractAddress,
