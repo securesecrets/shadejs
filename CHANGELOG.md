@@ -1,5 +1,12 @@
 # shadejs
 
+## 1.1.6
+
+### Patch Changes
+
+- e500c6f: Added stkd-scrt messages and services, and refactored dSHD names to derivativeShd
+- 8566226: update the public node endpoint
+
 ## 1.1.5
 
 ### Patch Changes
