@@ -1,0 +1,25 @@
+{
+   "communityRewards": "22865023",
+   "exchangeRate": 3.932046,
+   "nextUnbondingBatchEstimatedTime": 1695844838000,
+   "nextUnboundAmount": "0",
+   "supply": "7800000",
+   "validators": [
+      {
+       "validatorAddress": "secretvaloper14y56hayzwrf8c24g8hzk7h9ge0ax7g80tqaf32",
+       "weight": 16
+     },
+      {
+       "validatorAddress": "secretvaloper1gutgtpw0caqfsp8ja0r5yecv8jxz2y8vxxa9mw",
+       "weight": 17
+     },
+      {
+       "validatorAddress": "secretvaloper1lgqd22pd0p7uezjrhukkslml4d5czqszvz8gkc",
+       "weight": 16
+     },
+      {
+       "validatorAddress": "secretvaloper1wmc9e4552x4haktppy4nrknkdv8hhtm9talhqu",
+       "weight": 17
+      }
+  ]
+}

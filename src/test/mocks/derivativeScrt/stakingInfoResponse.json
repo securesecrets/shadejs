@@ -1,0 +1,33 @@
+{
+  "staking_info": {
+    "validators": [
+      {
+        "validator": "secretvaloper14y56hayzwrf8c24g8hzk7h9ge0ax7g80tqaf32",
+        "weight": 16
+      },
+      {
+        "validator": "secretvaloper1gutgtpw0caqfsp8ja0r5yecv8jxz2y8vxxa9mw",
+        "weight": 17
+      },
+      {
+        "validator": "secretvaloper1lgqd22pd0p7uezjrhukkslml4d5czqszvz8gkc",
+        "weight": 16
+      },
+      {
+        "validator": "secretvaloper1wmc9e4552x4haktppy4nrknkdv8hhtm9talhqu",
+        "weight": 17
+      }
+    ],
+    "unbonding_time": 840,
+    "unbonding_batch_interval": 120,
+    "next_unbonding_batch_time": 1695844838,
+    "unbond_amount_of_next_batch": "0",
+    "batch_unbond_in_progress": false,
+    "bonded_scrt": "7804034",
+    "reserved_scrt": "2004398",
+    "available_scrt": "906",
+    "rewards": "22865023",
+    "total_derivative_token_supply": "7800000",
+    "price": "3932046"
+  }
+}
