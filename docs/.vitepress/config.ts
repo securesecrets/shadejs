@@ -27,6 +27,7 @@ export default defineConfig({
         items: [
           { text: 'Swap', link: '/queries/swap' },
           { text: 'Oracle', link: '/queries/oracle' },
+          { text: 'stkd-SCRT', link: '/queries/derivativeScrt' },
           { text: 'Batch Query', link: '/queries/batch-query' },
           { text: 'Snip20', link: '/queries/snip20' },
         ]

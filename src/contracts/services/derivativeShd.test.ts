@@ -14,7 +14,7 @@ const sendSecretClientContractQuery$ = vi.hoisted(() => vi.fn());
 
 beforeAll(() => {
   vi.mock('~/contracts/definitions/derivativeShd', () => ({
-    msgQueryStakingInfo: vi.fn(() => 'STAKING_INFO_MSG'),
+    msgQueryShdDerivativeStakingInfo: vi.fn(() => 'STAKING_INFO_MSG'),
   }));
 
   vi.mock('~/client/index', () => ({
