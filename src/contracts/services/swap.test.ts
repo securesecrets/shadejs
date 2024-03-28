@@ -285,6 +285,7 @@ test('it can call the batch pairs info query service', async () => {
       },
       queryMsg: 'PAIR_INFO_MSG',
     }],
+    batchSize: 60,
   });
 
   expect(output).toStrictEqual(pairsInfoParsed);
@@ -305,6 +306,7 @@ test('it can call the batch pairs info query service', async () => {
       },
       queryMsg: 'PAIR_INFO_MSG',
     }],
+    batchSize: 60,
   });
   expect(response).toStrictEqual(pairsInfoParsed);
 });
@@ -340,7 +342,7 @@ test('it can call the batch staking info query service', async () => {
         address: input.stakingContracts[0].address,
         codeHash: input.stakingContracts[0].codeHash,
       },
-      queryMsg: 'PAIR_INFO_MSG',
+      queryMsg: 'STAKING_CONFIG_MSG',
     }],
   });
 
@@ -400,6 +402,7 @@ test('it can call the batch pair config query service', async () => {
       },
       queryMsg: 'PAIR_CONFIG_MSG',
     }],
+    batchSize: 60,
   });
 
   expect(output).toStrictEqual(batchPairsConfigParsed);
@@ -420,6 +423,7 @@ test('it can call the batch pair config query service', async () => {
       },
       queryMsg: 'PAIR_CONFIG_MSG',
     }],
+    batchSize: 60,
   });
   expect(response).toStrictEqual(batchPairsConfigParsed);
 });

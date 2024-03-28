@@ -3,6 +3,10 @@ import {
   first,
   map,
   lastValueFrom,
+  forkJoin,
+  concatAll,
+  reduce,
+  catchError,
 } from 'rxjs';
 import { sendSecretClientContractQuery$ } from '~/client/services/clientServices';
 import { getActiveQueryClient$ } from '~/client';
@@ -15,6 +19,7 @@ import {
 } from '~/types/contracts/batchQuery/model';
 import { BatchQueryResponse } from '~/types/contracts/batchQuery/response';
 import { decodeB64ToJson } from '~/lib/utils';
+import { SecretNetworkClient } from 'secretjs';
 
 /**
  * a parses the batch query response into a usable data model
@@ -42,8 +47,51 @@ function parseBatchQuery(response: BatchQueryResponse): BatchQueryParsedResponse
   });
 }
 
+// Function to divide an array of queries into batches of arrays
+function divideSingleBatchIntoArrayOfMultipleBatches(array: BatchQueryParams[], batchSize: number) {
+  const batches = [];
+  for (let i = 0; i < array.length; i += batchSize) {
+    batches.push(array.slice(i, i + batchSize));
+  }
+  return batches;
+}
+
 /**
  * batch query of multiple contracts/message at a time
+ */
+const batchQuerySingleBatch$ = ({
+  contractAddress,
+  codeHash,
+  queries,
+  client,
+}:{
+  contractAddress: string,
+  codeHash?: string,
+  lcdEndpoint?: string,
+  chainId?: string,
+  queries: BatchQueryParams[],
+  client: SecretNetworkClient
+}) => sendSecretClientContractQuery$({
+  queryMsg: msgBatchQuery(queries),
+  client,
+  contractAddress,
+  codeHash,
+}).pipe(
+  map((response) => parseBatchQuery(response as BatchQueryResponse)),
+  first(),
+  catchError((err) => {
+    if (err.message.includes('{wasm contract}')) {
+      throw new Error('{wasm contract} error that typically occurs when batch size is too large and node gas query limits are exceeded. Consider reducing the batch size.');
+    } else {
+      throw new Error(err);
+    }
+  }),
+);
+
+/**
+ * batch query of multiple contracts/message at a time
+ * @param batchSize defaults to processing all queries in a single batch
+ * when the batchSize is not passed in.
  */
 const batchQuery$ = ({
   contractAddress,
@@ -51,25 +99,44 @@ const batchQuery$ = ({
   lcdEndpoint,
   chainId,
   queries,
+  batchSize,
 }:{
   contractAddress: string,
   codeHash?: string,
   lcdEndpoint?: string,
   chainId?: string,
-  queries: BatchQueryParams[]
-}) => getActiveQueryClient$(lcdEndpoint, chainId).pipe(
-  switchMap(({ client }) => sendSecretClientContractQuery$({
-    queryMsg: msgBatchQuery(queries),
-    client,
-    contractAddress,
-    codeHash,
-  })),
-  map((response) => parseBatchQuery(response as BatchQueryResponse)),
-  first(),
-);
+  queries: BatchQueryParams[],
+  batchSize?: number,
+}) => {
+  // if batch size is passed in, convert single batch into multiple batches,
+  // otherwise process all data in a single batch
+  const batches = batchSize
+    ? divideSingleBatchIntoArrayOfMultipleBatches(queries, batchSize)
+    : [queries]; // array of arrays required for the forkJoin
+
+  return getActiveQueryClient$(lcdEndpoint, chainId).pipe(
+    switchMap(({ client }) => forkJoin(
+      batches.map((batch) => batchQuerySingleBatch$({
+        contractAddress,
+        codeHash,
+        queries: batch,
+        client,
+      })),
+    ).pipe(
+      concatAll(),
+      reduce((
+        acc: BatchQueryParsedResponse,
+        curr: BatchQueryParsedResponse,
+      ) => acc.concat(curr), []), // Flatten nested arrays into a single array
+      first(),
+    )),
+  );
+};
 
 /**
  * batch query of multiple contracts/message at a time
+ * @param batchSize defaults to processing all queries in a single batch
+ * when the batchSize is not passed in.
  */
 async function batchQuery({
   contractAddress,
@@ -77,12 +144,14 @@ async function batchQuery({
   lcdEndpoint,
   chainId,
   queries,
+  batchSize,
 }:{
   contractAddress: string,
   codeHash?: string,
   lcdEndpoint?: string,
   chainId?: string,
-  queries: BatchQueryParams[]
+  queries: BatchQueryParams[],
+  batchSize?: number,
 }) {
   return lastValueFrom(batchQuery$({
     contractAddress,
@@ -90,6 +159,7 @@ async function batchQuery({
     lcdEndpoint,
     chainId,
     queries,
+    batchSize,
   }));
 }
 
@@ -97,4 +167,5 @@ export {
   parseBatchQuery,
   batchQuery$,
   batchQuery,
+  batchQuerySingleBatch$,
 };
