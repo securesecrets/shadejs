@@ -3,10 +3,11 @@ import {
   SecretQueryOptions,
   ValidatorRate,
 } from '~/types/apy';
-import { lastValueFrom, map } from 'rxjs';
-import { DerivativeScrtValidator } from '~/types/contracts/derivativeScrt/model';
+import { forkJoin, lastValueFrom, map } from 'rxjs';
+import { DerivativeScrtValidator, DerivativeScrtInfo } from '~/types/contracts/derivativeScrt/model';
+import { convertCoinFromUDenom } from '~/lib/utils';
+import { queryDerivativeScrtInfo$ } from '~/contracts/services/derivativeScrt';
 import { secretChainQueries$ } from './secretQueries';
-import { convertCoinFromUDenom } from '../utils';
 
 const SECRET_DECIMALS = 6;
 
@@ -52,6 +53,10 @@ function calcAggregateAPR({
   communityTax:number,
 }) {
   let aggregateApr = 0;
+  // typically total weight will equal 100, but in rare situations the stkd-SCRT contract
+  // will automatically remove validators from the active set and the total will not add up to 100
+  const totalWeight = validatorSet.reduce((acc, validator) => acc + validator.weight, 0);
+
   validatorSet.forEach((validator) => {
     // Get commission rate for a single validator
     const commissionRate = getValidatorCommission(validator.validatorAddress, networkValidatorList);
@@ -61,7 +66,7 @@ function calcAggregateAPR({
     * (1 - commissionRate);
 
     // Calculate weighted average APR
-    aggregateApr += (apr * validator.weight) / 100;
+    aggregateApr += (apr * validator.weight) / totalWeight;
   });
   return aggregateApr;
 }
@@ -77,32 +82,80 @@ const calcAPY = (periodRate:number, apr:number):number => (1 + apr / periodRate)
 /**
  * Will calculate APY for the stkd secret derivative contract
  */
-function calculateDerivativeScrtApy$(lcdEndpoint: string) {
+function calculateDerivativeScrtApy$({
+  queryRouterContractAddress,
+  queryRouterCodeHash,
+  contractAddress,
+  codeHash,
+  lcdEndpoint,
+  chainId,
+}: {
+  queryRouterContractAddress: string,
+  queryRouterCodeHash?: string,
+  contractAddress: string,
+  codeHash: string,
+  lcdEndpoint: string,
+  chainId?: string,
+}) {
   const queries = Object.values(SecretQueryOptions);
-  return secretChainQueries$(lcdEndpoint, queries).pipe(
-    map((response: SecretChainDataQueryModel) => {
+  return forkJoin({
+    chainParameters: secretChainQueries$(lcdEndpoint, queries),
+    derivativeInfo: queryDerivativeScrtInfo$({
+      queryRouterContractAddress,
+      queryRouterCodeHash,
+      contractAddress,
+      codeHash,
+      lcdEndpoint,
+      chainId,
+    }),
+  }).pipe(
+    map((response: {
+      chainParameters: SecretChainDataQueryModel,
+      derivativeInfo: DerivativeScrtInfo,
+    }) => {
       const apr = calcAggregateAPR({
-        networkValidatorList: response.secretValidators!,
-        validatorSet: [], // TODO
-        inflationRate: response.secretInflationPercent!,
+        networkValidatorList: response.chainParameters.secretValidators!,
+        validatorSet: response.derivativeInfo.validators,
+        inflationRate: response.chainParameters.secretInflationPercent!,
         totalScrtStaked: convertCoinFromUDenom(
-          response.secretTotalStakedRaw!,
+          response.chainParameters.secretTotalStakedRaw!,
           SECRET_DECIMALS,
         ).toNumber(),
         totalScrtSupply: convertCoinFromUDenom(
-          response.secretTotalSupplyRaw!,
+          response.chainParameters.secretTotalSupplyRaw!,
           SECRET_DECIMALS,
         ).toNumber(),
-        foundationTax: response.secretTaxes!.foundationTaxPercent,
-        communityTax: response.secretTaxes!.communityTaxPercent,
+        foundationTax: response.chainParameters.secretTaxes!.foundationTaxPercent,
+        communityTax: response.chainParameters.secretTaxes!.communityTaxPercent,
       });
       return calcAPY(365, apr);
     }),
   );
 }
 
-function calculateDerivativeScrtApy(lcdEndpoint: string) {
-  return lastValueFrom(calculateDerivativeScrtApy$(lcdEndpoint));
+function calculateDerivativeScrtApy({
+  queryRouterContractAddress,
+  queryRouterCodeHash,
+  contractAddress,
+  codeHash,
+  lcdEndpoint,
+  chainId,
+}: {
+  queryRouterContractAddress: string,
+  queryRouterCodeHash?: string,
+  contractAddress: string,
+  codeHash: string,
+  lcdEndpoint: string,
+  chainId?: string,
+}) {
+  return lastValueFrom(calculateDerivativeScrtApy$({
+    queryRouterContractAddress,
+    queryRouterCodeHash,
+    contractAddress,
+    codeHash,
+    lcdEndpoint,
+    chainId,
+  }));
 }
 
 export {

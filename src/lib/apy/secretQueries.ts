@@ -1,11 +1,11 @@
 import {
   defer,
   forkJoin,
-  from,
   lastValueFrom,
   map,
 } from 'rxjs';
-import { createFetchClient } from '~/client/services/createFetch';
+import { fromFetch } from 'rxjs/fetch';
+import { createFetch } from '~/client/services/createFetch';
 import {
   SecretChainDataQueryModel,
   SecretQueryOptions,
@@ -68,8 +68,8 @@ function parseSecretQueryResponse(
  * The client does not support the types of queries specified in SecretQueryOptions
  */
 function secretChainQuery$(url: string, query: SecretQueryOptions) {
-  return createFetchClient(defer(
-    () => from(`${url}${query}`),
+  return createFetch(defer(
+    () => fromFetch(`${url}${query}`),
   )).pipe(
     map((response: any) => parseSecretQueryResponse(response, query)),
   );

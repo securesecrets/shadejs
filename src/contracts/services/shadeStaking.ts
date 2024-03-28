@@ -81,6 +81,7 @@ async function queryShadeStakingOpportunity({
 }
 
 export {
+  parseStakingOpportunity,
   queryShadeStakingOpportunity$,
   queryShadeStakingOpportunity,
 };

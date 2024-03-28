@@ -1,9 +1,8 @@
-import BigNumber from 'node_modules/bignumber.js/bignumber';
 import { queryShadeStakingOpportunity$ } from '~/contracts/services/shadeStaking';
-import { map } from 'rxjs';
+import { lastValueFrom, map } from 'rxjs';
 import { StakingInfoServiceModel } from '~/types/contracts/shadeStaking/index';
+import { convertCoinFromUDenom } from '~/lib/utils';
 import { calcAPY } from './derivativeScrt';
-import { convertCoinFromUDenom } from '../utils';
 
 /**
  * Calculate APY
@@ -23,21 +22,23 @@ function calculateRewardPoolAPY({
   decimalPlaces: number,
 }) {
   // Check that price returned successfully
-  if (!BigNumber(price).isZero()) {
-    return BigNumber(0);
+  if (!Number(price)) {
+    return 0;
   }
 
   const SECONDS_PER_YEAR = 31536000;
-  const rewardsPerYearPerStakedToken = BigNumber(rate).multipliedBy(
-    SECONDS_PER_YEAR,
-  ).dividedBy(BigNumber(totalStaked));
+  const rewardsPerYearPerStakedToken = (rate * SECONDS_PER_YEAR) / Number(totalStaked);
   // period rate = rewardsPerYear* price
-  const periodRate = rewardsPerYearPerStakedToken.multipliedBy(BigNumber(price));
+  const periodRate = rewardsPerYearPerStakedToken * Number(price);
   // divide by stakedPrice to determine a percentage. Units are now ($)/($*day)
-  const r = periodRate.dividedBy(BigNumber(price));
-  return BigNumber(calcAPY(365, r.toNumber())).decimalPlaces(decimalPlaces).toNumber();
+  const r = periodRate / Number(price);
+  return calcAPY(365, r) * (10 ** decimalPlaces);
 }
 
+/**
+ * Calculates the dSHD expected APY by querying the staking contract
+ * TESTNET ONLY NOT READY FOR PRODUCTION
+ */
 function calculateDerivativeShdApy$({
   shadeTokenContractAddress,
   shadeStakingContractAddress,
@@ -63,22 +64,56 @@ function calculateDerivativeShdApy$({
   }).pipe(
     map((response: StakingInfoServiceModel) => response.rewardPools.reduce(
       (prev, current) => {
+        // Make sure to check that we're only calculating for shd
         if (current.tokenAddress === shadeTokenContractAddress
             && current.endDate.getTime() > Date.now()) {
-          return prev.plus(calculateRewardPoolAPY({
+          return prev + calculateRewardPoolAPY({
             rate: convertCoinFromUDenom(current.rateRaw, decimals).toNumber(),
             totalStaked: response.totalStakedRaw,
             price,
             decimalPlaces: decimals,
-          }));
+          });
         }
         return prev;
       },
-      BigNumber(0),
+      0,
     )),
   );
 }
 
+/**
+ * Calculates the dSHD expected APY by querying the staking contract
+ * TESTNET ONLY NOT READY FOR PRODUCTION
+ */
+async function calculateDerivativeShdApy({
+  shadeTokenContractAddress,
+  shadeStakingContractAddress,
+  shadeStakingCodeHash,
+  decimals,
+  price,
+  lcdEndpoint,
+  chainId,
+}:{
+  shadeTokenContractAddress: string,
+  shadeStakingContractAddress: string,
+  shadeStakingCodeHash?: string,
+  decimals: number,
+  price: string,
+  lcdEndpoint?: string,
+  chainId?: string,
+}) {
+  return lastValueFrom(calculateDerivativeShdApy$({
+    shadeTokenContractAddress,
+    shadeStakingContractAddress,
+    shadeStakingCodeHash,
+    decimals,
+    price,
+    lcdEndpoint,
+    chainId,
+  }));
+}
+
 export {
   calculateDerivativeShdApy$,
+  calculateDerivativeShdApy,
 };
