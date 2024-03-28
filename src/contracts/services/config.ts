@@ -1,0 +1,8 @@
+const SERVICE_BATCH_SIZE = {
+  PAIR_INFO: 60,
+  PAIR_CONFIG: 60,
+};
+
+export {
+  SERVICE_BATCH_SIZE,
+};
