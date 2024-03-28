@@ -24,7 +24,6 @@ test('it can calculate the correct derivative apy', async () => {
     shadeTokenContractAddress: 'secret153wu605vvp934xhd4k9dtd640zsep5jkesstdm',
     shadeStakingContractAddress: 'MOCK_STAKING_ADDRESS',
     shadeStakingCodeHash: 'MOCK_STAKING_HASH',
-    decimals: 8,
     price: '7.15',
     lcdEndpoint: 'MOCK_ENDPOINT',
     chainId: 'MOCK_CHAIN_ID',

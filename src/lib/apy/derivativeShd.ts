@@ -4,6 +4,8 @@ import { StakingInfoServiceModel } from '~/types/contracts/shadeStaking/index';
 import { convertCoinFromUDenom } from '~/lib/utils';
 import { calcAPY } from './derivativeScrt';
 
+const SHADE_DECIMALS = 8;
+
 /**
  * Calculate APY
  * Formula is (1+r/n)^n-1
@@ -14,12 +16,10 @@ function calculateRewardPoolAPY({
   rate,
   totalStaked,
   price,
-  decimalPlaces,
 }:{
   rate: number,
   totalStaked: string,
   price: string,
-  decimalPlaces: number,
 }) {
   // Check that price returned successfully
   if (!Number(price)) {
@@ -32,7 +32,7 @@ function calculateRewardPoolAPY({
   const periodRate = rewardsPerYearPerStakedToken * Number(price);
   // divide by stakedPrice to determine a percentage. Units are now ($)/($*day)
   const r = periodRate / Number(price);
-  return calcAPY(365, r) * (10 ** decimalPlaces);
+  return calcAPY(365, r) * (10 ** SHADE_DECIMALS);
 }
 
 /**
@@ -45,7 +45,6 @@ function calculateDerivativeShdApy$({
   shadeTokenContractAddress,
   shadeStakingContractAddress,
   shadeStakingCodeHash,
-  decimals,
   price,
   lcdEndpoint,
   chainId,
@@ -53,7 +52,6 @@ function calculateDerivativeShdApy$({
   shadeTokenContractAddress: string,
   shadeStakingContractAddress: string,
   shadeStakingCodeHash?: string,
-  decimals: number,
   price: string,
   lcdEndpoint?: string,
   chainId?: string,
@@ -70,10 +68,9 @@ function calculateDerivativeShdApy$({
         if (current.tokenAddress === shadeTokenContractAddress
             && current.endDate.getTime() > Date.now()) {
           return prev + calculateRewardPoolAPY({
-            rate: convertCoinFromUDenom(current.rateRaw, decimals).toNumber(),
+            rate: convertCoinFromUDenom(current.rateRaw, SHADE_DECIMALS).toNumber(),
             totalStaked: response.totalStakedRaw,
             price,
-            decimalPlaces: decimals,
           });
         }
         return prev;
@@ -93,7 +90,6 @@ async function calculateDerivativeShdApy({
   shadeTokenContractAddress,
   shadeStakingContractAddress,
   shadeStakingCodeHash,
-  decimals,
   price,
   lcdEndpoint,
   chainId,
@@ -101,7 +97,6 @@ async function calculateDerivativeShdApy({
   shadeTokenContractAddress: string,
   shadeStakingContractAddress: string,
   shadeStakingCodeHash?: string,
-  decimals: number,
   price: string,
   lcdEndpoint?: string,
   chainId?: string,
@@ -110,7 +105,6 @@ async function calculateDerivativeShdApy({
     shadeTokenContractAddress,
     shadeStakingContractAddress,
     shadeStakingCodeHash,
-    decimals,
     price,
     lcdEndpoint,
     chainId,

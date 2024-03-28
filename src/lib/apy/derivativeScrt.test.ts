@@ -6,11 +6,12 @@ import {
 } from 'vitest';
 import { of } from 'rxjs';
 import { queryDerivativeScrtInfo$ } from '~/contracts/services/derivativeScrt';
+import { SecretQueryOptions } from '~/types/apy';
+import { secretChainQueries$ } from './secretQueries';
 import {
-  secretChainQueries$,
-} from './secretQueries';
-import { calculateDerivativeScrtApy, calculateDerivativeScrtApy$ } from './derivativeScrt';
-import { SecretQueryOptions } from '../../types/apy';
+  calculateDerivativeScrtApy,
+  calculateDerivativeScrtApy$,
+} from './derivativeScrt';
 
 beforeAll(() => {
   vi.mock('~/lib/apy/secretQueries', () => ({

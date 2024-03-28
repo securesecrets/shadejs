@@ -4,7 +4,10 @@ import {
   ValidatorRate,
 } from '~/types/apy';
 import { forkJoin, lastValueFrom, map } from 'rxjs';
-import { DerivativeScrtValidator, DerivativeScrtInfo } from '~/types/contracts/derivativeScrt/model';
+import {
+  DerivativeScrtValidator,
+  DerivativeScrtInfo,
+} from '~/types/contracts/derivativeScrt/model';
 import { convertCoinFromUDenom } from '~/lib/utils';
 import { queryDerivativeScrtInfo$ } from '~/contracts/services/derivativeScrt';
 import { secretChainQueries$ } from './secretQueries';

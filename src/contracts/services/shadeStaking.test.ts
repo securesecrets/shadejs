@@ -7,7 +7,11 @@ import {
 import { of } from 'rxjs';
 import stakingOpportunityResponse from '~/test/mocks/shadeStaking/stakingOpportunityResponse.json';
 import { stakingOpportunityResponseParsed } from '~/test/mocks/shadeStaking/response';
-import { parseStakingOpportunity, queryShadeStakingOpportunity, queryShadeStakingOpportunity$ } from '~/contracts/services/shadeStaking';
+import {
+  parseStakingOpportunity,
+  queryShadeStakingOpportunity,
+  queryShadeStakingOpportunity$,
+} from '~/contracts/services/shadeStaking';
 import { StakingInfoServiceResponse } from '~/types/contracts/shadeStaking/index';
 
 const sendSecretClientContractQuery$ = vi.hoisted(() => vi.fn());
