@@ -7,15 +7,13 @@ import {
 import { of } from 'rxjs';
 import { stakingOpportunityResponseParsed } from '~/test/mocks/shadeStaking/response';
 import { queryShadeStakingOpportunity$ } from '~/contracts/services/shadeStaking';
-import { calculateDerivativeShdApy$, calculateDerivativeShdApy } from './derivativeShd';
+import {
+  calculateDerivativeShdApy$,
+  calculateDerivativeShdApy,
+} from './derivativeShd';
 
 beforeAll(() => {
   vi.setSystemTime(new Date('2024-03-26T18:00:00.000Z'));
-  vi.mock('~/lib/apy/secretQueries', () => ({
-    secretChainQueries$: vi.fn(() => of({
-    })),
-  }));
-
   vi.mock('~/contracts/services/shadeStaking', () => ({
     queryShadeStakingOpportunity$: vi.fn(() => of(stakingOpportunityResponseParsed)),
   }));

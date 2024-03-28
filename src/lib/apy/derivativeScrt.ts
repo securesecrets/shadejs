@@ -81,6 +81,8 @@ const calcAPY = (periodRate:number, apr:number):number => (1 + apr / periodRate)
 
 /**
  * Will calculate APY for the stkd secret derivative contract
+ *
+ * returns a number that is the decimal form of the percent APY
  */
 function calculateDerivativeScrtApy$({
   queryRouterContractAddress,
@@ -99,7 +101,7 @@ function calculateDerivativeScrtApy$({
 }) {
   const queries = Object.values(SecretQueryOptions);
   return forkJoin({
-    chainParameters: secretChainQueries$(lcdEndpoint, queries),
+    chainParameters: secretChainQueries$<SecretChainDataQueryModel>(lcdEndpoint, queries),
     derivativeInfo: queryDerivativeScrtInfo$({
       queryRouterContractAddress,
       queryRouterCodeHash,
@@ -114,15 +116,15 @@ function calculateDerivativeScrtApy$({
       derivativeInfo: DerivativeScrtInfo,
     }) => {
       const apr = calcAggregateAPR({
-        networkValidatorList: response.chainParameters.secretValidators!,
+        networkValidatorList: response.chainParameters.secretValidators,
         validatorSet: response.derivativeInfo.validators,
-        inflationRate: response.chainParameters.secretInflationPercent!,
+        inflationRate: response.chainParameters.secretInflationPercent,
         totalScrtStaked: convertCoinFromUDenom(
-          response.chainParameters.secretTotalStakedRaw!,
+          response.chainParameters.secretTotalStakedRaw,
           SECRET_DECIMALS,
         ).toNumber(),
         totalScrtSupply: convertCoinFromUDenom(
-          response.chainParameters.secretTotalSupplyRaw!,
+          response.chainParameters.secretTotalSupplyRaw,
           SECRET_DECIMALS,
         ).toNumber(),
         foundationTax: response.chainParameters.secretTaxes!.foundationTaxPercent,
@@ -133,6 +135,11 @@ function calculateDerivativeScrtApy$({
   );
 }
 
+/**
+ * Will calculate APY for the stkd secret derivative contract
+ *
+ * returns a number that is the decimal form of the percent APY
+ */
 function calculateDerivativeScrtApy({
   queryRouterContractAddress,
   queryRouterCodeHash,

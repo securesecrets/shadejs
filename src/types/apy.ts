@@ -52,14 +52,14 @@ type ValidatorRate = {
 }
 
 type SecretChainDataQueryModel = {
-  secretInflationPercent?: number,
-  secretTotalSupplyRaw?: number,
-  secretTotalStakedRaw?: number,
-  secretTaxes?: {
+  secretInflationPercent: number,
+  secretTotalSupplyRaw: number,
+  secretTotalStakedRaw: number,
+  secretTaxes: {
     foundationTaxPercent: number,
     communityTaxPercent: number,
   },
-  secretValidators?: ValidatorRate[],
+  secretValidators: ValidatorRate[],
 }
 
 export type {

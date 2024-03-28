@@ -14,6 +14,9 @@ import {
   StakingInfoServiceModel,
 } from '~/types/contracts/shadeStaking/index';
 
+/**
+ * parses the response from the shade staking contract into a model
+ */
 function parseStakingOpportunity(data: StakingInfoServiceResponse): StakingInfoServiceModel {
   const stakeTokenAddress = data.staking_info.info.stake_token;
   const totalStakedRaw = data.staking_info.info.total_staked;
@@ -61,6 +64,9 @@ const queryShadeStakingOpportunity$ = ({
   first(),
 );
 
+/**
+ * query the staking info from the shade staking contract
+ */
 async function queryShadeStakingOpportunity({
   shadeStakingContractAddress,
   shadeStakingCodeHash,

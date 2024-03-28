@@ -38,6 +38,8 @@ function calculateRewardPoolAPY({
 /**
  * Calculates the dSHD expected APY by querying the staking contract
  * TESTNET ONLY NOT READY FOR PRODUCTION
+ *
+ * returns a number that is the decimal form of the percent APY
  */
 function calculateDerivativeShdApy$({
   shadeTokenContractAddress,
@@ -84,6 +86,8 @@ function calculateDerivativeShdApy$({
 /**
  * Calculates the dSHD expected APY by querying the staking contract
  * TESTNET ONLY NOT READY FOR PRODUCTION
+ *
+ * returns a number that is the decimal form of the percent APY
  */
 async function calculateDerivativeShdApy({
   shadeTokenContractAddress,
