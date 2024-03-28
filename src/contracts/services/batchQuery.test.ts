@@ -19,6 +19,7 @@ import {
   batchQuery$,
   batchQuery,
   batchQuerySingleBatch$,
+  divideSingleBatchIntoArrayOfMultipleBatches,
 } from './batchQuery';
 
 const sendSecretClientContractQuery$ = vi.hoisted(() => vi.fn());
@@ -156,4 +157,45 @@ test('it can call the multi-batch query service for multiple batches', async () 
   expect(msgBatchQuery).toHaveBeenNthCalledWith(3, [input.queries[0]]);
   expect(msgBatchQuery).toHaveBeenNthCalledWith(4, [input.queries[1]]);
   expect(response).toStrictEqual(combinedOutput);
+});
+
+test('it can divide a batch of queries into an array of multiple batches', () => {
+  const input1 = [
+    1 as unknown as BatchQueryParams,
+    2 as unknown as BatchQueryParams,
+    3 as unknown as BatchQueryParams,
+    4 as unknown as BatchQueryParams,
+    5 as unknown as BatchQueryParams,
+    6 as unknown as BatchQueryParams,
+    7 as unknown as BatchQueryParams,
+    8 as unknown as BatchQueryParams,
+  ];
+
+  expect(divideSingleBatchIntoArrayOfMultipleBatches(input1, 2)).toStrictEqual([
+    [1, 2],
+    [3, 4],
+    [5, 6],
+    [7, 8],
+  ]);
+
+  expect(divideSingleBatchIntoArrayOfMultipleBatches(input1, 3)).toStrictEqual([
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8],
+  ]);
+
+  expect(divideSingleBatchIntoArrayOfMultipleBatches(input1, 1)).toStrictEqual([
+    [1],
+    [2],
+    [3],
+    [4],
+    [5],
+    [6],
+    [7],
+    [8],
+  ]);
+
+  expect(divideSingleBatchIntoArrayOfMultipleBatches(input1, 10)).toStrictEqual([
+    [1, 2, 3, 4, 5, 6, 7, 8],
+  ]);
 });

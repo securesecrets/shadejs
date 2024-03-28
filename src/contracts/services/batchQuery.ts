@@ -168,4 +168,5 @@ export {
   batchQuery$,
   batchQuery,
   batchQuerySingleBatch$,
+  divideSingleBatchIntoArrayOfMultipleBatches,
 };
