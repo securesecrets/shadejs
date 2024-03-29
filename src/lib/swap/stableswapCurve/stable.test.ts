@@ -132,7 +132,7 @@ test('slippage calculations correct', () => {
 
   // slippage limit
   conf = getConfSmallPool();
-  expect(() => conf.swapToken0WithToken1(BigNumber(100000000))).toThrowError(/^The slippage of this trade.*/);
+  expect(() => conf.swapToken0WithToken1(BigNumber(100000000))).toThrowError(/^The price impact of this trade.*/);
 });
 
 test('py correct', () => {

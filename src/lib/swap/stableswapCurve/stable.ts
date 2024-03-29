@@ -480,7 +480,7 @@ export class StableConfig {
       tradeDirIs0For1,
     });
     if (priceImpact.isGreaterThan(this.priceImpactLimit) || priceImpact.isLessThan(BigNumber(0))) {
-      throw Error(`The slippage of this trade is outside of the acceptable range of 0% - ${this.priceImpactLimit}%.`);
+      throw Error(`The price impact of this trade (${priceImpact.toString()}%) is outside of the acceptable range of 0% - ${this.priceImpactLimit}%.`);
     }
   }
 
