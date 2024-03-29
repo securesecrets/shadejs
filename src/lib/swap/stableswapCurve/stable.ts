@@ -479,7 +479,9 @@ export class StableConfig {
       newPool1: pool1Size,
       tradeDirIs0For1,
     });
-    throw Error(`The price impact of this trade (${priceImpact.toString()}%) is outside of the acceptable range of 0% - ${this.priceImpactLimit}%. `);
+    if (priceImpact.isGreaterThan(this.priceImpactLimit) || priceImpact.isLessThan(BigNumber(0))) {
+      throw Error(`The price impact of this trade (${priceImpact.toString()}%) is outside of the acceptable range of 0% - ${this.priceImpactLimit}%.`);
+    }
   }
 
   // Returns the price impact associated with new x and y values (pool sizes),
