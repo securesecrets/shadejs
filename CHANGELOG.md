@@ -1,5 +1,11 @@
 # shadejs
 
+## 1.1.7
+
+### Patch Changes
+
+- 2bc844c: clarity around price impact error
+
 ## 1.1.6
 
 ### Patch Changes
