@@ -1,5 +1,15 @@
 # shadejs
 
+## 1.2.0
+
+### Minor Changes
+
+- 34ce7af: added apy calculations for derivatives and shade staking query interface
+
+### Patch Changes
+
+- c4d8927: Batch query can split queries to avoid hitting query gas limits
+
 ## 1.1.7
 
 ### Patch Changes
