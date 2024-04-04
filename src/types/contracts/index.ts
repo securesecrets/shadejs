@@ -5,3 +5,4 @@ export * from './snip20';
 export * from './swap';
 export * from './derivativeScrt';
 export * from './derivativeShd';
+export * from './shadeStaking';

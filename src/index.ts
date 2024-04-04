@@ -9,3 +9,5 @@ export {
   convertCoinToUDenom,
 } from '~/lib/utils';
 export * from './types';
+export * from '~/lib/apy/derivativeShd';
+export * from '~/lib/apy/derivativeScrt';

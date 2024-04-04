@@ -15,8 +15,8 @@ import {
 import { convertCoinFromUDenom } from '~/lib/utils';
 import { msgQueryShdDerivativeStakingInfo } from '~/contracts/definitions/derivativeShd';
 
-// Contract returns price as a rate of dSHD/SHD with 6 decimals
-const DERIVATE_PRICE_DECIMALS = 6;
+// Contract returns price as a rate of dSHD/SHD with 8 decimals
+const DERIVATE_PRICE_DECIMALS = 8;
 
 /**
 * Parses the staking info query into a cleaner data model

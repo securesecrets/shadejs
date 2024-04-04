@@ -39,6 +39,7 @@ import {
 import { TxResponse } from 'secretjs';
 import { Attribute } from 'secretjs/dist/protobuf/cosmos/base/abci/v1beta1/abci';
 import { batchQuery$ } from './batchQuery';
+import { SERVICE_BATCH_SIZE } from './config';
 
 /**
  * parses the factory config to a usable data model
@@ -509,12 +510,14 @@ function batchQueryPairsInfo$({
   lcdEndpoint,
   chainId,
   pairsContracts,
+  batchSize = SERVICE_BATCH_SIZE.PAIR_INFO,
 }:{
   queryRouterContractAddress: string,
   queryRouterCodeHash?: string,
   lcdEndpoint?: string,
   chainId?: string,
-  pairsContracts: Contract[]
+  pairsContracts: Contract[],
+  batchSize?: number,
 }) {
   const queries:BatchQueryParams[] = pairsContracts.map((contract) => ({
     id: contract.address,
@@ -530,6 +533,7 @@ function batchQueryPairsInfo$({
     lcdEndpoint,
     chainId,
     queries,
+    batchSize,
   }).pipe(
     map(parseBatchQueryPairInfoResponse),
     first(),
@@ -545,12 +549,14 @@ async function batchQueryPairsInfo({
   lcdEndpoint,
   chainId,
   pairsContracts,
+  batchSize,
 }:{
   queryRouterContractAddress: string,
   queryRouterCodeHash?: string,
   lcdEndpoint?: string,
   chainId?: string,
-  pairsContracts: Contract[]
+  pairsContracts: Contract[],
+  batchSize?: number,
 }) {
   return lastValueFrom(batchQueryPairsInfo$({
     queryRouterContractAddress,
@@ -558,6 +564,7 @@ async function batchQueryPairsInfo({
     lcdEndpoint,
     chainId,
     pairsContracts,
+    batchSize,
   }));
 }
 
@@ -570,12 +577,14 @@ function batchQueryPairsConfig$({
   lcdEndpoint,
   chainId,
   pairsContracts,
+  batchSize = SERVICE_BATCH_SIZE.PAIR_CONFIG,
 }:{
   queryRouterContractAddress: string,
   queryRouterCodeHash?: string,
   lcdEndpoint?: string,
   chainId?: string,
-  pairsContracts: Contract[]
+  pairsContracts: Contract[],
+  batchSize?: number,
 }) {
   const queries:BatchQueryParams[] = pairsContracts.map((contract) => ({
     id: contract.address,
@@ -591,6 +600,7 @@ function batchQueryPairsConfig$({
     lcdEndpoint,
     chainId,
     queries,
+    batchSize,
   }).pipe(
     map(parseBatchQueryPairConfigResponse),
     first(),
@@ -606,12 +616,14 @@ async function batchQueryPairsConfig({
   lcdEndpoint,
   chainId,
   pairsContracts,
+  batchSize,
 }:{
   queryRouterContractAddress: string,
   queryRouterCodeHash?: string,
   lcdEndpoint?: string,
   chainId?: string,
-  pairsContracts: Contract[]
+  pairsContracts: Contract[],
+  batchSize?: number,
 }) {
   return lastValueFrom(batchQueryPairsConfig$({
     queryRouterContractAddress,
@@ -619,6 +631,7 @@ async function batchQueryPairsConfig({
     lcdEndpoint,
     chainId,
     pairsContracts,
+    batchSize,
   }));
 }
 
