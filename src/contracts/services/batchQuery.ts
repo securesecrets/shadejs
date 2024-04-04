@@ -67,8 +67,6 @@ const batchQuerySingleBatch$ = ({
 }:{
   contractAddress: string,
   codeHash?: string,
-  lcdEndpoint?: string,
-  chainId?: string,
   queries: BatchQueryParams[],
   client: SecretNetworkClient
 }) => sendSecretClientContractQuery$({
