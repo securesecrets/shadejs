@@ -4,23 +4,10 @@ This page demonstrates how to query using a smart contract batch query router. T
 
 The batch query function is generalized to work with any contract queries. Miscellaneous ShadeJS services already implement the batch query router, for example the <a href="./swap.html#pairs-info" target="_blank">Pairs Info Query</a>
 
+By default, the batch query will process all queries in a single 
+thread, i.e. using a single node to query. However, there are query
+gas limitations controlled by the node provider that will throw errors when batch size is too large. When a batch size is provided as an input to the batch query, it will divide the batch into multi-threaded batches of batches of that size. There are certain batch sizes that have already been tested and are provided for specific ShadeJS services and recommended node settings, however your batch size will vary based on the type of query you are performing and your node provider settings.
 
-## Performance 
-All of the following results are run with 500 total queries
-
-| Batch Size | RPC Queries | Time  | Success |
-|------------|-------------|-------|---------|
-| 1          | 500         | 5.56s | 26.6%   |
-| 5          | 100         | 6.51s | 100%    |
-| 10         | 50          | 9.24s | 100%    |
-| 25         | 20          | 7.27s | 100%    |
-| 50         | 10          | 8.78s | 100%    |
-| 100        | 5           | 7.72s | 100%    |
-
-::: warning
-This testing was completed with a limited sample size and optimal batch size has 
-not yet determined. There is also an unknown variable of the quality of the infrastructure you would be using to perform these queries. It is encouraged to perform your own optimization testing when working with a batch query router.
-:::
 ## Batch Query
 
 **input**
@@ -41,12 +28,14 @@ async function batchQuery({
   lcdEndpoint,
   chainId,
   queries,
+  batchSize, // defaults to all queries in single batch
 }:{
   contractAddress: string,
   codeHash?: string,
   lcdEndpoint?: string,
   chainId?: string,
-  queries: BatchQueryParams[]
+  queries: BatchQueryParams[],
+  batchSize?: number, 
 }): Promise<BatchQueryParsedResponse> 
 ```
 
