@@ -1,0 +1,80 @@
+{
+  "validators": [
+    {
+      "validatorAddress": "secretvaloper12ancx2qcgk04rrkexuhjq93etgktq4nn58z9yu",
+      "weight": 4
+    },
+    {
+      "validatorAddress": "secretvaloper16k26akna7h295rfjx3278s7xusnt736vy437y8",
+      "weight": 4
+    },
+    {
+      "validatorAddress": "secretvaloper18acdn4vaxfkqj0ta25u3ulzdyzekrqe5w9q2n4",
+      "weight": 4
+    },
+    {
+      "validatorAddress": "secretvaloper19dw5tuep06ke9smem3df0lqvhpd25ke3we95n3",
+      "weight": 4
+    },
+    {
+      "validatorAddress": "secretvaloper1ahawe276d250zpxt0xgpfg63ymmu63a0svuvgw",
+      "weight": 4
+    },
+    {
+      "validatorAddress": "secretvaloper1cpp4s3t962tsn737fj4v8jr7net50qgxpn3nap",
+      "weight": 4
+    },
+    {
+      "validatorAddress": "secretvaloper1dpajv4su00mzf4r7rhzytc0vs23njkh2wll6lp",
+      "weight": 4
+    },
+    {
+      "validatorAddress": "secretvaloper1gkk02na77t83dvmf9vd7lajptejaqkyug62h56",
+      "weight": 4
+    },
+    {
+      "validatorAddress": "secretvaloper1jgx4pn3acae9esq5zha5ym3kzhq6x60frjwkrp",
+      "weight": 4
+    },
+    {
+      "validatorAddress": "secretvaloper1lyafdwwzwfmjc8zhsew5pdcdu46na6pg09fql4",
+      "weight": 4
+    },
+    {
+      "validatorAddress": "secretvaloper1nqxdqq6qhtaj9m2t2mgvzds0xa6fa2g9sk5ymu",
+      "weight": 4
+    },
+    {
+      "validatorAddress": "secretvaloper1pujrvwt9xve0u0t472x5wm0lf5r37thakp7pvw",
+      "weight": 4
+    },
+    {
+      "validatorAddress": "secretvaloper1q0rth4fu4svxnw63vjd7w74nadzsdp0fmkhj3d",
+      "weight": 4
+    },
+    {
+      "validatorAddress": "secretvaloper1qjk5uduu3zg356chmstcp2eqgdn35jp3ztxh4x",
+      "weight": 4
+    },
+    {
+      "validatorAddress": "secretvaloper1t5wtcuwjkdct9qkw2h6m48zu2hectpd6ulmekk",
+      "weight": 4
+    },
+    {
+      "validatorAddress": "secretvaloper1tums792cvpugaydvqgl7t6r5khfsgh7n78hs5w",
+      "weight": 4
+    },
+    {
+      "validatorAddress": "secretvaloper1vzkdmu0sa8gaj686jh5all7hpmmsp8x87vyz8z",
+      "weight": 4
+    },
+    {
+      "validatorAddress": "secretvaloper1wg085tj9xtv84q9l2zgdml46n6ju3mryun4fsu",
+      "weight": 4
+    },
+    {
+      "validatorAddress": "secretvaloper1xyvlmw93ytmcju4suuk8tpuhzu6rtnnwqc6a7y",
+      "weight": 4
+    }
+  ]
+}

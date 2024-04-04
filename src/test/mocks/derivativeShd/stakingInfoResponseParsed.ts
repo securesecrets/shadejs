@@ -4,7 +4,7 @@ export const stakingInfoResponseParsed = {
   availableShd: '0',
   rewards: '0',
   totalDerivativeTokenSupply: '0',
-  price: 100,
+  price: 1,
   feeInfo: {
     stakingFee: 0.01,
     unbondingFee: 0.01,

@@ -28,6 +28,7 @@ export default defineConfig({
           { text: 'Swap', link: '/queries/swap' },
           { text: 'Oracle', link: '/queries/oracle' },
           { text: 'stkd-SCRT', link: '/queries/derivativeScrt' },
+          { text: 'Shade Staking', link: '/queries/shadeStaking' },
           { text: 'Batch Query', link: '/queries/batch-query' },
           { text: 'Snip20', link: '/queries/snip20' },
         ]
@@ -45,6 +46,7 @@ export default defineConfig({
         items: [
           { text: 'Swap', link: '/calculations/swap' },
           { text: 'Routing', link: '/calculations/routing' },
+          { text: 'Apy', link: '/calculations/apy' },
         ]
       },
       {
