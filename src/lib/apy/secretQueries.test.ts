@@ -4,9 +4,6 @@ import {
   vi,
   beforeAll,
 } from 'vitest';
-import {
-  SecretQueryOptions,
-} from '~/types/apy';
 import { of } from 'rxjs';
 import {
   secretChainQuery$,
@@ -14,6 +11,7 @@ import {
   secretChainQueries$,
   secretChainQueries,
   parseSecretQueryResponse,
+  SecretQueryOptions,
 } from './secretQueries';
 
 beforeAll(async () => {

@@ -8,12 +8,16 @@ import {
 import { fromFetch } from 'rxjs/fetch';
 import { createFetch } from '~/client/services/createFetch';
 import {
-  SecretQueryOptions,
   SecretValidatorItemResponse,
 } from '~/types/apy';
 
-// NO DOCS NEEDED, THESE FUNCTIONS ARE NOT EXPORTED
-// See src/index.ts
+enum SecretQueryOptions {
+  INFLATION = '/minting/inflation',
+  TOTAL_SUPPLY = '/cosmos/bank/v1beta1/supply/uscrt',
+  TOTAL_STAKED = '/staking/pool',
+  TAXES = '/distribution/parameters',
+  VALIDATORS = '/staking/validators',
+}
 
 /**
  * Parses the response from the secretChainQuery service
@@ -135,6 +139,7 @@ async function secretChainQueries<ResponseType>(
 }
 
 export {
+  SecretQueryOptions,
   parseSecretQueryResponse,
   secretChainQuery$,
   secretChainQuery,

@@ -14,6 +14,8 @@ import {
   StakingInfoServiceModel,
 } from '~/types/contracts/shadeStaking/index';
 
+const NORMALIZATION_FACTOR = 18;
+
 /**
  * parses the response from the shade staking contract into a model
  */
@@ -30,7 +32,7 @@ function parseStakingOpportunity(data: StakingInfoServiceResponse): StakingInfoS
       tokenAddress: reward.token.address,
       // data returned from the contract in normalized form with
       // 18 decimals, in addition to any decimals on the individual token
-      rateRaw: convertCoinFromUDenom(reward.rate, 18).toString(),
+      rateRaw: convertCoinFromUDenom(reward.rate, NORMALIZATION_FACTOR).toString(),
     }));
   return {
     stakeTokenAddress,
