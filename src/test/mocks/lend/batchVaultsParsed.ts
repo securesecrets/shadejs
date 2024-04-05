@@ -6,7 +6,7 @@ import { LendContractStatus } from '~/types/contracts/lend/response';
 
 const batchVaultsParsed: BatchVaults = [
   {
-    vaultContractAddress: 'secret18y86hldtdp9ndj0jekcch49kwr0gwy7upe3ffw',
+    vaultRegistryContractAddress: 'secret18y86hldtdp9ndj0jekcch49kwr0gwy7upe3ffw',
     vaults: {
       1: {
         id: '1',
@@ -55,7 +55,7 @@ const batchVaultsParsed: BatchVaults = [
     },
   },
   {
-    vaultContractAddress: 'secret1qxk2scacpgj2mmm0af60674afl9e6qneg7yuny',
+    vaultRegistryContractAddress: 'secret1qxk2scacpgj2mmm0af60674afl9e6qneg7yuny',
     vaults: {
       1: {
         id: '1',
@@ -104,7 +104,7 @@ const batchVaultsParsed: BatchVaults = [
     },
   },
   {
-    vaultContractAddress: 'secret1wj2czeeknya2n6jag7kpfxlm28dw7q96dgqmfs',
+    vaultRegistryContractAddress: 'secret1wj2czeeknya2n6jag7kpfxlm28dw7q96dgqmfs',
     vaults: {
       1: {
         id: '1',

@@ -30,7 +30,7 @@ import {
   VaultsUserData,
   BatchVaultsUserData,
   VaultType,
-  LendVaultContract,
+  LendVaultRegistryContract,
 } from '~/types/contracts/lend/model';
 import {
   msgGetVault,
@@ -124,7 +124,7 @@ const parseBatchQueryVaultsInfo = (
   response: BatchQueryParsedResponse,
   vaultTypes: VaultType[],
 ): BatchVaults => response.map((item, index) => ({
-  vaultContractAddress: item.id as string,
+  vaultRegistryContractAddress: item.id as string,
   vaults: parseLendVaults(item.response, vaultTypes[index]),
 }));
 
@@ -188,7 +188,7 @@ function parseLendVaultsUserData(
 const parseBatchQueryVaultsUserData = (
   response: BatchQueryParsedResponse,
 ): BatchVaultsUserData => response.map((item) => ({
-  vaultContractAddress: item.id as string,
+  vaultRegistryContractAddress: item.id as string,
   vaultsUserData: parseLendVaultsUserData(item.response),
 }));
 
@@ -200,15 +200,15 @@ function batchQueryVaultsInfo$({
   queryRouterCodeHash,
   lcdEndpoint,
   chainId,
-  vaultContracts,
+  vaultRegistryContracts,
 }:{
   queryRouterContractAddress: string,
   queryRouterCodeHash?: string,
   lcdEndpoint?: string,
   chainId?: string,
-  vaultContracts: LendVaultContract[]
+  vaultRegistryContracts: LendVaultRegistryContract[]
 }) {
-  const queries:BatchQueryParams[] = vaultContracts.map((contract) => ({
+  const queries:BatchQueryParams[] = vaultRegistryContracts.map((contract) => ({
     id: contract.address,
     contract: {
       address: contract.address,
@@ -217,7 +217,7 @@ function batchQueryVaultsInfo$({
     queryMsg: msgGetVaults(1), // starting page of 1, meaning that we will query all vaults
   }));
 
-  const vaultTypes = vaultContracts.map((contract) => contract.vaultType);
+  const vaultTypes = vaultRegistryContracts.map((contract) => contract.vaultType);
 
   return batchQuery$({
     contractAddress: queryRouterContractAddress,
@@ -239,20 +239,20 @@ async function batchQueryVaultsInfo({
   queryRouterCodeHash,
   lcdEndpoint,
   chainId,
-  vaultContracts,
+  vaultRegistryContracts,
 }:{
   queryRouterContractAddress: string,
   queryRouterCodeHash?: string,
   lcdEndpoint?: string,
   chainId?: string,
-  vaultContracts: LendVaultContract[]
+  vaultRegistryContracts: LendVaultRegistryContract[]
 }) {
   return lastValueFrom(batchQueryVaultsInfo$({
     queryRouterContractAddress,
     queryRouterCodeHash,
     lcdEndpoint,
     chainId,
-    vaultContracts,
+    vaultRegistryContracts,
   }));
 }
 
@@ -260,15 +260,15 @@ async function batchQueryVaultsInfo({
  * Observable for querying a single vault
  */
 const queryVault$ = ({
-  vaultContractAddress,
-  vaultCodeHash,
+  vaultRegistryContractAddress,
+  vaultRegistryCodeHash,
   vaultType,
   vaultId,
   lcdEndpoint,
   chainId,
 }:{
-  vaultContractAddress: string,
-  vaultCodeHash?: string,
+  vaultRegistryContractAddress: string,
+  vaultRegistryCodeHash?: string,
   vaultType: VaultType,
   vaultId: string,
   lcdEndpoint?: string,
@@ -277,8 +277,8 @@ const queryVault$ = ({
   switchMap(({ client }) => sendSecretClientContractQuery$({
     queryMsg: msgGetVault(vaultId),
     client,
-    contractAddress: vaultContractAddress,
-    codeHash: vaultCodeHash,
+    contractAddress: vaultRegistryContractAddress,
+    codeHash: vaultRegistryCodeHash,
   })),
   map((response) => parseLendVault(response as VaultResponse, vaultType)),
   first(),
@@ -288,23 +288,23 @@ const queryVault$ = ({
  * query a single vault
  */
 async function queryVault({
-  vaultContractAddress,
-  vaultCodeHash,
+  vaultRegistryContractAddress,
+  vaultRegistryCodeHash,
   vaultType,
   vaultId,
   lcdEndpoint,
   chainId,
 }:{
-  vaultContractAddress: string,
-  vaultCodeHash?: string,
+  vaultRegistryContractAddress: string,
+  vaultRegistryCodeHash?: string,
   vaultType: VaultType,
   vaultId: string,
   lcdEndpoint?: string,
   chainId?: string,
 }) {
   return lastValueFrom(queryVault$({
-    vaultContractAddress,
-    vaultCodeHash,
+    vaultRegistryContractAddress,
+    vaultRegistryCodeHash,
     vaultType,
     vaultId,
     lcdEndpoint,
@@ -320,7 +320,7 @@ function batchQueryVaultsUserData$({
   queryRouterCodeHash,
   lcdEndpoint,
   chainId,
-  vaultContracts,
+  vaultRegistryContracts,
   permit,
   vaultIds,
 }:{
@@ -328,11 +328,11 @@ function batchQueryVaultsUserData$({
   queryRouterCodeHash?: string,
   lcdEndpoint?: string,
   chainId?: string,
-  vaultContracts: Contract[],
+  vaultRegistryContracts: Contract[],
   permit: AccountPermit,
   vaultIds: string[]
 }) {
-  const queries:BatchQueryParams[] = vaultContracts.map((contract) => ({
+  const queries:BatchQueryParams[] = vaultRegistryContracts.map((contract) => ({
     id: contract.address,
     contract: {
       address: contract.address,
@@ -360,7 +360,7 @@ async function batchQueryVaultsUserData({
   queryRouterCodeHash,
   lcdEndpoint,
   chainId,
-  vaultContracts,
+  vaultRegistryContracts,
   permit,
   vaultIds,
 }:{
@@ -368,7 +368,7 @@ async function batchQueryVaultsUserData({
   queryRouterCodeHash?: string,
   lcdEndpoint?: string,
   chainId?: string,
-  vaultContracts: Contract[],
+  vaultRegistryContracts: Contract[],
   permit: AccountPermit,
   vaultIds: string[]
 }) {
@@ -377,7 +377,7 @@ async function batchQueryVaultsUserData({
     queryRouterCodeHash,
     lcdEndpoint,
     chainId,
-    vaultContracts,
+    vaultRegistryContracts,
     permit,
     vaultIds,
   }));
@@ -387,15 +387,15 @@ async function batchQueryVaultsUserData({
  * Observable for querying a single vault user data
  */
 const queryVaultUserData$ = ({
-  vaultContractAddress,
-  vaultCodeHash,
+  vaultRegistryContractAddress,
+  vaultRegistryCodeHash,
   vaultId,
   lcdEndpoint,
   chainId,
   permit,
 }:{
-  vaultContractAddress: string,
-  vaultCodeHash?: string,
+  vaultRegistryContractAddress: string,
+  vaultRegistryCodeHash?: string,
   vaultId: string,
   lcdEndpoint?: string,
   chainId?: string,
@@ -404,8 +404,8 @@ const queryVaultUserData$ = ({
   switchMap(({ client }) => sendSecretClientContractQuery$({
     queryMsg: msgGetVaultUserPosition(permit, vaultId),
     client,
-    contractAddress: vaultContractAddress,
-    codeHash: vaultCodeHash,
+    contractAddress: vaultRegistryContractAddress,
+    codeHash: vaultRegistryCodeHash,
   })),
   map((response) => parseLendVaultUserData(response as PositionResponse)),
   first(),
@@ -415,23 +415,23 @@ const queryVaultUserData$ = ({
  * query the info for multiple lend vault contracts
  */
 async function queryVaultUserData({
-  vaultContractAddress,
-  vaultCodeHash,
+  vaultRegistryContractAddress,
+  vaultRegistryCodeHash,
   vaultId,
   lcdEndpoint,
   chainId,
   permit,
 }:{
-  vaultContractAddress: string,
-  vaultCodeHash?: string,
+  vaultRegistryContractAddress: string,
+  vaultRegistryCodeHash?: string,
   vaultId: string,
   lcdEndpoint?: string,
   chainId?: string,
   permit: AccountPermit,
 }) {
   return lastValueFrom(queryVaultUserData$({
-    vaultContractAddress,
-    vaultCodeHash,
+    vaultRegistryContractAddress,
+    vaultRegistryCodeHash,
     vaultId,
     lcdEndpoint,
     chainId,

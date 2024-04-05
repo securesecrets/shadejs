@@ -115,7 +115,7 @@ test('it can call the batch vaults query service', async () => {
     queryRouterCodeHash: 'QUERY_ROUTER_CODE_HASH',
     lcdEndpoint: 'LCD_ENDPOINT',
     chainId: 'CHAIN_ID',
-    vaultContracts: [{
+    vaultRegistryContracts: [{
       address: 'ADDRESS_1',
       codeHash: 'CODE_HASH_1',
       vaultType: VaultType.V1,
@@ -146,26 +146,26 @@ test('it can call the batch vaults query service', async () => {
     lcdEndpoint: input.lcdEndpoint,
     chainId: input.chainId,
     queries: [{
-      id: input.vaultContracts[0].address,
+      id: input.vaultRegistryContracts[0].address,
       contract: {
-        address: input.vaultContracts[0].address,
-        codeHash: input.vaultContracts[0].codeHash,
+        address: input.vaultRegistryContracts[0].address,
+        codeHash: input.vaultRegistryContracts[0].codeHash,
       },
       queryMsg: 'GET_VAULTS_MSG',
     },
     {
-      id: input.vaultContracts[1].address,
+      id: input.vaultRegistryContracts[1].address,
       contract: {
-        address: input.vaultContracts[1].address,
-        codeHash: input.vaultContracts[1].codeHash,
+        address: input.vaultRegistryContracts[1].address,
+        codeHash: input.vaultRegistryContracts[1].codeHash,
       },
       queryMsg: 'GET_VAULTS_MSG',
     },
     {
-      id: input.vaultContracts[2].address,
+      id: input.vaultRegistryContracts[2].address,
       contract: {
-        address: input.vaultContracts[2].address,
-        codeHash: input.vaultContracts[2].codeHash,
+        address: input.vaultRegistryContracts[2].address,
+        codeHash: input.vaultRegistryContracts[2].codeHash,
       },
       queryMsg: 'GET_VAULTS_MSG',
     }],
@@ -182,26 +182,26 @@ test('it can call the batch vaults query service', async () => {
     lcdEndpoint: input.lcdEndpoint,
     chainId: input.chainId,
     queries: [{
-      id: input.vaultContracts[0].address,
+      id: input.vaultRegistryContracts[0].address,
       contract: {
-        address: input.vaultContracts[0].address,
-        codeHash: input.vaultContracts[0].codeHash,
+        address: input.vaultRegistryContracts[0].address,
+        codeHash: input.vaultRegistryContracts[0].codeHash,
       },
       queryMsg: 'GET_VAULTS_MSG',
     },
     {
-      id: input.vaultContracts[1].address,
+      id: input.vaultRegistryContracts[1].address,
       contract: {
-        address: input.vaultContracts[1].address,
-        codeHash: input.vaultContracts[1].codeHash,
+        address: input.vaultRegistryContracts[1].address,
+        codeHash: input.vaultRegistryContracts[1].codeHash,
       },
       queryMsg: 'GET_VAULTS_MSG',
     },
     {
-      id: input.vaultContracts[2].address,
+      id: input.vaultRegistryContracts[2].address,
       contract: {
-        address: input.vaultContracts[2].address,
-        codeHash: input.vaultContracts[2].codeHash,
+        address: input.vaultRegistryContracts[2].address,
+        codeHash: input.vaultRegistryContracts[2].codeHash,
       },
       queryMsg: 'GET_VAULTS_MSG',
     }],
@@ -211,8 +211,8 @@ test('it can call the batch vaults query service', async () => {
 
 test('it can call single vault query service', async () => {
   const input = {
-    vaultContractAddress: 'VAULT_CONTRACT_ADDRESS',
-    vaultCodeHash: 'VAULT_CODE_HASH',
+    vaultRegistryContractAddress: 'VAULT_CONTRACT_ADDRESS',
+    vaultRegistryCodeHash: 'VAULT_CODE_HASH',
     vaultType: VaultType.V1,
     vaultId: '1',
     lcdEndpoint: 'LCD_ENDPOINT',
@@ -230,8 +230,8 @@ test('it can call single vault query service', async () => {
   expect(sendSecretClientContractQuery$).toHaveBeenCalledWith({
     queryMsg: 'GET_VAULT_MSG',
     client: 'CLIENT',
-    contractAddress: input.vaultContractAddress,
-    codeHash: input.vaultCodeHash,
+    contractAddress: input.vaultRegistryContractAddress,
+    codeHash: input.vaultRegistryCodeHash,
   });
 
   expect(output).toStrictEqual(vaultV1Parsed);
@@ -242,8 +242,8 @@ test('it can call single vault query service', async () => {
   expect(sendSecretClientContractQuery$).toHaveBeenCalledWith({
     queryMsg: 'GET_VAULT_MSG',
     client: 'CLIENT',
-    contractAddress: input.vaultContractAddress,
-    codeHash: input.vaultCodeHash,
+    contractAddress: input.vaultRegistryContractAddress,
+    codeHash: input.vaultRegistryCodeHash,
   });
   expect(response).toStrictEqual(vaultV1Parsed);
 });
