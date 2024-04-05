@@ -119,66 +119,6 @@
       },
       "status": "deprecated",
       "whitelist": []
-    },
-    {
-      "vault": {
-        "id": "3",
-        "epoch": "0",
-        "name": "USDC Vault",
-        "collateral_addr": "secret1vkq022x4q8t8kx9de3r84u669l65xnwf2lg3e6",
-        "safe_collateral": "1000000164731066290",
-        "collateral": {
-          "elastic": "488470570095957000308",
-          "base": "488470570095957000308",
-          "last_accrued": "1681764653"
-        },
-        "debt": {
-          "elastic": "319158888887400748294",
-          "base": "319158888887400748294",
-          "last_accrued": "1710953012"
-        },
-        "config": {
-          "max_ltv": "0.85",
-          "collateral_oracle_delay": "600",
-          "fees": {
-            "interest_rate": {
-              "last_changed": "1681764653",
-              "current": "0",
-              "target": "0",
-              "minimum_fee_update_interval": "1681764653",
-              "delta": "0.01",
-              "rate_per_second": "0"
-            },
-            "borrow_fee": {
-              "last_changed": "1681764653",
-              "current": "0",
-              "target": "0",
-              "minimum_fee_update_interval": "1681764653",
-              "delta": "0.01",
-              "rate_per_second": "0"
-            },
-            "liquidation_fee": {
-              "discount": "0.05",
-              "min_debt": "100000000000000000000",
-              "treasury_share": "0.2",
-              "caller_share": "0.1"
-            }
-          }
-        },
-        "allowance": {
-          "used": "0",
-          "max": "0"
-        },
-        "open_positions": {
-          "value": "8"
-        },
-        "is_protocol": false,
-        "position_id_counter": {
-          "value": "37"
-        }
-      },
-      "status": "deprecated",
-      "whitelist": []
     }
   ],
   "page": "0",

@@ -23,11 +23,13 @@ type VaultResponse = {
       elastic: string,
       base: string,
       last_accrued: string,
+      decimals?: number, // not included in Vault V1
     },
     debt: {
       elastic: string,
       base: string,
       last_accrued: string,
+      decimals?: number, // not included in Vault V1
     },
     config: {
       max_ltv: string,
@@ -37,7 +39,6 @@ type VaultResponse = {
           last_changed: string,
           current: string,
           target: string,
-          minimum_fee_update_interval: string,
           delta: string,
           rate_per_second: string,
         },
@@ -45,7 +46,6 @@ type VaultResponse = {
           last_changed: string,
           current: string,
           target: string,
-          minimum_fee_update_interval: string,
           delta: string,
           rate_per_second: string,
         },

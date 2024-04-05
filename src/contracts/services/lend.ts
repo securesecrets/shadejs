@@ -65,6 +65,7 @@ function parseLendVault(vault: VaultResponse, vaultType: VaultType) {
     collateral_addr: collateralAddress,
     is_protocol: isProtocol,
     name,
+    open_positions: openPositions,
   } = vault.vault;
   return {
     id,
@@ -75,23 +76,28 @@ function parseLendVault(vault: VaultResponse, vaultType: VaultType) {
     silkAllowanceUsed: convertCoinFromUDenom(allowance.used, NormalizationFactor.LEND).toString(),
     maxLtv: Number(maxLtv),
     // Collateral is expressed differently depending on vault type
-    totalCollateral:
+    collateralAmount:
     (vaultType === VaultType.V1 || vaultType === VaultType.V2)
-      ? elasticCollateral
-      : BigNumber(elasticCollateral).plus(safeCollateral),
-    totalSilkBorrowed: convertCoinFromUDenom(debt.elastic, NormalizationFactor.LEND).toString(),
+      ? convertCoinFromUDenom(elasticCollateral, NormalizationFactor.LEND).toString()
+      : convertCoinFromUDenom(
+        BigNumber(elasticCollateral).plus(safeCollateral),
+        NormalizationFactor.LEND,
+      ).toString(),
+    silkBorrowAmount: convertCoinFromUDenom(debt.elastic, NormalizationFactor.LEND).toString(),
     interestRate: Number(interestRate.current),
     borrowFee: Number(borrowFee.current),
     liquidationFee: {
       discount: Number(liquidationFee.discount),
-      minimumDebt: liquidationFee.min_debt,
+      minimumDebt: convertCoinFromUDenom(
+        liquidationFee.min_debt,
+        NormalizationFactor.LEND,
+      ).toString(),
       treasuryShare: Number(liquidationFee.treasury_share),
       callerShare: Number(liquidationFee.caller_share),
     },
     isProtocolOwned: isProtocol,
     status: LendContractStatus.NORMAL,
-    openPositions: 9,
-    totalDeposited: convertCoinFromUDenom(elasticCollateral, NormalizationFactor.LEND).toString(),
+    openPositions: Number(openPositions.value),
   } as Vault;
 }
 

@@ -1,9 +1,9 @@
 import { LendContractStatus } from './response';
 
 enum VaultType {
-  V1 = 'v1', // deprecated
-  V2 = 'v2', // we call this "V1" internally
-  V3 = 'v3', // we call this "V2" internally
+  V1 = 'v1',
+  V2 = 'v2',
+  V3 = 'v3',
 }
 
 type Vault = {
@@ -14,8 +14,8 @@ type Vault = {
   silkMaxAllowance: string,
   silkAllowanceUsed: string,
   maxLtv: number,
-  totalCollateral: string,
-  totalSilkBorrowed: string,
+  collateralAmount: string,
+  silkBorrowAmount: string,
   interestRate: number,
   borrowFee: number,
   liquidationFee: {
