@@ -1,0 +1,187 @@
+{
+  "vaults": [
+    {
+      "vault": {
+        "id": "1",
+        "epoch": "0",
+        "name": "WBTC Vault",
+        "collateral_addr": "secret1guyayjwg5f84daaxl7w84skd8naxvq8vz9upqx",
+        "safe_collateral": "4026842206160691204",
+        "collateral": {
+          "elastic": "2114626673839308796",
+          "base": "2114626673839308796",
+          "last_accrued": "1710183488",
+          "decimals": 8
+        },
+        "debt": {
+          "elastic": "121848577218000000000000",
+          "base": "121848577218000000000000",
+          "last_accrued": "1710953123",
+          "decimals": 6
+        },
+        "config": {
+          "max_ltv": "0.8",
+          "collateral_oracle_delay": "600",
+          "fees": {
+            "interest_rate": {
+              "last_changed": "1710183488",
+              "current": "0",
+              "target": "0",
+              "delta": "0.01",
+              "rate_per_second": "0"
+            },
+            "borrow_fee": {
+              "last_changed": "1710183488",
+              "current": "0",
+              "target": "0",
+              "delta": "0.01",
+              "rate_per_second": "0"
+            },
+            "liquidation_fee": {
+              "discount": "0.1",
+              "min_debt": "100000000000000000000",
+              "treasury_share": "0.2",
+              "caller_share": "0.1"
+            }
+          }
+        },
+        "allowance": {
+          "used": "121848577218000000000000",
+          "max": "150000000000000000000000"
+        },
+        "open_positions": {
+          "value": "21"
+        },
+        "is_protocol": false,
+        "position_id_counter": {
+          "value": "23"
+        }
+      },
+      "status": "normal",
+      "whitelist": []
+    },
+    {
+      "vault": {
+        "id": "2",
+        "epoch": "0",
+        "name": "TIA Vault",
+        "collateral_addr": "secret1s9h6mrp4k9gll4zfv5h78ll68hdq8ml7jrnn20",
+        "safe_collateral": "9360727902929305557",
+        "collateral": {
+          "elastic": "5699935097070694443",
+          "base": "5699935097070694443",
+          "last_accrued": "1710183538",
+          "decimals": 6
+        },
+        "debt": {
+          "elastic": "64898575000000000000",
+          "base": "64898575000000000000",
+          "last_accrued": "1710953123",
+          "decimals": 6
+        },
+        "config": {
+          "max_ltv": "0.55",
+          "collateral_oracle_delay": "600",
+          "fees": {
+            "interest_rate": {
+              "last_changed": "1710183538",
+              "current": "0",
+              "target": "0",
+              "delta": "0.01",
+              "rate_per_second": "0"
+            },
+            "borrow_fee": {
+              "last_changed": "1710183538",
+              "current": "0",
+              "target": "0",
+              "delta": "0.01",
+              "rate_per_second": "0"
+            },
+            "liquidation_fee": {
+              "discount": "0.1",
+              "min_debt": "100000000000000000000",
+              "treasury_share": "0.2",
+              "caller_share": "0.1"
+            }
+          }
+        },
+        "allowance": {
+          "used": "64898575000000000000",
+          "max": "50000000000000000000000"
+        },
+        "open_positions": {
+          "value": "2"
+        },
+        "is_protocol": false,
+        "position_id_counter": {
+          "value": "2"
+        }
+      },
+      "status": "normal",
+      "whitelist": []
+    },
+    {
+      "vault": {
+        "id": "3",
+        "epoch": "0",
+        "name": "Stride TIA Vault",
+        "collateral_addr": "secret1l5d0vncwnlln0tz0m4tp9rgm740xl7th6es0q0",
+        "safe_collateral": "240426464553821726117",
+        "collateral": {
+          "elastic": "86036808446178273883",
+          "base": "86036808446178273883",
+          "last_accrued": "1710183580",
+          "decimals": 6
+        },
+        "debt": {
+          "elastic": "1137849603000000000000",
+          "base": "1137849603000000000000",
+          "last_accrued": "1710953123",
+          "decimals": 6
+        },
+        "config": {
+          "max_ltv": "0.5",
+          "collateral_oracle_delay": "600",
+          "fees": {
+            "interest_rate": {
+              "last_changed": "1710183580",
+              "current": "0",
+              "target": "0",
+              "delta": "0.01",
+              "rate_per_second": "0"
+            },
+            "borrow_fee": {
+              "last_changed": "1710183580",
+              "current": "0",
+              "target": "0",
+              "delta": "0.01",
+              "rate_per_second": "0"
+            },
+            "liquidation_fee": {
+              "discount": "0.1",
+              "min_debt": "100000000000000000000",
+              "treasury_share": "0.2",
+              "caller_share": "0.1"
+            }
+          }
+        },
+        "allowance": {
+          "used": "1137849603000000000000",
+          "max": "50000000000000000000000"
+        },
+        "open_positions": {
+          "value": "5"
+        },
+        "is_protocol": false,
+        "position_id_counter": {
+          "value": "6"
+        }
+      },
+      "status": "normal",
+      "whitelist": []
+    }
+  ],
+  "page": "0",
+  "total_pages": "1",
+  "total_vaults": "3"
+}
