@@ -1,5 +1,3 @@
-import { ContractData } from '~/types/contracts/shared';
-
 enum NormalizationFactor {
   LEND = 18,
   LEND_BORROW_FEE = 16,
@@ -9,14 +7,10 @@ type Counter = {
   value: string,
 }
 
-type MigrationInfo = {
-  id: number,
-  contract: ContractData,
-}
-
-type VaultMigrationInfo = {
-  origin: MigrationInfo | null,
-  destination: MigrationInfo | null,
+enum LendContractStatus {
+  NORMAL = 'normal',
+  DEPRECATED = 'deprecated',
+  FROZEN = 'frozen'
 }
 
 type VaultResponse = {
@@ -71,8 +65,7 @@ type VaultResponse = {
     open_positions: Counter,
     is_protocol: boolean,
   },
-  status: string,
-  migration_info: VaultMigrationInfo,
+  status: LendContractStatus,
   whitelist: string[],
 }
 
@@ -105,4 +98,7 @@ export type {
   PositionResponse,
   PositionsResponse,
 };
-export { NormalizationFactor };
+export {
+  NormalizationFactor,
+  LendContractStatus,
+};

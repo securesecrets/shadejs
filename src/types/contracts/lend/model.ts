@@ -1,14 +1,32 @@
+import { LendContractStatus } from './response';
+
+enum VaultType {
+  V1 = 'v1', // deprecated
+  V2 = 'v2', // we call this "V1" internally
+  V3 = 'v3', // we call this "V2" internally
+}
+
 type Vault = {
   id: string,
+  vaultType: VaultType,
+  name: string,
   collateralAddress: string,
   silkMaxAllowance: string,
   silkAllowanceUsed: string,
-  interestRate: string,
-  fee: string,
-  maxLtv: string,
-  totalDeposited: string,
-  totalBorrow: string,
+  maxLtv: number,
+  totalCollateral: string,
+  totalSilkBorrowed: string,
+  interestRate: number,
+  borrowFee: number,
+  liquidationFee: {
+    discount: number,
+    minimumDebt: string,
+    treasuryShare: number,
+    callerShare: number
+  }
   isProtocolOwned: boolean,
+  status: LendContractStatus,
+  openPositions: number,
 }
 
 type Vaults = {
@@ -39,6 +57,12 @@ type BatchVaultsUserDataItem = {
 
 type BatchVaultsUserData = BatchVaultsUserDataItem[]
 
+type LendVaultContract = {
+  address: string,
+  codeHash: string,
+  vaultType: VaultType,
+};
+
 export type {
   BatchVaults,
   Vault,
@@ -46,4 +70,9 @@ export type {
   VaultUserData,
   VaultsUserData,
   BatchVaultsUserData,
+  LendVaultContract,
+};
+
+export {
+  VaultType,
 };

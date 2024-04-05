@@ -16,6 +16,7 @@ import {
   NormalizationFactor,
   PositionResponse,
   PositionsResponse,
+  LendContractStatus,
 } from '~/types/contracts/lend/response';
 import {
   convertCoinFromUDenom,
@@ -28,6 +29,8 @@ import {
   VaultUserData,
   VaultsUserData,
   BatchVaultsUserData,
+  VaultType,
+  LendVaultContract,
 } from '~/types/contracts/lend/model';
 import {
   msgGetVault,
@@ -37,45 +40,72 @@ import {
 } from '~/contracts/definitions/lend';
 import { sendSecretClientContractQuery$ } from '~/client/services/clientServices';
 import { AccountPermit } from '~/types/permit';
+import BigNumber from 'bignumber.js';
 
 /**
 * Parse lend vault response
 */
-function parseLendVault(vault: VaultResponse) {
+function parseLendVault(vault: VaultResponse, vaultType: VaultType) {
   const {
     id,
     allowance,
-    collateral,
-    config,
+    collateral: {
+      elastic: elasticCollateral,
+    },
+    safe_collateral: safeCollateral,
+    config: {
+      max_ltv: maxLtv,
+      fees: {
+        interest_rate: interestRate,
+        borrow_fee: borrowFee,
+        liquidation_fee: liquidationFee,
+      },
+    },
     debt,
     collateral_addr: collateralAddress,
     is_protocol: isProtocol,
+    name,
   } = vault.vault;
   return {
     id,
+    vaultType,
+    name,
     collateralAddress,
     silkMaxAllowance: convertCoinFromUDenom(allowance.max, NormalizationFactor.LEND).toString(),
     silkAllowanceUsed: convertCoinFromUDenom(allowance.used, NormalizationFactor.LEND).toString(),
-    interestRate: config.fees.interest_rate.current,
-    fee: config.fees.borrow_fee.current,
-    maxLtv: config.max_ltv,
-    totalDeposited: convertCoinFromUDenom(collateral.elastic, NormalizationFactor.LEND).toString(),
-    totalBorrow: convertCoinFromUDenom(debt.elastic, NormalizationFactor.LEND).toString(),
+    maxLtv: Number(maxLtv),
+    // Collateral is expressed differently depending on vault type
+    totalCollateral:
+    (vaultType === VaultType.V1 || vaultType === VaultType.V2)
+      ? elasticCollateral
+      : BigNumber(elasticCollateral).plus(safeCollateral),
+    totalSilkBorrowed: convertCoinFromUDenom(debt.elastic, NormalizationFactor.LEND).toString(),
+    interestRate: Number(interestRate.current),
+    borrowFee: Number(borrowFee.current),
+    liquidationFee: {
+      discount: Number(liquidationFee.discount),
+      minimumDebt: liquidationFee.min_debt,
+      treasuryShare: Number(liquidationFee.treasury_share),
+      callerShare: Number(liquidationFee.caller_share),
+    },
     isProtocolOwned: isProtocol,
+    status: LendContractStatus.NORMAL,
+    openPositions: 9,
+    totalDeposited: convertCoinFromUDenom(elasticCollateral, NormalizationFactor.LEND).toString(),
   } as Vault;
 }
 
 /**
 * Parse lend vaults response
 */
-function parseLendVaults(vaults: VaultsResponse) {
+function parseLendVaults(vaults: VaultsResponse, vaultType: VaultType) {
   return vaults.vaults.reduce((prev, vault) => {
     const {
       id: vaultId,
     } = vault.vault;
     return {
       ...prev,
-      [vaultId]: parseLendVault(vault),
+      [vaultId]: parseLendVault(vault, vaultType),
     };
   }, {} as Vaults);
 }
@@ -86,9 +116,10 @@ function parseLendVaults(vaults: VaultsResponse) {
  */
 const parseBatchQueryVaultsInfo = (
   response: BatchQueryParsedResponse,
-): BatchVaults => response.map((item) => ({
+  vaultTypes: VaultType[],
+): BatchVaults => response.map((item, index) => ({
   vaultContractAddress: item.id as string,
-  vaults: parseLendVaults(item.response),
+  vaults: parseLendVaults(item.response, vaultTypes[index]),
 }));
 
 /**
@@ -169,7 +200,7 @@ function batchQueryVaultsInfo$({
   queryRouterCodeHash?: string,
   lcdEndpoint?: string,
   chainId?: string,
-  vaultContracts: Contract[]
+  vaultContracts: LendVaultContract[]
 }) {
   const queries:BatchQueryParams[] = vaultContracts.map((contract) => ({
     id: contract.address,
@@ -179,6 +210,9 @@ function batchQueryVaultsInfo$({
     },
     queryMsg: msgGetVaults(1), // starting page of 1, meaning that we will query all vaults
   }));
+
+  const vaultTypes = vaultContracts.map((contract) => contract.vaultType);
+
   return batchQuery$({
     contractAddress: queryRouterContractAddress,
     codeHash: queryRouterCodeHash,
@@ -186,7 +220,7 @@ function batchQueryVaultsInfo$({
     chainId,
     queries,
   }).pipe(
-    map(parseBatchQueryVaultsInfo),
+    map((response) => parseBatchQueryVaultsInfo(response, vaultTypes)),
     first(),
   );
 }
@@ -205,7 +239,7 @@ async function batchQueryVaultsInfo({
   queryRouterCodeHash?: string,
   lcdEndpoint?: string,
   chainId?: string,
-  vaultContracts: Contract[]
+  vaultContracts: LendVaultContract[]
 }) {
   return lastValueFrom(batchQueryVaultsInfo$({
     queryRouterContractAddress,
@@ -222,12 +256,14 @@ async function batchQueryVaultsInfo({
 const queryVault$ = ({
   vaultContractAddress,
   vaultCodeHash,
+  vaultType,
   vaultId,
   lcdEndpoint,
   chainId,
 }:{
   vaultContractAddress: string,
   vaultCodeHash?: string,
+  vaultType: VaultType,
   vaultId: string,
   lcdEndpoint?: string,
   chainId?: string,
@@ -238,7 +274,7 @@ const queryVault$ = ({
     contractAddress: vaultContractAddress,
     codeHash: vaultCodeHash,
   })),
-  map((response) => parseLendVault(response as VaultResponse)),
+  map((response) => parseLendVault(response as VaultResponse, vaultType)),
   first(),
 );
 
@@ -248,12 +284,14 @@ const queryVault$ = ({
 async function queryVault({
   vaultContractAddress,
   vaultCodeHash,
+  vaultType,
   vaultId,
   lcdEndpoint,
   chainId,
 }:{
   vaultContractAddress: string,
   vaultCodeHash?: string,
+  vaultType: VaultType,
   vaultId: string,
   lcdEndpoint?: string,
   chainId?: string,
@@ -261,6 +299,7 @@ async function queryVault({
   return lastValueFrom(queryVault$({
     vaultContractAddress,
     vaultCodeHash,
+    vaultType,
     vaultId,
     lcdEndpoint,
     chainId,
