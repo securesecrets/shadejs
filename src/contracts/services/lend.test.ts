@@ -32,18 +32,19 @@ import {
   parseLendVault,
   parseLendVaults,
   parseBatchQueryVaultsInfo,
+  batchQueryVaultsInfo$,
+  batchQueryVaultsInfo,
+  queryVault$,
+  queryVault,
 } from './lend';
 
 const sendSecretClientContractQuery$ = vi.hoisted(() => vi.fn());
 const batchQuery$ = vi.hoisted(() => vi.fn());
 
 beforeAll(() => {
-  vi.mock('~/contracts/definitions/swap', () => ({
-    msgQueryFactoryConfig: vi.fn(() => 'FACTORY_CONFIG_MSG'),
-    msgQueryFactoryPairs: vi.fn(() => 'FACTORY_PAIRS_MSG'),
-    msgQueryPairConfig: vi.fn(() => 'PAIR_CONFIG_MSG'),
-    msgQueryPairInfo: vi.fn(() => 'PAIR_INFO_MSG'),
-    msgQueryStakingConfig: vi.fn(() => 'STAKING_CONFIG_MSG'),
+  vi.mock('~/contracts/definitions/lend', () => ({
+    msgGetVaults: vi.fn(() => 'GET_VAULTS_MSG'),
+    msgGetVault: vi.fn(() => 'GET_VAULT_MSG'),
   }));
 
   vi.mock('~/client/index', () => ({
@@ -106,4 +107,143 @@ test('it can parse the batch query of multiple lend vault contracts', () => {
     batchVaultsResponseUnparsed as BatchQueryParsedResponse,
     [VaultType.V1, VaultType.V2, VaultType.V3],
   )).toStrictEqual(batchVaultsParsed);
+});
+
+test('it can call the batch vaults query service', async () => {
+  const input = {
+    queryRouterContractAddress: 'QUERY_ROUTER_CONTRACT_ADDRESS',
+    queryRouterCodeHash: 'QUERY_ROUTER_CODE_HASH',
+    lcdEndpoint: 'LCD_ENDPOINT',
+    chainId: 'CHAIN_ID',
+    vaultContracts: [{
+      address: 'ADDRESS_1',
+      codeHash: 'CODE_HASH_1',
+      vaultType: VaultType.V1,
+    },
+    {
+      address: 'ADDRESS_2',
+      codeHash: 'CODE_HASH_2',
+      vaultType: VaultType.V2,
+    },
+    {
+      address: 'ADDRESS_3',
+      codeHash: 'CODE_HASH_3',
+      vaultType: VaultType.V3,
+    }],
+  };
+  // observables function
+  batchQuery$.mockReturnValueOnce(of(batchVaultsResponseUnparsed));
+  let output;
+  batchQueryVaultsInfo$(input).subscribe({
+    next: (response) => {
+      output = response;
+    },
+  });
+
+  expect(batchQuery$).toHaveBeenCalledWith({
+    contractAddress: input.queryRouterContractAddress,
+    codeHash: input.queryRouterCodeHash,
+    lcdEndpoint: input.lcdEndpoint,
+    chainId: input.chainId,
+    queries: [{
+      id: input.vaultContracts[0].address,
+      contract: {
+        address: input.vaultContracts[0].address,
+        codeHash: input.vaultContracts[0].codeHash,
+      },
+      queryMsg: 'GET_VAULTS_MSG',
+    },
+    {
+      id: input.vaultContracts[1].address,
+      contract: {
+        address: input.vaultContracts[1].address,
+        codeHash: input.vaultContracts[1].codeHash,
+      },
+      queryMsg: 'GET_VAULTS_MSG',
+    },
+    {
+      id: input.vaultContracts[2].address,
+      contract: {
+        address: input.vaultContracts[2].address,
+        codeHash: input.vaultContracts[2].codeHash,
+      },
+      queryMsg: 'GET_VAULTS_MSG',
+    }],
+  });
+
+  expect(output).toStrictEqual(batchVaultsParsed);
+
+  // async/await function
+  batchQuery$.mockReturnValueOnce(of(batchVaultsResponseUnparsed));
+  const response = await batchQueryVaultsInfo(input);
+  expect(batchQuery$).toHaveBeenCalledWith({
+    contractAddress: input.queryRouterContractAddress,
+    codeHash: input.queryRouterCodeHash,
+    lcdEndpoint: input.lcdEndpoint,
+    chainId: input.chainId,
+    queries: [{
+      id: input.vaultContracts[0].address,
+      contract: {
+        address: input.vaultContracts[0].address,
+        codeHash: input.vaultContracts[0].codeHash,
+      },
+      queryMsg: 'GET_VAULTS_MSG',
+    },
+    {
+      id: input.vaultContracts[1].address,
+      contract: {
+        address: input.vaultContracts[1].address,
+        codeHash: input.vaultContracts[1].codeHash,
+      },
+      queryMsg: 'GET_VAULTS_MSG',
+    },
+    {
+      id: input.vaultContracts[2].address,
+      contract: {
+        address: input.vaultContracts[2].address,
+        codeHash: input.vaultContracts[2].codeHash,
+      },
+      queryMsg: 'GET_VAULTS_MSG',
+    }],
+  });
+  expect(response).toStrictEqual(batchVaultsParsed);
+});
+
+test('it can call single vault query service', async () => {
+  const input = {
+    vaultContractAddress: 'VAULT_CONTRACT_ADDRESS',
+    vaultCodeHash: 'VAULT_CODE_HASH',
+    vaultType: VaultType.V1,
+    vaultId: '1',
+    lcdEndpoint: 'LCD_ENDPOINT',
+    chainId: 'CHAIN_ID',
+  };
+  // observables function
+  sendSecretClientContractQuery$.mockReturnValueOnce(of(vaultV1Response));
+  let output;
+  queryVault$(input).subscribe({
+    next: (response) => {
+      output = response;
+    },
+  });
+
+  expect(sendSecretClientContractQuery$).toHaveBeenCalledWith({
+    queryMsg: 'GET_VAULT_MSG',
+    client: 'CLIENT',
+    contractAddress: input.vaultContractAddress,
+    codeHash: input.vaultCodeHash,
+  });
+
+  expect(output).toStrictEqual(vaultV1Parsed);
+
+  // async/await function
+  sendSecretClientContractQuery$.mockReturnValueOnce(of(vaultV1Response));
+  const response = await queryVault(input);
+  expect(sendSecretClientContractQuery$).toHaveBeenCalledWith({
+    queryMsg: 'GET_VAULT_MSG',
+    client: 'CLIENT',
+    contractAddress: input.vaultContractAddress,
+    codeHash: input.vaultCodeHash,
+  });
+  expect(response).toStrictEqual(vaultV1Parsed);
 });
