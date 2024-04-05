@@ -314,6 +314,9 @@ async function queryVault({
 
 /**
  * query the user data for multiple lend vault contracts
+ *
+ * EXPERIMENTAL QUERY. This has not yet been
+ * validated/unit tested in shadeJS for production use
  */
 function batchQueryVaultsUserData$({
   queryRouterContractAddress,
@@ -354,6 +357,9 @@ function batchQueryVaultsUserData$({
 
 /**
  * query the info for multiple lend vault contracts
+ *
+ * EXPERIMENTAL QUERY. This has not yet been
+ * validated/unit tested in shadeJS for production use
  */
 async function batchQueryVaultsUserData({
   queryRouterContractAddress,
@@ -385,6 +391,9 @@ async function batchQueryVaultsUserData({
 
 /**
  * Observable for querying a single vault user data
+ *
+ * EXPERIMENTAL QUERY. This has not yet been
+ * validated/unit tested in shadeJS for production use
  */
 const queryVaultUserData$ = ({
   vaultRegistryContractAddress,
@@ -413,6 +422,9 @@ const queryVaultUserData$ = ({
 
 /**
  * query the info for multiple lend vault contracts
+ *
+ * EXPERIMENTAL QUERY. This has not yet been
+ * validated/unit tested in shadeJS for production use.
  */
 async function queryVaultUserData({
   vaultRegistryContractAddress,
