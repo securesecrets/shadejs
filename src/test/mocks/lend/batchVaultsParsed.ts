@@ -16,8 +16,15 @@ const batchVaultsParsed: BatchVaults = [
         silkMaxAllowance: '0',
         silkAllowanceUsed: '11825.976211616265357496',
         maxLtv: 0.45,
-        collateralAmount: '69822.082224544587516946',
-        silkBorrowAmount: '12734.302492560037164766',
+        collateral: {
+          total: '69822.082224544587516946',
+          elastic: '69822.082224544587516946',
+          base: '69822.082224544587516946',
+        },
+        debt: {
+          total: '12734.302492560037164766',
+          base: '12734.302492560037164766',
+        },
         interestRate: 0,
         borrowFee: 0,
         liquidationFee: {
@@ -38,8 +45,15 @@ const batchVaultsParsed: BatchVaults = [
         silkMaxAllowance: '0',
         silkAllowanceUsed: '0',
         maxLtv: 0.85,
-        collateralAmount: '0',
-        silkBorrowAmount: '0',
+        collateral: {
+          total: '0',
+          elastic: '0',
+          base: '0',
+        },
+        debt: {
+          total: '0',
+          base: '0',
+        },
         interestRate: 0,
         borrowFee: 0,
         liquidationFee: {
@@ -65,8 +79,15 @@ const batchVaultsParsed: BatchVaults = [
         silkMaxAllowance: '750000',
         silkAllowanceUsed: '700859.978232',
         maxLtv: 0.5,
-        collateralAmount: '3740763.561877',
-        silkBorrowAmount: '700859.978232',
+        collateral: {
+          total: '3740763.561877',
+          elastic: '3740763.561877',
+          base: '3740763.561877',
+        },
+        debt: {
+          total: '700859.978232',
+          base: '700859.978232',
+        },
         interestRate: 0,
         borrowFee: 0,
         liquidationFee: {
@@ -87,8 +108,15 @@ const batchVaultsParsed: BatchVaults = [
         silkMaxAllowance: '700000',
         silkAllowanceUsed: '226463.25657',
         maxLtv: 0.85,
-        collateralAmount: '350148.899892',
-        silkBorrowAmount: '227873.904431360577633957',
+        collateral: {
+          total: '350148.899892',
+          elastic: '350148.899892',
+          base: '350148.899892',
+        },
+        debt: {
+          total: '227873.904431360577633957',
+          base: '226847.073546658394171419',
+        },
         interestRate: 0.01,
         borrowFee: 0,
         liquidationFee: {
@@ -114,8 +142,15 @@ const batchVaultsParsed: BatchVaults = [
         silkMaxAllowance: '150000',
         silkAllowanceUsed: '121848.577218',
         maxLtv: 0.8,
-        collateralAmount: '6.14146888',
-        silkBorrowAmount: '121848.577218',
+        collateral: {
+          total: '6.14146888',
+          elastic: '2.114626673839308796',
+          base: '2.114626673839308796',
+        },
+        debt: {
+          total: '121848.577218',
+          base: '121848.577218',
+        },
         interestRate: 0,
         borrowFee: 0,
         liquidationFee: {
@@ -136,8 +171,15 @@ const batchVaultsParsed: BatchVaults = [
         silkMaxAllowance: '50000',
         silkAllowanceUsed: '64.898575',
         maxLtv: 0.55,
-        collateralAmount: '15.060663',
-        silkBorrowAmount: '64.898575',
+        collateral: {
+          total: '15.060663',
+          elastic: '5.699935097070694443',
+          base: '5.699935097070694443',
+        },
+        debt: {
+          total: '64.898575',
+          base: '64.898575',
+        },
         interestRate: 0,
         borrowFee: 0,
         liquidationFee: {

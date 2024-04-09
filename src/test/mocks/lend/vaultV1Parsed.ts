@@ -13,8 +13,15 @@ const vaultV1Parsed: Vault = {
   silkMaxAllowance: '0',
   silkAllowanceUsed: '11825.976211616265357496',
   maxLtv: 0.45,
-  collateralAmount: '69822.082224544587516946',
-  silkBorrowAmount: '12734.302492560037164766',
+  collateral: {
+    total: '69822.082224544587516946',
+    elastic: '69822.082224544587516946',
+    base: '69822.082224544587516946',
+  },
+  debt: {
+    total: '12734.302492560037164766',
+    base: '12734.302492560037164766',
+  },
   interestRate: 0,
   borrowFee: 0,
   liquidationFee: {
@@ -37,8 +44,15 @@ const vaultsV1Parsed: Vaults = {
     silkMaxAllowance: '0',
     silkAllowanceUsed: '11825.976211616265357496',
     maxLtv: 0.45,
-    collateralAmount: '69822.082224544587516946',
-    silkBorrowAmount: '12734.302492560037164766',
+    collateral: {
+      total: '69822.082224544587516946',
+      elastic: '69822.082224544587516946',
+      base: '69822.082224544587516946',
+    },
+    debt: {
+      total: '12734.302492560037164766',
+      base: '12734.302492560037164766',
+    },
     interestRate: 0,
     borrowFee: 0,
     liquidationFee: {
@@ -59,8 +73,15 @@ const vaultsV1Parsed: Vaults = {
     silkMaxAllowance: '0',
     silkAllowanceUsed: '0',
     maxLtv: 0.85,
-    collateralAmount: '0',
-    silkBorrowAmount: '0',
+    collateral: {
+      total: '0',
+      elastic: '0',
+      base: '0',
+    },
+    debt: {
+      total: '0',
+      base: '0',
+    },
     interestRate: 0,
     borrowFee: 0,
     liquidationFee: {

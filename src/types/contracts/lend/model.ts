@@ -14,8 +14,15 @@ type Vault = {
   silkMaxAllowance: string,
   silkAllowanceUsed: string,
   maxLtv: number,
-  collateralAmount: string,
-  silkBorrowAmount: string,
+  collateral: {
+    total: string,
+    elastic: string,
+    base: string,
+  },
+  debt: {
+    total: string, // also referred to as "elastic"
+    base: string,
+  }
   interestRate: number,
   borrowFee: number,
   liquidationFee: {

@@ -51,6 +51,7 @@ function parseLendVault(vault: VaultResponse, vaultType: VaultType) {
     allowance,
     collateral: {
       elastic: elasticCollateral,
+      base: baseCollateral,
     },
     safe_collateral: safeCollateral,
     config: {
@@ -76,14 +77,21 @@ function parseLendVault(vault: VaultResponse, vaultType: VaultType) {
     silkAllowanceUsed: convertCoinFromUDenom(allowance.used, NormalizationFactor.LEND).toString(),
     maxLtv: Number(maxLtv),
     // Collateral is expressed differently depending on vault type
-    collateralAmount:
+    collateral: {
+      total:
     (vaultType === VaultType.V1 || vaultType === VaultType.V2)
       ? convertCoinFromUDenom(elasticCollateral, NormalizationFactor.LEND).toString()
       : convertCoinFromUDenom(
         BigNumber(elasticCollateral).plus(safeCollateral),
         NormalizationFactor.LEND,
       ).toString(),
-    silkBorrowAmount: convertCoinFromUDenom(debt.elastic, NormalizationFactor.LEND).toString(),
+      elastic: convertCoinFromUDenom(elasticCollateral, NormalizationFactor.LEND).toString(),
+      base: convertCoinFromUDenom(baseCollateral, NormalizationFactor.LEND).toString(),
+    },
+    debt: {
+      total: convertCoinFromUDenom(debt.elastic, NormalizationFactor.LEND).toString(),
+      base: convertCoinFromUDenom(debt.base, NormalizationFactor.LEND).toString(),
+    },
     interestRate: Number(interestRate.current),
     borrowFee: Number(borrowFee.current),
     liquidationFee: {
