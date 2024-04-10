@@ -52,6 +52,7 @@ function parseLendVault(vault: VaultResponse, vaultType: VaultType) {
     collateral: {
       elastic: elasticCollateral,
       base: baseCollateral,
+      last_accrued: collateralLastAccrued,
     },
     safe_collateral: safeCollateral,
     config: {
@@ -89,10 +90,12 @@ function parseLendVault(vault: VaultResponse, vaultType: VaultType) {
       elastic: convertCoinFromUDenom(elasticCollateral, NormalizationFactor.LEND).toString(),
       base: convertCoinFromUDenom(baseCollateral, NormalizationFactor.LEND).toString(),
       safe: convertCoinFromUDenom(safeCollateral, NormalizationFactor.LEND).toString(),
+      lastAccruedAt: new Date(Number(collateralLastAccrued) * 1000),
     },
     debt: {
       total: convertCoinFromUDenom(debt.elastic, NormalizationFactor.LEND).toString(),
       base: convertCoinFromUDenom(debt.base, NormalizationFactor.LEND).toString(),
+      lastAccruedAt: new Date(Number(debt.last_accrued) * 1000),
     },
     interestRate: {
       current: Number(interestRate.current),

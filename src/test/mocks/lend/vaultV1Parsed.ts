@@ -18,10 +18,12 @@ const vaultV1Parsed: Vault = {
     elastic: '69822.082224544587516946',
     base: '69822.082224544587516946',
     safe: '3076.606761056046617547',
+    lastAccruedAt: new Date(1681764653000),
   },
   debt: {
     total: '12734.302492560037164766',
     base: '12734.302492560037164766',
+    lastAccruedAt: new Date(1712346110000),
   },
   interestRate: {
     current: 0,
@@ -63,10 +65,12 @@ const vaultsV1Parsed: Vaults = {
       elastic: '69822.082224544587516946',
       base: '69822.082224544587516946',
       safe: '3076.606761056046617547',
+      lastAccruedAt: new Date(1681764653000),
     },
     debt: {
       total: '12734.302492560037164766',
       base: '12734.302492560037164766',
+      lastAccruedAt: new Date(1710953012000),
     },
     interestRate: {
       current: 0,
@@ -106,10 +110,12 @@ const vaultsV1Parsed: Vaults = {
       elastic: '0',
       base: '0',
       safe: '0.000004653229977094',
+      lastAccruedAt: new Date(1681764653000),
     },
     debt: {
       total: '0',
       base: '0',
+      lastAccruedAt: new Date(1710953012000),
     },
     interestRate: {
       current: 0,

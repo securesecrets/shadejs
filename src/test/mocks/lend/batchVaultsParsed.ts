@@ -21,10 +21,12 @@ const batchVaultsParsed: BatchVaults = [
           elastic: '69822.082224544587516946',
           base: '69822.082224544587516946',
           safe: '3076.606761056046617547',
+          lastAccruedAt: new Date(1681764653000),
         },
         debt: {
           total: '12734.302492560037164766',
           base: '12734.302492560037164766',
+          lastAccruedAt: new Date(1710953012000),
         },
         interestRate: {
           current: 0,
@@ -64,10 +66,12 @@ const batchVaultsParsed: BatchVaults = [
           elastic: '0',
           base: '0',
           safe: '0.000004653229977094',
+          lastAccruedAt: new Date(1681764653000),
         },
         debt: {
           total: '0',
           base: '0',
+          lastAccruedAt: new Date(1710953012000),
         },
         interestRate: {
           current: 0,
@@ -112,10 +116,12 @@ const batchVaultsParsed: BatchVaults = [
           elastic: '3740763.561877',
           base: '3740763.561877',
           safe: '31445.759105',
+          lastAccruedAt: new Date(1682191940000),
         },
         debt: {
           total: '700859.978232',
           base: '700859.978232',
+          lastAccruedAt: new Date(1710952834000),
         },
         interestRate: {
           current: 0,
@@ -155,10 +161,12 @@ const batchVaultsParsed: BatchVaults = [
           elastic: '350148.899892',
           base: '350148.899892',
           safe: '73.431644',
+          lastAccruedAt: new Date(1682191940000),
         },
         debt: {
           total: '227873.904431360577633957',
           base: '226847.073546658394171419',
+          lastAccruedAt: new Date(1710952834000),
         },
         interestRate: {
           current: 0.01,
@@ -203,10 +211,12 @@ const batchVaultsParsed: BatchVaults = [
           elastic: '2.114626673839308796',
           base: '2.114626673839308796',
           safe: '4.026842206160691204',
+          lastAccruedAt: new Date(1710183488000),
         },
         debt: {
           total: '121848.577218',
           base: '121848.577218',
+          lastAccruedAt: new Date(1710953123000),
         },
         interestRate: {
           current: 0,
@@ -246,10 +256,12 @@ const batchVaultsParsed: BatchVaults = [
           elastic: '5.699935097070694443',
           base: '5.699935097070694443',
           safe: '9.360727902929305557',
+          lastAccruedAt: new Date(1710183538000),
         },
         debt: {
           total: '64.898575',
           base: '64.898575',
+          lastAccruedAt: new Date(1710953123000),
         },
         interestRate: {
           current: 0,

@@ -19,10 +19,12 @@ type Vault = {
     elastic: string,
     base: string,
     safe: string,
+    lastAccruedAt: Date,
   },
   debt: {
     total: string, // aka "elastic"
     base: string,
+    lastAccruedAt: Date,
   }
   interestRate: {
     current: number,
