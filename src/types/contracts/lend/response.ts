@@ -41,6 +41,7 @@ type VaultResponse = {
           target: string,
           delta: string,
           rate_per_second: string,
+          minimum_fee_update_interval?: string // V1 only
         },
         borrow_fee: {
           last_changed: string,
@@ -48,6 +49,7 @@ type VaultResponse = {
           target: string,
           delta: string,
           rate_per_second: string,
+          minimum_fee_update_interval?: string // V1 only
         },
         liquidation_fee: {
           discount: string,

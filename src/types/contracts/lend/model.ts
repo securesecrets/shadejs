@@ -18,22 +18,36 @@ type Vault = {
     total: string,
     elastic: string,
     base: string,
+    safe: string,
   },
   debt: {
-    total: string, // also referred to as "elastic"
+    total: string, // aka "elastic"
     base: string,
   }
-  interestRate: number,
-  borrowFee: number,
+  interestRate: {
+    current: number,
+    target: number,
+    delta: number,
+    ratePerSecond: number,
+    lastUpdatedAt: Date,
+  },
+  borrowFee: {
+    current: number,
+    target: number,
+    delta: number,
+    ratePerSecond: number,
+    lastUpdatedAt: Date,
+  },
   liquidationFee: {
     discount: number,
     minimumDebt: string,
-    treasuryShare: number,
+    daoShare: number,
     callerShare: number
   }
-  isProtocolOwned: boolean,
+  isProtocolOnly: boolean,
   status: LendContractStatus,
   openPositions: number,
+  totalPositions: number,
 }
 
 type Vaults = {

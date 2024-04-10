@@ -67,6 +67,7 @@ function parseLendVault(vault: VaultResponse, vaultType: VaultType) {
     is_protocol: isProtocol,
     name,
     open_positions: openPositions,
+    position_id_counter: positionIdCounter,
   } = vault.vault;
   return {
     id,
@@ -87,25 +88,41 @@ function parseLendVault(vault: VaultResponse, vaultType: VaultType) {
       ).toString(),
       elastic: convertCoinFromUDenom(elasticCollateral, NormalizationFactor.LEND).toString(),
       base: convertCoinFromUDenom(baseCollateral, NormalizationFactor.LEND).toString(),
+      safe: convertCoinFromUDenom(safeCollateral, NormalizationFactor.LEND).toString(),
     },
     debt: {
       total: convertCoinFromUDenom(debt.elastic, NormalizationFactor.LEND).toString(),
       base: convertCoinFromUDenom(debt.base, NormalizationFactor.LEND).toString(),
     },
-    interestRate: Number(interestRate.current),
-    borrowFee: Number(borrowFee.current),
+    interestRate: {
+      current: Number(interestRate.current),
+      target: Number(interestRate.target),
+      delta: Number(interestRate.delta),
+      ratePerSecond: Number(interestRate.rate_per_second),
+      lastUpdatedAt: new Date(
+        Number(interestRate.last_changed) * 1000,
+      ),
+    },
+    borrowFee: {
+      current: Number(borrowFee.current),
+      target: Number(borrowFee.target),
+      delta: Number(borrowFee.delta),
+      ratePerSecond: Number(borrowFee.rate_per_second),
+      lastUpdatedAt: new Date(Number(borrowFee.last_changed) * 1000),
+    },
     liquidationFee: {
       discount: Number(liquidationFee.discount),
       minimumDebt: convertCoinFromUDenom(
         liquidationFee.min_debt,
         NormalizationFactor.LEND,
       ).toString(),
-      treasuryShare: Number(liquidationFee.treasury_share),
+      daoShare: Number(liquidationFee.treasury_share),
       callerShare: Number(liquidationFee.caller_share),
     },
-    isProtocolOwned: isProtocol,
+    isProtocolOnly: isProtocol,
     status: LendContractStatus.NORMAL,
     openPositions: Number(openPositions.value),
+    totalPositions: Number(positionIdCounter.value),
   } as Vault;
 }
 
