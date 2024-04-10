@@ -32,8 +32,8 @@ import {
   parseLendVault,
   parseLendVaults,
   parseBatchQueryVaultsInfo,
-  batchQueryVaultsInfo$,
-  batchQueryVaultsInfo,
+  queryVaults$,
+  queryVaults,
   queryVault$,
   queryVault,
 } from './lend';
@@ -134,7 +134,7 @@ test('it can call the batch vaults query service', async () => {
   // observables function
   batchQuery$.mockReturnValueOnce(of(batchVaultsResponseUnparsed));
   let output;
-  batchQueryVaultsInfo$(input).subscribe({
+  queryVaults$(input).subscribe({
     next: (response) => {
       output = response;
     },
@@ -175,7 +175,7 @@ test('it can call the batch vaults query service', async () => {
 
   // async/await function
   batchQuery$.mockReturnValueOnce(of(batchVaultsResponseUnparsed));
-  const response = await batchQueryVaultsInfo(input);
+  const response = await queryVaults(input);
   expect(batchQuery$).toHaveBeenCalledWith({
     contractAddress: input.queryRouterContractAddress,
     codeHash: input.queryRouterCodeHash,

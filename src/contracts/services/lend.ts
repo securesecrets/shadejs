@@ -221,9 +221,9 @@ const parseBatchQueryVaultsUserData = (
 }));
 
 /**
- * query the info for multiple lend vault contracts
+ * query the info for multiple lend vaults contracts
  */
-function batchQueryVaultsInfo$({
+function queryVaults$({
   queryRouterContractAddress,
   queryRouterCodeHash,
   lcdEndpoint,
@@ -262,7 +262,7 @@ function batchQueryVaultsInfo$({
 /**
  * query the info for multiple lend vault contracts
  */
-async function batchQueryVaultsInfo({
+async function queryVaults({
   queryRouterContractAddress,
   queryRouterCodeHash,
   lcdEndpoint,
@@ -275,7 +275,7 @@ async function batchQueryVaultsInfo({
   chainId?: string,
   vaultRegistryContracts: LendVaultRegistryContract[]
 }) {
-  return lastValueFrom(batchQueryVaultsInfo$({
+  return lastValueFrom(queryVaults$({
     queryRouterContractAddress,
     queryRouterCodeHash,
     lcdEndpoint,
@@ -483,8 +483,8 @@ export {
   parseLendVault,
   parseLendVaults,
   parseBatchQueryVaultsInfo,
-  batchQueryVaultsInfo$,
-  batchQueryVaultsInfo,
+  queryVaults$,
+  queryVaults,
   queryVault$,
   queryVault,
   batchQueryVaultsUserData$,
