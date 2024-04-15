@@ -1,13 +1,13 @@
 import {
   Vault,
   Vaults,
-  VaultType,
+  VaultVersion,
 } from '~/types/contracts/lend/model';
 import { LendContractStatus } from '~/types/contracts/lend/response';
 
 const vaultV2Parsed: Vault = {
   id: '1',
-  vaultType: VaultType.V2,
+  vaultVersion: VaultVersion.V2,
   name: 'stkd-SCRT Vault',
   collateralAddress: 'secret1k6u0cy4feepm6pehnz804zmwakuwdapm69tuc4',
   silkMaxAllowance: '850000',
@@ -54,7 +54,7 @@ const vaultV2Parsed: Vault = {
 const vaultsV2Parsed: Vaults = {
   1: {
     id: '1',
-    vaultType: VaultType.V2,
+    vaultVersion: VaultVersion.V2,
     name: 'stkd-SCRT Vault',
     collateralAddress: 'secret1k6u0cy4feepm6pehnz804zmwakuwdapm69tuc4',
     silkMaxAllowance: '750000',
@@ -99,7 +99,7 @@ const vaultsV2Parsed: Vaults = {
   },
   2: {
     id: '2',
-    vaultType: VaultType.V2,
+    vaultVersion: VaultVersion.V2,
     name: 'USDT Vault',
     collateralAddress: 'secret1wk5j2cntwg2fgklf0uta3tlkvt87alfj7kepuw',
     silkMaxAllowance: '700000',

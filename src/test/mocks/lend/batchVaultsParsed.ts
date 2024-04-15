@@ -1,6 +1,6 @@
 import {
   BatchVaults,
-  VaultType,
+  VaultVersion,
 } from '~/types/contracts/lend/model';
 import { LendContractStatus } from '~/types/contracts/lend/response';
 
@@ -10,7 +10,7 @@ const batchVaultsParsed: BatchVaults = [
     vaults: {
       1: {
         id: '1',
-        vaultType: VaultType.V1,
+        vaultVersion: VaultVersion.V1,
         name: 'stkd-SCRT Vault',
         collateralAddress: 'secret1k6u0cy4feepm6pehnz804zmwakuwdapm69tuc4',
         silkMaxAllowance: '0',
@@ -55,7 +55,7 @@ const batchVaultsParsed: BatchVaults = [
       },
       2: {
         id: '2',
-        vaultType: VaultType.V1,
+        vaultVersion: VaultVersion.V1,
         name: 'USDT Vault',
         collateralAddress: 'secret1wk5j2cntwg2fgklf0uta3tlkvt87alfj7kepuw',
         silkMaxAllowance: '0',
@@ -105,7 +105,7 @@ const batchVaultsParsed: BatchVaults = [
     vaults: {
       1: {
         id: '1',
-        vaultType: VaultType.V2,
+        vaultVersion: VaultVersion.V2,
         name: 'stkd-SCRT Vault',
         collateralAddress: 'secret1k6u0cy4feepm6pehnz804zmwakuwdapm69tuc4',
         silkMaxAllowance: '750000',
@@ -150,7 +150,7 @@ const batchVaultsParsed: BatchVaults = [
       },
       2: {
         id: '2',
-        vaultType: VaultType.V2,
+        vaultVersion: VaultVersion.V2,
         name: 'USDT Vault',
         collateralAddress: 'secret1wk5j2cntwg2fgklf0uta3tlkvt87alfj7kepuw',
         silkMaxAllowance: '700000',
@@ -200,7 +200,7 @@ const batchVaultsParsed: BatchVaults = [
     vaults: {
       1: {
         id: '1',
-        vaultType: VaultType.V3,
+        vaultVersion: VaultVersion.V3,
         name: 'WBTC Vault',
         collateralAddress: 'secret1guyayjwg5f84daaxl7w84skd8naxvq8vz9upqx',
         silkMaxAllowance: '150000',
@@ -245,7 +245,7 @@ const batchVaultsParsed: BatchVaults = [
       },
       2: {
         id: '2',
-        vaultType: VaultType.V3,
+        vaultVersion: VaultVersion.V3,
         name: 'TIA Vault',
         collateralAddress: 'secret1s9h6mrp4k9gll4zfv5h78ll68hdq8ml7jrnn20',
         silkMaxAllowance: '50000',

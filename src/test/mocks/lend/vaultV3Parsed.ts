@@ -1,13 +1,13 @@
 import {
   Vault,
   Vaults,
-  VaultType,
+  VaultVersion,
 } from '~/types/contracts/lend/model';
 import { LendContractStatus } from '~/types/contracts/lend/response';
 
 const vaultV3Parsed: Vault = {
   id: '1',
-  vaultType: VaultType.V3,
+  vaultVersion: VaultVersion.V3,
   name: 'WBTC Vault',
   collateralAddress: 'secret1guyayjwg5f84daaxl7w84skd8naxvq8vz9upqx',
   silkMaxAllowance: '300000',
@@ -54,7 +54,7 @@ const vaultV3Parsed: Vault = {
 const vaultsV3Parsed: Vaults = {
   1: {
     id: '1',
-    vaultType: VaultType.V3,
+    vaultVersion: VaultVersion.V3,
     name: 'WBTC Vault',
     collateralAddress: 'secret1guyayjwg5f84daaxl7w84skd8naxvq8vz9upqx',
     silkMaxAllowance: '150000',
@@ -99,7 +99,7 @@ const vaultsV3Parsed: Vaults = {
   },
   2: {
     id: '2',
-    vaultType: VaultType.V3,
+    vaultVersion: VaultVersion.V3,
     name: 'TIA Vault',
     collateralAddress: 'secret1s9h6mrp4k9gll4zfv5h78ll68hdq8ml7jrnn20',
     silkMaxAllowance: '50000',

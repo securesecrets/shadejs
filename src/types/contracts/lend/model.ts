@@ -1,6 +1,6 @@
 import { LendContractStatus } from './response';
 
-enum VaultType {
+enum VaultVersion {
   V1 = 'v1',
   V2 = 'v2',
   V3 = 'v3',
@@ -8,7 +8,7 @@ enum VaultType {
 
 type Vault = {
   id: string,
-  vaultType: VaultType,
+  vaultVersion: VaultVersion,
   name: string,
   collateralAddress: string,
   silkMaxAllowance: string,
@@ -83,7 +83,7 @@ type BatchVaultsUserData = BatchVaultsUserDataItem[]
 type LendVaultRegistryContract = {
   address: string,
   codeHash: string,
-  vaultType: VaultType,
+  vaultVersion: VaultVersion,
 };
 
 export type {
@@ -97,5 +97,5 @@ export type {
 };
 
 export {
-  VaultType,
+  VaultVersion,
 };

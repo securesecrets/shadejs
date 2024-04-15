@@ -11,7 +11,7 @@ import vaultV2Response from '~/test/mocks/lend/vaultV2Response.json';
 import vaultsV2Response from '~/test/mocks/lend/vaultsV2Response.json';
 import vaultV3Response from '~/test/mocks/lend/vaultV3Response.json';
 import vaultsV3Response from '~/test/mocks/lend/vaultsV3Response.json';
-import { VaultType } from '~/types/contracts/lend/model';
+import { VaultVersion } from '~/types/contracts/lend/model';
 import { VaultResponse, VaultsResponse } from '~/types/contracts/lend/response';
 import {
   vaultV1Parsed,
@@ -63,49 +63,49 @@ beforeAll(() => {
 test('it can parse the single lend vault V1 response', () => {
   expect(parseLendVault(
     vaultV1Response as VaultResponse,
-    VaultType.V1,
+    VaultVersion.V1,
   )).toStrictEqual(vaultV1Parsed);
 });
 
 test('it can parse the single lend vault V2 response', () => {
   expect(parseLendVault(
     vaultV2Response as VaultResponse,
-    VaultType.V2,
+    VaultVersion.V2,
   )).toStrictEqual(vaultV2Parsed);
 });
 
 test('it can parse the single lend vault V3 response', () => {
   expect(parseLendVault(
     vaultV3Response as VaultResponse,
-    VaultType.V3,
+    VaultVersion.V3,
   )).toStrictEqual(vaultV3Parsed);
 });
 
 test('it can parse the multiple lend vaults V1 response', () => {
   expect(parseLendVaults(
     vaultsV1Response as VaultsResponse,
-    VaultType.V1,
+    VaultVersion.V1,
   )).toStrictEqual(vaultsV1Parsed);
 });
 
 test('it can parse the multiple lend vaults V2 response', () => {
   expect(parseLendVaults(
     vaultsV2Response as VaultsResponse,
-    VaultType.V2,
+    VaultVersion.V2,
   )).toStrictEqual(vaultsV2Parsed);
 });
 
 test('it can parse the multiple lend vaults V3 response', () => {
   expect(parseLendVaults(
     vaultsV3Response as VaultsResponse,
-    VaultType.V3,
+    VaultVersion.V3,
   )).toStrictEqual(vaultsV3Parsed);
 });
 
 test('it can parse the batch query of multiple lend vault contracts', () => {
   expect(parseBatchQueryVaultsInfo(
     batchVaultsResponseUnparsed as BatchQueryParsedResponse,
-    [VaultType.V1, VaultType.V2, VaultType.V3],
+    [VaultVersion.V1, VaultVersion.V2, VaultVersion.V3],
   )).toStrictEqual(batchVaultsParsed);
 });
 
@@ -118,17 +118,17 @@ test('it can call the batch vaults query service', async () => {
     vaultRegistryContracts: [{
       address: 'ADDRESS_1',
       codeHash: 'CODE_HASH_1',
-      vaultType: VaultType.V1,
+      vaultVersion: VaultVersion.V1,
     },
     {
       address: 'ADDRESS_2',
       codeHash: 'CODE_HASH_2',
-      vaultType: VaultType.V2,
+      vaultVersion: VaultVersion.V2,
     },
     {
       address: 'ADDRESS_3',
       codeHash: 'CODE_HASH_3',
-      vaultType: VaultType.V3,
+      vaultVersion: VaultVersion.V3,
     }],
   };
   // observables function
@@ -213,7 +213,7 @@ test('it can call single vault query service', async () => {
   const input = {
     vaultRegistryContractAddress: 'VAULT_CONTRACT_ADDRESS',
     vaultRegistryCodeHash: 'VAULT_CODE_HASH',
-    vaultType: VaultType.V1,
+    vaultVersion: VaultVersion.V1,
     vaultId: '1',
     lcdEndpoint: 'LCD_ENDPOINT',
     chainId: 'CHAIN_ID',

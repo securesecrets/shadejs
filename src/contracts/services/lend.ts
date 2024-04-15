@@ -29,7 +29,7 @@ import {
   VaultUserData,
   VaultsUserData,
   BatchVaultsUserData,
-  VaultType,
+  VaultVersion,
   LendVaultRegistryContract,
 } from '~/types/contracts/lend/model';
 import {
@@ -45,7 +45,7 @@ import BigNumber from 'bignumber.js';
 /**
 * Parse lend vault response
 */
-function parseLendVault(vault: VaultResponse, vaultType: VaultType) {
+function parseLendVault(vault: VaultResponse, vaultVersion: VaultVersion) {
   const {
     id,
     allowance,
@@ -72,7 +72,7 @@ function parseLendVault(vault: VaultResponse, vaultType: VaultType) {
   } = vault.vault;
   return {
     id,
-    vaultType,
+    vaultVersion,
     name,
     collateralAddress,
     silkMaxAllowance: convertCoinFromUDenom(allowance.max, NormalizationFactor.LEND).toString(),
@@ -81,7 +81,7 @@ function parseLendVault(vault: VaultResponse, vaultType: VaultType) {
     // Collateral is expressed differently depending on vault type
     collateral: {
       total:
-    (vaultType === VaultType.V1 || vaultType === VaultType.V2)
+    (vaultVersion === VaultVersion.V1 || vaultVersion === VaultVersion.V2)
       ? convertCoinFromUDenom(elasticCollateral, NormalizationFactor.LEND).toString()
       : convertCoinFromUDenom(
         BigNumber(elasticCollateral).plus(safeCollateral),
@@ -132,14 +132,14 @@ function parseLendVault(vault: VaultResponse, vaultType: VaultType) {
 /**
 * Parse lend vaults response
 */
-function parseLendVaults(vaults: VaultsResponse, vaultType: VaultType) {
+function parseLendVaults(vaults: VaultsResponse, vaultVersion: VaultVersion) {
   return vaults.vaults.reduce((prev, vault) => {
     const {
       id: vaultId,
     } = vault.vault;
     return {
       ...prev,
-      [vaultId]: parseLendVault(vault, vaultType),
+      [vaultId]: parseLendVault(vault, vaultVersion),
     };
   }, {} as Vaults);
 }
@@ -150,10 +150,10 @@ function parseLendVaults(vaults: VaultsResponse, vaultType: VaultType) {
  */
 const parseBatchQueryVaultsInfo = (
   response: BatchQueryParsedResponse,
-  vaultTypes: VaultType[],
+  vaultVersions: VaultVersion[],
 ): BatchVaults => response.map((item, index) => ({
   vaultRegistryContractAddress: item.id as string,
-  vaults: parseLendVaults(item.response, vaultTypes[index]),
+  vaults: parseLendVaults(item.response, vaultVersions[index]),
 }));
 
 /**
@@ -245,7 +245,7 @@ function queryVaults$({
     queryMsg: msgGetVaults(1), // starting page of 1, meaning that we will query all vaults
   }));
 
-  const vaultTypes = vaultRegistryContracts.map((contract) => contract.vaultType);
+  const vaultVersions = vaultRegistryContracts.map((contract) => contract.vaultVersion);
 
   return batchQuery$({
     contractAddress: queryRouterContractAddress,
@@ -254,7 +254,7 @@ function queryVaults$({
     chainId,
     queries,
   }).pipe(
-    map((response) => parseBatchQueryVaultsInfo(response, vaultTypes)),
+    map((response) => parseBatchQueryVaultsInfo(response, vaultVersions)),
     first(),
   );
 }
@@ -290,14 +290,14 @@ async function queryVaults({
 const queryVault$ = ({
   vaultRegistryContractAddress,
   vaultRegistryCodeHash,
-  vaultType,
+  vaultVersion,
   vaultId,
   lcdEndpoint,
   chainId,
 }:{
   vaultRegistryContractAddress: string,
   vaultRegistryCodeHash?: string,
-  vaultType: VaultType,
+  vaultVersion: VaultVersion,
   vaultId: string,
   lcdEndpoint?: string,
   chainId?: string,
@@ -308,7 +308,7 @@ const queryVault$ = ({
     contractAddress: vaultRegistryContractAddress,
     codeHash: vaultRegistryCodeHash,
   })),
-  map((response) => parseLendVault(response as VaultResponse, vaultType)),
+  map((response) => parseLendVault(response as VaultResponse, vaultVersion)),
   first(),
 );
 
@@ -318,14 +318,14 @@ const queryVault$ = ({
 async function queryVault({
   vaultRegistryContractAddress,
   vaultRegistryCodeHash,
-  vaultType,
+  vaultVersion,
   vaultId,
   lcdEndpoint,
   chainId,
 }:{
   vaultRegistryContractAddress: string,
   vaultRegistryCodeHash?: string,
-  vaultType: VaultType,
+  vaultVersion: VaultVersion,
   vaultId: string,
   lcdEndpoint?: string,
   chainId?: string,
@@ -333,7 +333,7 @@ async function queryVault({
   return lastValueFrom(queryVault$({
     vaultRegistryContractAddress,
     vaultRegistryCodeHash,
-    vaultType,
+    vaultVersion,
     vaultId,
     lcdEndpoint,
     chainId,
