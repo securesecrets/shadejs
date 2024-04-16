@@ -1,5 +1,6 @@
 {
   "batch": {
+    "block_height": 3,
     "responses": [
       {
         "id": "MQ==",

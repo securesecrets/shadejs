@@ -7,6 +7,14 @@ import {
   concatAll,
   reduce,
   catchError,
+  of,
+  retry,
+  tap,
+  retryWhen,
+  scan,
+  delay,
+  throwError,
+  concatMap,
 } from 'rxjs';
 import { sendSecretClientContractQuery$ } from '~/client/services/clientServices';
 import { getActiveQueryClient$ } from '~/client';
@@ -33,6 +41,7 @@ function parseBatchQuery(response: BatchQueryResponse): BatchQueryParsedResponse
         id: decodeB64ToJson(item.id),
         response: item.response.system_err, // response is not B64 encoded
         status: BatchItemResponseStatus.ERROR,
+        blockHeight: response.batch.block_height,
       };
     }
 
@@ -43,6 +52,7 @@ function parseBatchQuery(response: BatchQueryResponse): BatchQueryParsedResponse
       // a response available.
       response: decodeB64ToJson(item.response.response!),
       status: BatchItemResponseStatus.SUCCESS,
+      blockHeight: response.batch.block_height,
     };
   });
 }
@@ -56,6 +66,12 @@ function divideSingleBatchIntoArrayOfMultipleBatches(array: BatchQueryParams[], 
   return batches;
 }
 
+type NodeHealthValidationConfig = {
+  minBlockHeight: number,
+  maxRetries: number,
+  onStaleNodeDetected?: () => void
+}
+
 /**
  * batch query of multiple contracts/message at a time
  */
@@ -64,26 +80,52 @@ const batchQuerySingleBatch$ = ({
   codeHash,
   queries,
   client,
+  nodeHealthValidationConfig,
 }:{
   contractAddress: string,
   codeHash?: string,
   queries: BatchQueryParams[],
-  client: SecretNetworkClient
+  client: SecretNetworkClient,
+  nodeHealthValidationConfig?: NodeHealthValidationConfig,
 }) => sendSecretClientContractQuery$({
   queryMsg: msgBatchQuery(queries),
   client,
   contractAddress,
   codeHash,
 }).pipe(
-  map((response) => parseBatchQuery(response as BatchQueryResponse)),
-  first(),
-  catchError((err) => {
-    if (err.message.includes('{wasm contract}')) {
-      throw new Error('{wasm contract} error that typically occurs when batch size is too large and node gas query limits are exceeded. Consider reducing the batch size.');
-    } else {
-      throw new Error(err);
+  map((response) => response as BatchQueryResponse), // map used for typecast only
+  map((response) => {
+    // create an error if stale node is detected
+    if (nodeHealthValidationConfig
+      && nodeHealthValidationConfig.minBlockHeight
+      && response.batch.block_height < nodeHealthValidationConfig.minBlockHeight
+    ) {
+      // callback for when stale node is detected. Useful for error logging.
+      if (nodeHealthValidationConfig.onStaleNodeDetected) {
+        nodeHealthValidationConfig.onStaleNodeDetected();
+      }
+      throw new Error('Stale node detected');
     }
+    return response;
   }),
+  catchError((error, caught) => {
+    if (error.message === 'Stale node detected') {
+      // Caught is the observable that failed
+      return caught.pipe(
+        concatMap((e, index) => {
+          if (index < 3) {
+            return timer(1000);
+          }
+          return throwError(() => new Error('Reached maximum retry attempts for Stale node error.'));
+        }),
+      );
+    } if (error.message.includes('{wasm contract}')) {
+      return throwError(() => new Error('{wasm contract} error that typically occurs when batch size is too large and node gas query limits are exceeded. Consider reducing the batch size.'));
+    }
+    return throwError(() => error);
+  }),
+  map(parseBatchQuery),
+  first(),
 );
 
 /**
