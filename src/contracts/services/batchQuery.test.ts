@@ -66,8 +66,8 @@ test('it can call the single batch query service', async () => {
     client: 'SECRET_CLIENT' as unknown as SecretNetworkClient,
     nodeHealthValidationConfig: {
       minBlockHeight: 3,
-      maxRetries: 1,
-      // onStaleNodeDetected: () => console.log('STALE'),
+      maxRetries: 3,
+      onStaleNodeDetected: () => console.log('STALE NODE FOUND'),
     },
   };
 
@@ -78,12 +78,16 @@ test('it can call the single batch query service', async () => {
     },
   };
 
-  // console.log(batchPairResponse1);
-  // console.log(batchPairConfigResponse);
   // observables function
-  sendSecretClientContractQuery$.mockResolvedValueOnce(
+  sendSecretClientContractQuery$.mockReturnValueOnce(
     of(batchPairResponse1),
-  ).mockResolvedValueOnce(of(batchPairConfigResponse));
+  ).mockReturnValueOnce(
+    of(batchPairResponse1),
+  ).mockReturnValueOnce(
+    of(batchPairResponse1),
+  ).mockReturnValueOnce(
+    of(batchPairConfigResponse),
+  );
 
   let output;
   batchQuerySingleBatch$(input).subscribe({
@@ -92,8 +96,8 @@ test('it can call the single batch query service', async () => {
     },
   });
 
-  // expect(msgBatchQuery).toHaveBeenNthCalledWith(1, input.queries);
-  // expect(output).toStrictEqual(batchPairConfigParsed);
+  expect(msgBatchQuery).toHaveBeenNthCalledWith(1, input.queries);
+  expect(output).toStrictEqual(batchPairConfigParsed);
 
   // async/await function
   // sendSecretClientContractQuery$.mockReturnValueOnce(of(batchPairConfigResponse));

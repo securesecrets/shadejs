@@ -15,6 +15,7 @@ import {
   delay,
   throwError,
   concatMap,
+  timer,
 } from 'rxjs';
 import { sendSecretClientContractQuery$ } from '~/client/services/clientServices';
 import { getActiveQueryClient$ } from '~/client';
@@ -87,46 +88,49 @@ const batchQuerySingleBatch$ = ({
   queries: BatchQueryParams[],
   client: SecretNetworkClient,
   nodeHealthValidationConfig?: NodeHealthValidationConfig,
-}) => sendSecretClientContractQuery$({
-  queryMsg: msgBatchQuery(queries),
-  client,
-  contractAddress,
-  codeHash,
-}).pipe(
-  map((response) => response as BatchQueryResponse), // map used for typecast only
-  map((response) => {
-    // create an error if stale node is detected
-    if (nodeHealthValidationConfig
+}) => {
+  let retryCount = 0;
+  return of(1).pipe( // empty observable used here so that we can start a data stream
+    // and retry from this level when certain error conditions are reached
+    switchMap(() => sendSecretClientContractQuery$({
+      queryMsg: msgBatchQuery(queries),
+      client,
+      contractAddress,
+      codeHash,
+    }).pipe(
+      map((response) => response as BatchQueryResponse), // map used for typecast only
+      switchMap((response) => {
+      // create an error if stale node is detected
+        if (nodeHealthValidationConfig
       && nodeHealthValidationConfig.minBlockHeight
       && response.batch.block_height < nodeHealthValidationConfig.minBlockHeight
-    ) {
-      // callback for when stale node is detected. Useful for error logging.
-      if (nodeHealthValidationConfig.onStaleNodeDetected) {
-        nodeHealthValidationConfig.onStaleNodeDetected();
-      }
-      throw new Error('Stale node detected');
-    }
-    return response;
-  }),
-  catchError((error, caught) => {
-    if (error.message === 'Stale node detected') {
-      // Caught is the observable that failed
-      return caught.pipe(
-        concatMap((e, index) => {
-          if (index < 3) {
-            return timer(1000);
+        ) {
+        // callback for when stale node is detected. Useful for error logging.
+          if (typeof nodeHealthValidationConfig.onStaleNodeDetected === 'function') {
+            nodeHealthValidationConfig.onStaleNodeDetected();
           }
-          return throwError(() => new Error('Reached maximum retry attempts for Stale node error.'));
-        }),
-      );
-    } if (error.message.includes('{wasm contract}')) {
-      return throwError(() => new Error('{wasm contract} error that typically occurs when batch size is too large and node gas query limits are exceeded. Consider reducing the batch size.'));
-    }
-    return throwError(() => error);
-  }),
-  map(parseBatchQuery),
-  first(),
-);
+          return throwError(() => new Error('Stale node detected'));
+        }
+        return of(response);
+      }),
+      map(parseBatchQuery),
+      first(),
+    )),
+    first(),
+    catchError((error, caught) => {
+      if (error.message === 'Stale node detected') {
+        retryCount += 1;
+        if (nodeHealthValidationConfig && retryCount <= nodeHealthValidationConfig?.maxRetries) {
+          return caught;
+        }
+        return throwError(() => new Error('Reached maximum retry attempts for Stale node error.'));
+      } if (error.message.includes('{wasm contract}')) {
+        return throwError(() => new Error('{wasm contract} error that typically occurs when batch size is too large and node gas query limits are exceeded. Consider reducing the batch size.'));
+      }
+      return throwError(() => error);
+    }),
+  );
+};
 
 /**
  * batch query of multiple contracts/message at a time
