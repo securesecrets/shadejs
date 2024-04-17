@@ -33,6 +33,7 @@ const batchPairsConfigResponseUnparsed = [
         custom_fee: null,
       },
     },
+    blockHeight: 1,
   },
   {
     id: 'secret1l34fyc9g23fnlk896693nw57phevnyha7pt6gj',
@@ -77,6 +78,7 @@ const batchPairsConfigResponseUnparsed = [
         },
       },
     },
+    blockHeight: 1,
   },
 ];
 

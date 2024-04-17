@@ -9,6 +9,7 @@ const batchTokensInfoUnparsed = [
         total_supply: '248115955993665',
       },
     },
+    blockHeight: 1,
   },
   {
     id: 'secret1fl449muk5yq8dlad7a22nje4p5d2pnsgymhjfd',
@@ -20,6 +21,7 @@ const batchTokensInfoUnparsed = [
         total_supply: '3688426236358',
       },
     },
+    blockHeight: 1,
   },
 ];
 
