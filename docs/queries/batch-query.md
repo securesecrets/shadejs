@@ -70,7 +70,7 @@ enum BatchItemResponseStatus {
 type BatchQueryParsedResponseItem = {
   id: string | number,
   response: any,
-  status?: BatchItemResponseStatus
+  status?: BatchItemResponseStatus,
   blockHeight: number, // the block height that the data is from
 }
 
