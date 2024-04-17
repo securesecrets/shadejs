@@ -22,6 +22,7 @@ import {
 import { BatchQueryResponse } from '~/types/contracts/batchQuery/response';
 import { decodeB64ToJson } from '~/lib/utils';
 import { SecretNetworkClient } from 'secretjs';
+import { NodeHealthValidationConfig } from '~/types/contracts/batchQuery/service';
 
 /**
  * a parses the batch query response into a usable data model
@@ -58,12 +59,6 @@ function divideSingleBatchIntoArrayOfMultipleBatches(array: BatchQueryParams[], 
     batches.push(array.slice(i, i + batchSize));
   }
   return batches;
-}
-
-type NodeHealthValidationConfig = {
-  minBlockHeight: number,
-  maxRetries: number,
-  onStaleNodeDetected?: () => void
 }
 
 /**

@@ -22,6 +22,20 @@ type BatchQueryParams = {
   queryMsg: any,
 }
 
+// NodeHealthValidationConfig is an optional property that is used to validate the 
+// accuracy of the data in the batch response using an expected minimum 
+// block height associated with the data. The query will be retried until 
+// non-stale data is found (up to a max number of retries before error is thrown).
+// The assumption is that you are working with a node cluster where one or more
+// stale nodes are mixed into healthy nodes, and eventually the query will be 
+// tried with a healthy node and meet the minimum block height threshold.
+type NodeHealthValidationConfig = {
+  minBlockHeight: number, // data must come from this block height or newer block
+  maxRetries: number,
+  onStaleNodeDetected?: () => void
+}
+
+
 async function batchQuery({
   contractAddress,
   codeHash,
@@ -29,6 +43,7 @@ async function batchQuery({
   chainId,
   queries,
   batchSize, // defaults to all queries in single batch
+  nodeHealthValidationConfig,
 }:{
   contractAddress: string,
   codeHash?: string,
@@ -36,6 +51,7 @@ async function batchQuery({
   chainId?: string,
   queries: BatchQueryParams[],
   batchSize?: number, 
+  nodeHealthValidationConfig?: NodeHealthValidationConfig,
 }): Promise<BatchQueryParsedResponse> 
 ```
 
@@ -53,6 +69,7 @@ type BatchQueryParsedResponseItem = {
   id: string | number,
   response: any,
   status?: BatchItemResponseStatus
+  blockHeight: number, // the block height that the data is from
 }
 
 
@@ -121,5 +138,6 @@ console.log(output)
       },
     },
   },
+  blockHeight: 123456789,
 }];
 ```
