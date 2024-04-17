@@ -29,10 +29,12 @@ type BatchQueryParams = {
 // The assumption is that you are working with a node cluster where one or more
 // stale nodes are mixed into healthy nodes, and eventually the query will be 
 // tried with a healthy node and meet the minimum block height threshold.
+// onStaleNodeDetected is a callback function for when stale nodes are found. This 
+// can be useful for error/node monitoring services.
 type NodeHealthValidationConfig = {
   minBlockHeight: number, // data must come from this block height or newer block
   maxRetries: number,
-  onStaleNodeDetected?: () => void
+  onStaleNodeDetected?: () => void 
 }
 
 
