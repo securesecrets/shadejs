@@ -20,6 +20,7 @@ type TokenInfo = {
 type BatchTokensInfoItem = {
   tokenContractAddress: string,
   tokenInfo: TokenInfo,
+  blockHeight: number,
 }
 
 type BatchTokensInfo = BatchTokensInfoItem[]

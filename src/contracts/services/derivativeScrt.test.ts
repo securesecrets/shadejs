@@ -21,10 +21,12 @@ const batchQueryResponse = [
   {
     id: BatchRouterKeys.STAKING_INFO,
     response: stakingInfoResponse,
+    blockHeight: 1,
   },
   {
     id: BatchRouterKeys.FEE_INFO,
     response: feeInfoResponse,
+    blockHeight: 1,
   },
 ];
 
@@ -55,6 +57,7 @@ test('it can parse the batch query resonse', () => {
   )).toStrictEqual({
     ...feeInfoResponseParsed,
     ...stakingInfoResponseParsed,
+    blockHeight: 1,
   });
 });
 
@@ -78,6 +81,7 @@ test('it can call the query all info service', async () => {
   expect(output).toStrictEqual({
     ...feeInfoResponseParsed,
     ...stakingInfoResponseParsed,
+    blockHeight: 1,
   });
 
   // async/await function
@@ -87,5 +91,6 @@ test('it can call the query all info service', async () => {
   expect(output2).toStrictEqual({
     ...feeInfoResponseParsed,
     ...stakingInfoResponseParsed,
+    blockHeight: 1,
   });
 });
