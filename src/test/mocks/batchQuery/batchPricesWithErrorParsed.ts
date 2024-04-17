@@ -12,13 +12,13 @@ const batchPricesWithErrorParsed: BatchQueryParsedResponse = [{
     },
   },
   status: BatchItemResponseStatus.SUCCESS,
-  blockHeight: 1,
+  blockHeight: 3,
 },
 {
   id: 'Quicksilver ATOM',
   response: 'Cannot parse response: expected value at line 1 column 1 in: Generic error: Querier system error: Cannot parse response: expected value at line 1 column 1 in: Generic error: Derivative rate is stale. Last updated 1704806636. Current time 1707858606.',
   status: BatchItemResponseStatus.ERROR,
-  blockHeight: 1,
+  blockHeight: 3,
 }];
 
 export {

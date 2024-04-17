@@ -8,14 +8,7 @@ import {
   reduce,
   catchError,
   of,
-  retry,
-  tap,
-  retryWhen,
-  scan,
-  delay,
   throwError,
-  concatMap,
-  timer,
 } from 'rxjs';
 import { sendSecretClientContractQuery$ } from '~/client/services/clientServices';
 import { getActiveQueryClient$ } from '~/client';
@@ -121,6 +114,7 @@ const batchQuerySingleBatch$ = ({
       if (error.message === 'Stale node detected') {
         retryCount += 1;
         if (nodeHealthValidationConfig && retryCount <= nodeHealthValidationConfig?.maxRetries) {
+          // retry the query
           return caught;
         }
         return throwError(() => new Error('Reached maximum retry attempts for Stale node error.'));
@@ -144,6 +138,7 @@ const batchQuery$ = ({
   chainId,
   queries,
   batchSize,
+  nodeHealthValidationConfig,
 }:{
   contractAddress: string,
   codeHash?: string,
@@ -151,6 +146,7 @@ const batchQuery$ = ({
   chainId?: string,
   queries: BatchQueryParams[],
   batchSize?: number,
+  nodeHealthValidationConfig?: NodeHealthValidationConfig,
 }) => {
   // if batch size is passed in, convert single batch into multiple batches,
   // otherwise process all data in a single batch
@@ -165,6 +161,7 @@ const batchQuery$ = ({
         codeHash,
         queries: batch,
         client,
+        nodeHealthValidationConfig,
       })),
     ).pipe(
       concatAll(),
@@ -189,6 +186,7 @@ async function batchQuery({
   chainId,
   queries,
   batchSize,
+  nodeHealthValidationConfig,
 }:{
   contractAddress: string,
   codeHash?: string,
@@ -196,6 +194,7 @@ async function batchQuery({
   chainId?: string,
   queries: BatchQueryParams[],
   batchSize?: number,
+  nodeHealthValidationConfig?: NodeHealthValidationConfig,
 }) {
   return lastValueFrom(batchQuery$({
     contractAddress,
@@ -204,6 +203,7 @@ async function batchQuery({
     chainId,
     queries,
     batchSize,
+    nodeHealthValidationConfig,
   }));
 }
 
