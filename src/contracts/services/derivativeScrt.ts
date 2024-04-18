@@ -167,6 +167,7 @@ async function queryDerivativeScrtInfo({
   lcdEndpoint,
   chainId,
   queryTimeSeconds,
+  nodeHealthValidationConfig,
 }: {
   queryRouterContractAddress: string,
   queryRouterCodeHash?: string,
@@ -175,6 +176,7 @@ async function queryDerivativeScrtInfo({
   lcdEndpoint?: string,
   chainId?: string,
   queryTimeSeconds?: number,
+  nodeHealthValidationConfig?: NodeHealthValidationConfig,
 }) {
   return lastValueFrom(queryDerivativeScrtInfo$({
     queryRouterContractAddress,
@@ -184,6 +186,7 @@ async function queryDerivativeScrtInfo({
     lcdEndpoint,
     chainId,
     queryTimeSeconds,
+    nodeHealthValidationConfig,
   }));
 }
 

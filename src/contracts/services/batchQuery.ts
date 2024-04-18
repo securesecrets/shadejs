@@ -78,7 +78,7 @@ const batchQuerySingleBatch$ = ({
   nodeHealthValidationConfig?: NodeHealthValidationConfig,
 }) => {
   let retryCount = 0;
-  return of(1).pipe( // empty observable used here so that we can start a data stream
+  return of(1).pipe( // placeholder observable of(1) used here so that we can start a data stream
     // and retry from this level when certain error conditions are reached
     switchMap(() => sendSecretClientContractQuery$({
       queryMsg: msgBatchQuery(queries),
@@ -112,7 +112,7 @@ const batchQuerySingleBatch$ = ({
           // retry the query
           return caught;
         }
-        return throwError(() => new Error('Reached maximum retry attempts for Stale node error.'));
+        return throwError(() => new Error('Reached maximum retry attempts for stale node error.'));
       } if (error.message.includes('{wasm contract}')) {
         return throwError(() => new Error('{wasm contract} error that typically occurs when batch size is too large and node gas query limits are exceeded. Consider reducing the batch size.'));
       }
