@@ -22,7 +22,7 @@ type BatchQueryParams = {
   queryMsg: any,
 }
 
-// NodeHealthValidationConfig is an optional property that is used to validate the 
+// MinBlockHeightValidationOptions is an optional property that is used to validate the 
 // accuracy of the data in the batch response using an expected minimum 
 // block height associated with the data. The query will be retried until 
 // non-stale data is found (up to a max number of retries before error is thrown).
