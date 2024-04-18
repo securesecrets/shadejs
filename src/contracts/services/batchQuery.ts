@@ -93,7 +93,9 @@ const batchQuerySingleBatch$ = ({
           && response.batch.block_height < minBlockHeightValidationOptions.minBlockHeight
         ) {
         // callback for when stale node is detected. Useful for error logging.
-          if (typeof minBlockHeightValidationOptions.onStaleNodeDetected === 'function') {
+        // check the retryCount to ensure that this only fires one time
+          if (retryCount === 0
+            && typeof minBlockHeightValidationOptions.onStaleNodeDetected === 'function') {
             minBlockHeightValidationOptions.onStaleNodeDetected();
           }
           return throwError(() => new Error('Stale node detected'));
@@ -101,7 +103,6 @@ const batchQuerySingleBatch$ = ({
         return of(response);
       }),
       map(parseBatchQuery),
-      first(),
     )),
     first(),
     catchError((error, caught) => {
