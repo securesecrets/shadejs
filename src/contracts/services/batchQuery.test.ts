@@ -172,7 +172,7 @@ test('it can call the single batch query service and detect query retry limit ex
     of(batchPairConfigResponse), // will never reach final case due to retry limit
   );
 
-  await expect(() => batchQuery(input)).rejects.toThrowError('Reached maximum retry attempts for Stale node error.');
+  await expect(() => batchQuery(input)).rejects.toThrowError('Reached maximum retry attempts for stale node error.');
 });
 
 test('it can call the multi-batch query service on a single batch', async () => {

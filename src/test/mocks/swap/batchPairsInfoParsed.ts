@@ -28,6 +28,7 @@ const pairsInfoParsed = [
       stableParams: null,
       contractVersion: 1,
     },
+    blockHeight: 1,
   },
   {
     pairContractAddress: 'secret1wn9tdlvut2nz0cpv28qtv74pqx20p847j8gx3w',
@@ -58,6 +59,7 @@ const pairsInfoParsed = [
       stableParams: null,
       contractVersion: 1,
     },
+    blockHeight: 1,
   },
 ];
 

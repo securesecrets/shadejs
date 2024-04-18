@@ -7,7 +7,7 @@ This page contains a list of deployed contracts.
 |--------------------	|-----------------------------------------------	|------------------------------------------------------------------	|
 | ShadeSwap Factory  	| secret1ja0hcwvy76grqkpgwznxukgd7t8a8anmmx05pp 	| 2ad4ed2a4a45fd6de3daca9541ba82c26bb66c76d1c3540de39b509abd26538e 	|
 | ShadeSwap Router   	| secret1pjhdug87nxzv0esxasmeyfsucaj98pw4334wyc 	| 448e3f6d801e453e838b7a5fbaa4dd93b84d0f1011245f0d5745366dadaf3e85 	|
-| Batch Query Router 	| secret17gnlxnwux0szd7qhl90ym8lw22qvedjz4v09dm 	| 72a09535b77b76862f7b568baf1ddbe158a2e4bbd0f0879c69ada9b398e31c1f 	|
+| Batch Query Router 	| secret15mkmad8ac036v4nrpcc7nk8wyr578egt077syt 	| 1c7e86ba4fdb6760e70bf08a7df7f44b53eb0b23290e3e69ca96140810d4f432 	|
 | Oracle             	| secret10n2xl5jmez6r9umtdrth78k0vwmce0l5m9f5dm 	| 32c4710842b97a526c243a68511b15f58d6e72a388af38a7221ff3244c754e91 	|
 | stkd-scrt          	| secret1k6u0cy4feepm6pehnz804zmwakuwdapm69tuc4 	| f6be719b3c6feb498d3554ca0398eb6b7e7db262acb33f84a8f12106da6bbb09 	|
 | Shade Staking      	| secret1y6px5x7jzrk8hyvy67f06ytn8v0jwculypwxws 	| 2a1ae7fd2be82931cb11d0ce82b2e243507f2006074e2f316da661beb1abe3c3 	|
