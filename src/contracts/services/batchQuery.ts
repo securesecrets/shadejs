@@ -90,8 +90,7 @@ const batchQuerySingleBatch$ = ({
       switchMap((response) => {
       // create an error if stale node is detected
         if (nodeHealthValidationConfig
-      && nodeHealthValidationConfig.minBlockHeight
-      && response.batch.block_height < nodeHealthValidationConfig.minBlockHeight
+          && response.batch.block_height < nodeHealthValidationConfig.minBlockHeight
         ) {
         // callback for when stale node is detected. Useful for error logging.
           if (typeof nodeHealthValidationConfig.onStaleNodeDetected === 'function') {
