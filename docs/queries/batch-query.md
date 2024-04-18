@@ -31,7 +31,7 @@ type BatchQueryParams = {
 // tried with a healthy node and meet the minimum block height threshold.
 // onStaleNodeDetected is a callback function for when stale nodes are found. This 
 // can be useful for error/node monitoring services.
-type NodeHealthValidationConfig = {
+type MinBlockHeightValidationOptions = {
   minBlockHeight: number, // data must come from this block height or newer block
   maxRetries: number,
   onStaleNodeDetected?: () => void 
@@ -45,7 +45,7 @@ async function batchQuery({
   chainId,
   queries,
   batchSize, // defaults to all queries in single batch
-  nodeHealthValidationConfig,
+  minBlockHeightValidationOptions,
 }:{
   contractAddress: string,
   codeHash?: string,
@@ -53,7 +53,7 @@ async function batchQuery({
   chainId?: string,
   queries: BatchQueryParams[],
   batchSize?: number, 
-  nodeHealthValidationConfig?: NodeHealthValidationConfig,
+  minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
 }): Promise<BatchQueryParsedResponse> 
 ```
 
