@@ -20,17 +20,22 @@ import {
   BatchItemResponseStatus,
   BatchQueryParams,
   BatchQueryParsedResponse,
+  MinBlockHeightValidationOptions,
 } from '~/types';
 import { batchQuery$ } from './batchQuery';
 
 /**
 * Parses the contract price query into the app data model
 */
-const parsePriceFromContract = (response: OraclePriceResponse): ParsedOraclePriceResponse => ({
+const parsePriceFromContract = (
+  response: OraclePriceResponse,
+  blockHeight?: number,
+): ParsedOraclePriceResponse => ({
   oracleKey: response.key,
   rate: response.data.rate,
   lastUpdatedBase: response.data.last_updated_base,
   lastUpdatedQuote: response.data.last_updated_quote,
+  blockHeight,
 });
 
 /**
@@ -74,12 +79,13 @@ const parseBatchQueryIndividualPrices = (
           type: errorType,
           msg: item.response,
         },
+        blockHeight: item.blockHeight,
       },
     };
   }
   return {
     ...prev,
-    [item.id as string]: parsePriceFromContract(item.response),
+    [item.id as string]: parsePriceFromContract(item.response, item.blockHeight),
   };
 }, {});
 
@@ -202,6 +208,7 @@ function batchQueryIndividualPrices$({
   oracleContractAddress,
   oracleCodeHash,
   oracleKeys,
+  minBlockHeightValidationOptions,
 }:{
   queryRouterContractAddress: string,
   queryRouterCodeHash?: string,
@@ -210,6 +217,7 @@ function batchQueryIndividualPrices$({
   oracleContractAddress: string
   oracleCodeHash: string
   oracleKeys: string[],
+  minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
 }) {
   const queries:BatchQueryParams[] = oracleKeys.map((key) => ({
     id: key,
@@ -225,6 +233,7 @@ function batchQueryIndividualPrices$({
     lcdEndpoint,
     chainId,
     queries,
+    minBlockHeightValidationOptions,
   }).pipe(
     map(parseBatchQueryIndividualPrices),
     first(),

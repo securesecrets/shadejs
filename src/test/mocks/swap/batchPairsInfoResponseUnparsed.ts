@@ -52,6 +52,7 @@ const pairsInfoResponseUnparsed = [
         stable_info: null,
       },
     },
+    blockHeight: 1,
   },
   {
     id: 'secret1wn9tdlvut2nz0cpv28qtv74pqx20p847j8gx3w',
@@ -106,6 +107,7 @@ const pairsInfoResponseUnparsed = [
         stable_info: null,
       },
     },
+    blockHeight: 1,
   },
 ];
 

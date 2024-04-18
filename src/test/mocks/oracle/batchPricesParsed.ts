@@ -7,6 +7,7 @@ const batchPricesWithErrorParsedResponse: ParsedOraclePricesResponse = {
     lastUpdatedBase: 1707858482,
     // eslint-disable-next-line
     lastUpdatedQuote: 18446744073709551615,
+    blockHeight: 3,
   },
   'Quicksilver ATOM': {
     oracleKey: 'Quicksilver ATOM',
@@ -14,6 +15,7 @@ const batchPricesWithErrorParsedResponse: ParsedOraclePricesResponse = {
       type: OracleErrorType.STALE_DERIVATIVE_RATE,
       msg: 'Cannot parse response: expected value at line 1 column 1 in: Generic error: Querier system error: Cannot parse response: expected value at line 1 column 1 in: Generic error: Derivative rate is stale. Last updated 1704806636. Current time 1707858606.',
     },
+    blockHeight: 3,
   },
 };
 

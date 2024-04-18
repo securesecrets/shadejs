@@ -26,6 +26,7 @@ type DerivativeScrtInfo = {
   nextUnbondingBatchEstimatedTime: number,
   depositFee: number,
   withdrawFee: number,
+  blockHeight: number,
 }
 
 enum BatchRouterKeys {

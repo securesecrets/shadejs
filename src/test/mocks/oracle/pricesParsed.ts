@@ -3,6 +3,7 @@ const priceParsed = {
   rate: '27917207155600000000000',
   lastUpdatedBase: 1696644063,
   lastUpdatedQuote: 18446744073709552000,
+  blockHeight: undefined,
 };
 
 const pricesParsed = {

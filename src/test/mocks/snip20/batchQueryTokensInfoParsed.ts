@@ -9,6 +9,7 @@ const batchTokensInfoParsed: BatchTokensInfo = [
       decimals: 8,
       totalSupply: '248115955993665',
     },
+    blockHeight: 3,
   },
   {
     tokenContractAddress: 'secret1fl449muk5yq8dlad7a22nje4p5d2pnsgymhjfd',
@@ -18,6 +19,7 @@ const batchTokensInfoParsed: BatchTokensInfo = [
       decimals: 6,
       totalSupply: '3688426236358',
     },
+    blockHeight: 3,
   },
 ];
 

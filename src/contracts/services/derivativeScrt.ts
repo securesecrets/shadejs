@@ -22,6 +22,7 @@ import {
   BatchQueryParsedResponse,
   BatchQueryParsedResponseItem,
 } from '~/types/contracts/batchQuery/model';
+import { MinBlockHeightValidationOptions } from '~/types';
 import { batchQuery$ } from './batchQuery';
 
 // Contract returns price as a rate of stkd-SCRT/SCRT with 6 decimals
@@ -89,6 +90,9 @@ const parseDerivativeScrtInfo = (
   return {
     ...parseDerivativeScrtStakingInfo(stakingInfoResponse.response),
     ...parseDerivativeScrtFeeInfo(feeInfoResponse.response),
+    // we are assuming that both responses will come from the same block
+    // because they are queried in the same batch.
+    blockHeight: stakingInfoResponse.blockHeight,
   };
 };
 
@@ -107,6 +111,7 @@ const queryDerivativeScrtInfo$ = ({
   lcdEndpoint,
   chainId,
   queryTimeSeconds,
+  minBlockHeightValidationOptions,
 }: {
   queryRouterContractAddress: string,
   queryRouterCodeHash?: string,
@@ -115,6 +120,7 @@ const queryDerivativeScrtInfo$ = ({
   lcdEndpoint?: string,
   chainId?: string,
   queryTimeSeconds?: number,
+  minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
 }) => batchQuery$({
   queries: [
     {
@@ -134,13 +140,13 @@ const queryDerivativeScrtInfo$ = ({
         codeHash,
       },
       queryMsg: msgQueryScrtDerivativeFees(),
-
     },
   ],
   lcdEndpoint,
   contractAddress: queryRouterContractAddress,
   codeHash: queryRouterCodeHash,
   chainId,
+  minBlockHeightValidationOptions,
 }).pipe(
   map((response: any) => parseDerivativeScrtInfo(response as BatchQueryParsedResponse)),
   first(),
@@ -161,6 +167,7 @@ async function queryDerivativeScrtInfo({
   lcdEndpoint,
   chainId,
   queryTimeSeconds,
+  minBlockHeightValidationOptions,
 }: {
   queryRouterContractAddress: string,
   queryRouterCodeHash?: string,
@@ -169,6 +176,7 @@ async function queryDerivativeScrtInfo({
   lcdEndpoint?: string,
   chainId?: string,
   queryTimeSeconds?: number,
+  minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
 }) {
   return lastValueFrom(queryDerivativeScrtInfo$({
     queryRouterContractAddress,
@@ -178,6 +186,7 @@ async function queryDerivativeScrtInfo({
     lcdEndpoint,
     chainId,
     queryTimeSeconds,
+    minBlockHeightValidationOptions,
   }));
 }
 

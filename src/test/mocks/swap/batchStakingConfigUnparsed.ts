@@ -30,6 +30,7 @@ const batchStakingConfigUnparsed = [
         },
       ],
     },
+    blockHeight: 1,
   },
   {
     id: 'secret1vgtmfvzdn7ztn7kcrqd7p6f2z97wvauavp3udh',
@@ -139,6 +140,7 @@ const batchStakingConfigUnparsed = [
         },
       ],
     },
+    blockHeight: 1,
   },
 ];
 

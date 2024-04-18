@@ -16,6 +16,7 @@ import {
   Contract,
   BatchQueryParams,
   BatchQueryParsedResponse,
+  MinBlockHeightValidationOptions,
 } from '~/types';
 import { batchQuery$ } from './batchQuery';
 
@@ -35,6 +36,7 @@ const parseBatchQueryTokensInfo = (
 ): BatchTokensInfo => response.map((item) => ({
   tokenContractAddress: item.id as string,
   tokenInfo: parseTokenInfo(item.response),
+  blockHeight: item.blockHeight,
 }));
 
 const parseBalance = (response: BalanceResponse): string => response.balance.amount;
@@ -94,12 +96,14 @@ function batchQuerySnip20TokensInfo$({
   lcdEndpoint,
   chainId,
   tokenContracts,
+  minBlockHeightValidationOptions,
 }:{
   queryRouterContractAddress: string,
   queryRouterCodeHash?: string,
   lcdEndpoint?: string,
   chainId?: string,
   tokenContracts: Contract[]
+  minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
 }) {
   const queries:BatchQueryParams[] = tokenContracts.map((contract) => ({
     id: contract.address,
@@ -115,6 +119,7 @@ function batchQuerySnip20TokensInfo$({
     lcdEndpoint,
     chainId,
     queries,
+    minBlockHeightValidationOptions,
   }).pipe(
     map(parseBatchQueryTokensInfo),
     first(),
@@ -130,12 +135,14 @@ function batchQuerySnip20TokensInfo({
   lcdEndpoint,
   chainId,
   tokenContracts,
+  minBlockHeightValidationOptions,
 }:{
   queryRouterContractAddress: string,
   queryRouterCodeHash?: string,
   lcdEndpoint?: string,
   chainId?: string,
   tokenContracts: Contract[]
+  minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
 }) {
   return lastValueFrom(batchQuerySnip20TokensInfo$({
     queryRouterContractAddress,
@@ -143,6 +150,7 @@ function batchQuerySnip20TokensInfo({
     lcdEndpoint,
     chainId,
     tokenContracts,
+    minBlockHeightValidationOptions,
   }));
 }
 

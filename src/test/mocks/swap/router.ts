@@ -28,6 +28,7 @@ const batchPairsInfoMock: BatchPairsInfo = [
       stableParams: null,
       contractVersion: 1,
     },
+    blockHeight: 1,
   },
   {
     pairContractAddress: 'CONTRACT_ADDRESS_PAIR_2',
@@ -55,6 +56,7 @@ const batchPairsInfoMock: BatchPairsInfo = [
       stableParams: null,
       contractVersion: 1,
     },
+    blockHeight: 1,
   },
   {
     pairContractAddress: 'CONTRACT_ADDRESS_PAIR_3',
@@ -82,6 +84,7 @@ const batchPairsInfoMock: BatchPairsInfo = [
       stableParams: null,
       contractVersion: 1,
     },
+    blockHeight: 1,
   },
   {
     pairContractAddress: 'CONTRACT_ADDRESS_PAIR_4',
@@ -130,6 +133,7 @@ const batchPairsInfoMock: BatchPairsInfo = [
       },
       contractVersion: 1,
     },
+    blockHeight: 1,
   },
   {
     pairContractAddress: 'CONTRACT_ADDRESS_PAIR_5',
@@ -178,6 +182,7 @@ const batchPairsInfoMock: BatchPairsInfo = [
       },
       contractVersion: 1,
     },
+    blockHeight: 1,
   },
   {
     pairContractAddress: 'CONTRACT_ADDRESS_PAIR_6',
@@ -226,6 +231,7 @@ const batchPairsInfoMock: BatchPairsInfo = [
       },
       contractVersion: 1,
     },
+    blockHeight: 1,
   },
   {
     pairContractAddress: 'CONTRACT_ADDRESS_PAIR_7',
@@ -253,6 +259,7 @@ const batchPairsInfoMock: BatchPairsInfo = [
       stableParams: null,
       contractVersion: 1,
     },
+    blockHeight: 1,
   },
   {
     pairContractAddress: 'CONTRACT_ADDRESS_PAIR_8',
@@ -280,6 +287,7 @@ const batchPairsInfoMock: BatchPairsInfo = [
       stableParams: null,
       contractVersion: 1,
     },
+    blockHeight: 1,
   },
   {
     pairContractAddress: 'CONTRACT_ADDRESS_PAIR_9',
@@ -307,6 +315,7 @@ const batchPairsInfoMock: BatchPairsInfo = [
       stableParams: null,
       contractVersion: 1,
     },
+    blockHeight: 1,
   },
   {
     pairContractAddress: 'CONTRACT_ADDRESS_PAIR_10',
@@ -355,6 +364,7 @@ const batchPairsInfoMock: BatchPairsInfo = [
       },
       contractVersion: 1,
     },
+    blockHeight: 1,
   },
   {
     pairContractAddress: 'CONTRACT_ADDRESS_PAIR_11',
@@ -403,6 +413,7 @@ const batchPairsInfoMock: BatchPairsInfo = [
       },
       contractVersion: 1,
     },
+    blockHeight: 1,
   },
   {
     pairContractAddress: 'CONTRACT_ADDRESS_PAIR_12',
@@ -451,6 +462,7 @@ const batchPairsInfoMock: BatchPairsInfo = [
       },
       contractVersion: 1,
     },
+    blockHeight: 1,
   },
   {
     pairContractAddress: 'CONTRACT_ADDRESS_PAIR_13',
@@ -499,6 +511,7 @@ const batchPairsInfoMock: BatchPairsInfo = [
       },
       contractVersion: 1,
     },
+    blockHeight: 1,
   },
   {
     pairContractAddress: 'CONTRACT_ADDRESS_PAIR_14',
@@ -527,6 +540,7 @@ const batchPairsInfoMock: BatchPairsInfo = [
 
       contractVersion: 1,
     },
+    blockHeight: 1,
   },
   {
     pairContractAddress: 'CONTRACT_ADDRESS_PAIR_15',
@@ -575,6 +589,7 @@ const batchPairsInfoMock: BatchPairsInfo = [
       },
       contractVersion: 1,
     },
+    blockHeight: 1,
   },
   {
     pairContractAddress: 'CONTRACT_ADDRESS_PAIR_16',
@@ -623,6 +638,7 @@ const batchPairsInfoMock: BatchPairsInfo = [
       },
       contractVersion: 1,
     },
+    blockHeight: 1,
   },
   {
     pairContractAddress: 'CONTRACT_ADDRESS_PAIR_17',
@@ -671,6 +687,7 @@ const batchPairsInfoMock: BatchPairsInfo = [
       },
       contractVersion: 1,
     },
+    blockHeight: 1,
   },
   {
     pairContractAddress: 'CONTRACT_ADDRESS_PAIR_18',
@@ -719,6 +736,7 @@ const batchPairsInfoMock: BatchPairsInfo = [
       },
       contractVersion: 1,
     },
+    blockHeight: 1,
   },
 ];
 
@@ -749,6 +767,7 @@ const batchPairsInfoMockForComplexRoute: BatchPairsInfo = [
       stableParams: null,
       contractVersion: 1,
     },
+    blockHeight: 1,
   },
   {
     pairContractAddress: 'CONTRACT_ADDRESS_PAIR_2',
@@ -776,6 +795,7 @@ const batchPairsInfoMockForComplexRoute: BatchPairsInfo = [
       stableParams: null,
       contractVersion: 1,
     },
+    blockHeight: 1,
   },
   {
     pairContractAddress: 'CONTRACT_ADDRESS_PAIR_3',
@@ -803,6 +823,7 @@ const batchPairsInfoMockForComplexRoute: BatchPairsInfo = [
       stableParams: null,
       contractVersion: 1,
     },
+    blockHeight: 1,
   },
   {
     pairContractAddress: 'CONTRACT_ADDRESS_PAIR_4',
@@ -851,6 +872,7 @@ const batchPairsInfoMockForComplexRoute: BatchPairsInfo = [
       },
       contractVersion: 1,
     },
+    blockHeight: 1,
   },
   {
     pairContractAddress: 'CONTRACT_ADDRESS_PAIR_5',
@@ -899,6 +921,7 @@ const batchPairsInfoMockForComplexRoute: BatchPairsInfo = [
       },
       contractVersion: 1,
     },
+    blockHeight: 1,
   },
   {
     pairContractAddress: 'CONTRACT_ADDRESS_PAIR_6',
@@ -947,6 +970,7 @@ const batchPairsInfoMockForComplexRoute: BatchPairsInfo = [
       },
       contractVersion: 1,
     },
+    blockHeight: 1,
   },
   {
     pairContractAddress: 'CONTRACT_ADDRESS_PAIR_7',
@@ -974,6 +998,7 @@ const batchPairsInfoMockForComplexRoute: BatchPairsInfo = [
       stableParams: null,
       contractVersion: 1,
     },
+    blockHeight: 1,
   },
   {
     pairContractAddress: 'CONTRACT_ADDRESS_PAIR_8',
@@ -1001,6 +1026,7 @@ const batchPairsInfoMockForComplexRoute: BatchPairsInfo = [
       stableParams: null,
       contractVersion: 1,
     },
+    blockHeight: 1,
   },
   {
     pairContractAddress: 'CONTRACT_ADDRESS_PAIR_9',
@@ -1028,6 +1054,7 @@ const batchPairsInfoMockForComplexRoute: BatchPairsInfo = [
       stableParams: null,
       contractVersion: 1,
     },
+    blockHeight: 1,
   },
   {
     pairContractAddress: 'CONTRACT_ADDRESS_PAIR_10',
@@ -1076,6 +1103,7 @@ const batchPairsInfoMockForComplexRoute: BatchPairsInfo = [
       },
       contractVersion: 1,
     },
+    blockHeight: 1,
   },
   {
     pairContractAddress: 'CONTRACT_ADDRESS_PAIR_11',
@@ -1124,6 +1152,7 @@ const batchPairsInfoMockForComplexRoute: BatchPairsInfo = [
       },
       contractVersion: 1,
     },
+    blockHeight: 1,
   },
 ];
 
