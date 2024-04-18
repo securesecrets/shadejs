@@ -93,7 +93,7 @@ test('it can call the single batch query service and retry on stale node found',
     codeHash: 'CODE_HASH',
     queries: ['BATCH_QUERY' as unknown as BatchQueryParams],
     client: 'SECRET_CLIENT' as unknown as SecretNetworkClient,
-    nodeHealthValidationConfig: {
+    minBlockHeightValidationOptions: {
       minBlockHeight: 3,
       maxRetries: 3,
     },
@@ -148,7 +148,7 @@ test('it can call the single batch query service and detect query retry limit ex
     codeHash: 'CODE_HASH',
     queries: ['BATCH_QUERY' as unknown as BatchQueryParams],
     client: 'SECRET_CLIENT' as unknown as SecretNetworkClient,
-    nodeHealthValidationConfig: {
+    minBlockHeightValidationOptions: {
       minBlockHeight: 3,
       maxRetries: 2,
     },

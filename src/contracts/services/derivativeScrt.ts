@@ -22,7 +22,7 @@ import {
   BatchQueryParsedResponse,
   BatchQueryParsedResponseItem,
 } from '~/types/contracts/batchQuery/model';
-import { NodeHealthValidationConfig } from '~/types';
+import { MinBlockHeightValidationOptions } from '~/types';
 import { batchQuery$ } from './batchQuery';
 
 // Contract returns price as a rate of stkd-SCRT/SCRT with 6 decimals
@@ -111,7 +111,7 @@ const queryDerivativeScrtInfo$ = ({
   lcdEndpoint,
   chainId,
   queryTimeSeconds,
-  nodeHealthValidationConfig,
+  minBlockHeightValidationOptions,
 }: {
   queryRouterContractAddress: string,
   queryRouterCodeHash?: string,
@@ -120,7 +120,7 @@ const queryDerivativeScrtInfo$ = ({
   lcdEndpoint?: string,
   chainId?: string,
   queryTimeSeconds?: number,
-  nodeHealthValidationConfig?: NodeHealthValidationConfig,
+  minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
 }) => batchQuery$({
   queries: [
     {
@@ -146,7 +146,7 @@ const queryDerivativeScrtInfo$ = ({
   contractAddress: queryRouterContractAddress,
   codeHash: queryRouterCodeHash,
   chainId,
-  nodeHealthValidationConfig,
+  minBlockHeightValidationOptions,
 }).pipe(
   map((response: any) => parseDerivativeScrtInfo(response as BatchQueryParsedResponse)),
   first(),
@@ -167,7 +167,7 @@ async function queryDerivativeScrtInfo({
   lcdEndpoint,
   chainId,
   queryTimeSeconds,
-  nodeHealthValidationConfig,
+  minBlockHeightValidationOptions,
 }: {
   queryRouterContractAddress: string,
   queryRouterCodeHash?: string,
@@ -176,7 +176,7 @@ async function queryDerivativeScrtInfo({
   lcdEndpoint?: string,
   chainId?: string,
   queryTimeSeconds?: number,
-  nodeHealthValidationConfig?: NodeHealthValidationConfig,
+  minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
 }) {
   return lastValueFrom(queryDerivativeScrtInfo$({
     queryRouterContractAddress,
@@ -186,7 +186,7 @@ async function queryDerivativeScrtInfo({
     lcdEndpoint,
     chainId,
     queryTimeSeconds,
-    nodeHealthValidationConfig,
+    minBlockHeightValidationOptions,
   }));
 }
 

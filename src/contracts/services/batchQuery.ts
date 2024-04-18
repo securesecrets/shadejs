@@ -22,7 +22,7 @@ import {
 import { BatchQueryResponse } from '~/types/contracts/batchQuery/response';
 import { decodeB64ToJson } from '~/lib/utils';
 import { SecretNetworkClient } from 'secretjs';
-import { NodeHealthValidationConfig } from '~/types/contracts/batchQuery/service';
+import { MinBlockHeightValidationOptions } from '~/types/contracts/batchQuery/service';
 
 /**
  * a parses the batch query response into a usable data model
@@ -69,13 +69,13 @@ const batchQuerySingleBatch$ = ({
   codeHash,
   queries,
   client,
-  nodeHealthValidationConfig,
+  minBlockHeightValidationOptions,
 }:{
   contractAddress: string,
   codeHash?: string,
   queries: BatchQueryParams[],
   client: SecretNetworkClient,
-  nodeHealthValidationConfig?: NodeHealthValidationConfig,
+  minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
 }) => {
   let retryCount = 0;
   return of(1).pipe( // placeholder observable of(1) used here so that we can start a data stream
@@ -89,12 +89,12 @@ const batchQuerySingleBatch$ = ({
       map((response) => response as BatchQueryResponse), // map used for typecast only
       switchMap((response) => {
       // create an error if stale node is detected
-        if (nodeHealthValidationConfig
-          && response.batch.block_height < nodeHealthValidationConfig.minBlockHeight
+        if (minBlockHeightValidationOptions
+          && response.batch.block_height < minBlockHeightValidationOptions.minBlockHeight
         ) {
         // callback for when stale node is detected. Useful for error logging.
-          if (typeof nodeHealthValidationConfig.onStaleNodeDetected === 'function') {
-            nodeHealthValidationConfig.onStaleNodeDetected();
+          if (typeof minBlockHeightValidationOptions.onStaleNodeDetected === 'function') {
+            minBlockHeightValidationOptions.onStaleNodeDetected();
           }
           return throwError(() => new Error('Stale node detected'));
         }
@@ -107,7 +107,10 @@ const batchQuerySingleBatch$ = ({
     catchError((error, caught) => {
       if (error.message === 'Stale node detected') {
         retryCount += 1;
-        if (nodeHealthValidationConfig && retryCount <= nodeHealthValidationConfig?.maxRetries) {
+        if (
+          minBlockHeightValidationOptions
+          && retryCount <= minBlockHeightValidationOptions?.maxRetries
+        ) {
           // retry the query
           return caught;
         }
@@ -132,7 +135,7 @@ const batchQuery$ = ({
   chainId,
   queries,
   batchSize,
-  nodeHealthValidationConfig,
+  minBlockHeightValidationOptions,
 }:{
   contractAddress: string,
   codeHash?: string,
@@ -140,7 +143,7 @@ const batchQuery$ = ({
   chainId?: string,
   queries: BatchQueryParams[],
   batchSize?: number,
-  nodeHealthValidationConfig?: NodeHealthValidationConfig,
+  minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
 }) => {
   // if batch size is passed in, convert single batch into multiple batches,
   // otherwise process all data in a single batch
@@ -155,7 +158,7 @@ const batchQuery$ = ({
         codeHash,
         queries: batch,
         client,
-        nodeHealthValidationConfig,
+        minBlockHeightValidationOptions,
       })),
     ).pipe(
       concatAll(),
@@ -180,7 +183,7 @@ async function batchQuery({
   chainId,
   queries,
   batchSize,
-  nodeHealthValidationConfig,
+  minBlockHeightValidationOptions,
 }:{
   contractAddress: string,
   codeHash?: string,
@@ -188,7 +191,7 @@ async function batchQuery({
   chainId?: string,
   queries: BatchQueryParams[],
   batchSize?: number,
-  nodeHealthValidationConfig?: NodeHealthValidationConfig,
+  minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
 }) {
   return lastValueFrom(batchQuery$({
     contractAddress,
@@ -197,7 +200,7 @@ async function batchQuery({
     chainId,
     queries,
     batchSize,
-    nodeHealthValidationConfig,
+    minBlockHeightValidationOptions,
   }));
 }
 

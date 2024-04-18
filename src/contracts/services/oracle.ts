@@ -20,7 +20,7 @@ import {
   BatchItemResponseStatus,
   BatchQueryParams,
   BatchQueryParsedResponse,
-  NodeHealthValidationConfig,
+  MinBlockHeightValidationOptions,
 } from '~/types';
 import { batchQuery$ } from './batchQuery';
 
@@ -208,7 +208,7 @@ function batchQueryIndividualPrices$({
   oracleContractAddress,
   oracleCodeHash,
   oracleKeys,
-  nodeHealthValidationConfig,
+  minBlockHeightValidationOptions,
 }:{
   queryRouterContractAddress: string,
   queryRouterCodeHash?: string,
@@ -217,7 +217,7 @@ function batchQueryIndividualPrices$({
   oracleContractAddress: string
   oracleCodeHash: string
   oracleKeys: string[],
-  nodeHealthValidationConfig?: NodeHealthValidationConfig,
+  minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
 }) {
   const queries:BatchQueryParams[] = oracleKeys.map((key) => ({
     id: key,
@@ -233,7 +233,7 @@ function batchQueryIndividualPrices$({
     lcdEndpoint,
     chainId,
     queries,
-    nodeHealthValidationConfig,
+    minBlockHeightValidationOptions,
   }).pipe(
     map(parseBatchQueryIndividualPrices),
     first(),

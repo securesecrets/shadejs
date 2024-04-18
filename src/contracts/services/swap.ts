@@ -38,7 +38,7 @@ import {
 } from '~/types/contracts/batchQuery/model';
 import { TxResponse } from 'secretjs';
 import { Attribute } from 'secretjs/dist/protobuf/cosmos/base/abci/v1beta1/abci';
-import { NodeHealthValidationConfig } from '~/types';
+import { MinBlockHeightValidationOptions } from '~/types';
 import { batchQuery$ } from './batchQuery';
 import { SERVICE_BATCH_SIZE } from './config';
 
@@ -515,7 +515,7 @@ function batchQueryPairsInfo$({
   chainId,
   pairsContracts,
   batchSize = SERVICE_BATCH_SIZE.PAIR_INFO,
-  nodeHealthValidationConfig,
+  minBlockHeightValidationOptions,
 }:{
   queryRouterContractAddress: string,
   queryRouterCodeHash?: string,
@@ -523,7 +523,7 @@ function batchQueryPairsInfo$({
   chainId?: string,
   pairsContracts: Contract[],
   batchSize?: number,
-  nodeHealthValidationConfig?: NodeHealthValidationConfig,
+  minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
 }) {
   const queries:BatchQueryParams[] = pairsContracts.map((contract) => ({
     id: contract.address,
@@ -540,7 +540,7 @@ function batchQueryPairsInfo$({
     chainId,
     queries,
     batchSize,
-    nodeHealthValidationConfig,
+    minBlockHeightValidationOptions,
   }).pipe(
     map(parseBatchQueryPairInfoResponse),
     first(),
@@ -557,7 +557,7 @@ async function batchQueryPairsInfo({
   chainId,
   pairsContracts,
   batchSize,
-  nodeHealthValidationConfig,
+  minBlockHeightValidationOptions,
 }:{
   queryRouterContractAddress: string,
   queryRouterCodeHash?: string,
@@ -565,7 +565,7 @@ async function batchQueryPairsInfo({
   chainId?: string,
   pairsContracts: Contract[],
   batchSize?: number,
-  nodeHealthValidationConfig?: NodeHealthValidationConfig,
+  minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
 }) {
   return lastValueFrom(batchQueryPairsInfo$({
     queryRouterContractAddress,
@@ -574,7 +574,7 @@ async function batchQueryPairsInfo({
     chainId,
     pairsContracts,
     batchSize,
-    nodeHealthValidationConfig,
+    minBlockHeightValidationOptions,
   }));
 }
 
@@ -588,7 +588,7 @@ function batchQueryPairsConfig$({
   chainId,
   pairsContracts,
   batchSize = SERVICE_BATCH_SIZE.PAIR_CONFIG,
-  nodeHealthValidationConfig,
+  minBlockHeightValidationOptions,
 }:{
   queryRouterContractAddress: string,
   queryRouterCodeHash?: string,
@@ -596,7 +596,7 @@ function batchQueryPairsConfig$({
   chainId?: string,
   pairsContracts: Contract[],
   batchSize?: number,
-  nodeHealthValidationConfig?: NodeHealthValidationConfig,
+  minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
 }) {
   const queries:BatchQueryParams[] = pairsContracts.map((contract) => ({
     id: contract.address,
@@ -613,7 +613,7 @@ function batchQueryPairsConfig$({
     chainId,
     queries,
     batchSize,
-    nodeHealthValidationConfig,
+    minBlockHeightValidationOptions,
   }).pipe(
     map(parseBatchQueryPairConfigResponse),
     first(),
@@ -630,7 +630,7 @@ async function batchQueryPairsConfig({
   chainId,
   pairsContracts,
   batchSize,
-  nodeHealthValidationConfig,
+  minBlockHeightValidationOptions,
 }:{
   queryRouterContractAddress: string,
   queryRouterCodeHash?: string,
@@ -638,7 +638,7 @@ async function batchQueryPairsConfig({
   chainId?: string,
   pairsContracts: Contract[],
   batchSize?: number,
-  nodeHealthValidationConfig?: NodeHealthValidationConfig,
+  minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
 }) {
   return lastValueFrom(batchQueryPairsConfig$({
     queryRouterContractAddress,
@@ -647,7 +647,7 @@ async function batchQueryPairsConfig({
     chainId,
     pairsContracts,
     batchSize,
-    nodeHealthValidationConfig,
+    minBlockHeightValidationOptions,
   }));
 }
 
@@ -660,14 +660,14 @@ function batchQueryStakingInfo$({
   lcdEndpoint,
   chainId,
   stakingContracts,
-  nodeHealthValidationConfig,
+  minBlockHeightValidationOptions,
 }:{
   queryRouterContractAddress: string,
   queryRouterCodeHash?: string,
   lcdEndpoint?: string,
   chainId?: string,
   stakingContracts: Contract[]
-  nodeHealthValidationConfig?: NodeHealthValidationConfig,
+  minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
 }) {
   const queries:BatchQueryParams[] = stakingContracts.map((contract) => ({
     id: contract.address,
@@ -683,7 +683,7 @@ function batchQueryStakingInfo$({
     lcdEndpoint,
     chainId,
     queries,
-    nodeHealthValidationConfig,
+    minBlockHeightValidationOptions,
   }).pipe(
     map(parseBatchQueryStakingInfoResponse),
     first(),
@@ -699,14 +699,14 @@ async function batchQueryStakingInfo({
   lcdEndpoint,
   chainId,
   stakingContracts,
-  nodeHealthValidationConfig,
+  minBlockHeightValidationOptions,
 }:{
   queryRouterContractAddress: string,
   queryRouterCodeHash?: string,
   lcdEndpoint?: string,
   chainId?: string,
   stakingContracts: Contract[]
-  nodeHealthValidationConfig?: NodeHealthValidationConfig,
+  minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
 }) {
   return lastValueFrom(batchQueryStakingInfo$({
     queryRouterContractAddress,
@@ -714,7 +714,7 @@ async function batchQueryStakingInfo({
     lcdEndpoint,
     chainId,
     stakingContracts,
-    nodeHealthValidationConfig,
+    minBlockHeightValidationOptions,
   }));
 }
 
