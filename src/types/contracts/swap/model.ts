@@ -92,6 +92,7 @@ type PairInfo = {
 type BatchPairInfo = {
   pairContractAddress: string,
   pairInfo: PairInfo,
+  blockHeight: number,
 }
 
 type BatchPairsInfo = BatchPairInfo[]
@@ -99,6 +100,7 @@ type BatchPairsInfo = BatchPairInfo[]
 type BatchPairConfig = {
   pairContractAddress: string,
   pairConfig: PairConfig,
+  blockHeight: number,
 }
 
 type BatchPairsConfig = BatchPairConfig[]
@@ -123,6 +125,7 @@ type StakingInfo = {
 type BatchSingleStakingInfo = {
   stakingContractAddress: string,
   stakingInfo: StakingInfo,
+  blockHeight: number,
 }
 
 type BatchStakingInfo = BatchSingleStakingInfo[]

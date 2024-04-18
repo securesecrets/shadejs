@@ -12,6 +12,7 @@ type BatchQueryResponseItem = {
 
 type BatchQueryResponse = {
   batch: {
+    block_height: number,
     responses: BatchQueryResponseItem[],
   }
 }

@@ -25,6 +25,7 @@ const batchPairsConfigParsed = [
       isStable: false,
       fee: null,
     },
+    blockHeight: 1,
   },
   {
     pairContractAddress: 'secret1l34fyc9g23fnlk896693nw57phevnyha7pt6gj',
@@ -55,6 +56,7 @@ const batchPairsConfigParsed = [
         daoFee: 0.003,
       },
     },
+    blockHeight: 1,
   },
 ];
 

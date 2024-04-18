@@ -16,6 +16,7 @@ type BatchQueryParsedResponseItem = {
   id: string | number,
   response: any,
   status?: BatchItemResponseStatus
+  blockHeight: number,
 }
 
 type BatchQueryParsedResponse = BatchQueryParsedResponseItem[]

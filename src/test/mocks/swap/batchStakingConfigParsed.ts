@@ -29,6 +29,7 @@ const batchStakingConfigParsed = [
         },
       ],
     },
+    blockHeight: 1,
   },
   {
     stakingContractAddress: 'secret1vgtmfvzdn7ztn7kcrqd7p6f2z97wvauavp3udh',
@@ -130,6 +131,7 @@ const batchStakingConfigParsed = [
         },
       ],
     },
+    blockHeight: 1,
   },
 ];
 

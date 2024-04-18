@@ -65,6 +65,7 @@ test('it can call the single batch query service', async () => {
     queries: ['BATCH_QUERY' as unknown as BatchQueryParams],
     client: 'SECRET_CLIENT' as unknown as SecretNetworkClient,
   };
+
   // observables function
   sendSecretClientContractQuery$.mockReturnValueOnce(of(batchPairConfigResponse));
 
@@ -80,9 +81,98 @@ test('it can call the single batch query service', async () => {
 
   // async/await function
   sendSecretClientContractQuery$.mockReturnValueOnce(of(batchPairConfigResponse));
+
   const response = await batchQuery(input);
   expect(msgBatchQuery).toHaveBeenNthCalledWith(2, input.queries);
   expect(response).toStrictEqual(batchPairConfigParsed);
+});
+
+test('it can call the single batch query service and retry on stale node found', async () => {
+  const input = {
+    contractAddress: 'CONTRACT_ADDRESS',
+    codeHash: 'CODE_HASH',
+    queries: ['BATCH_QUERY' as unknown as BatchQueryParams],
+    client: 'SECRET_CLIENT' as unknown as SecretNetworkClient,
+    minBlockHeightValidationOptions: {
+      minBlockHeight: 3,
+      maxRetries: 3,
+    },
+  };
+
+  const batchPairResponse1 = {
+    batch: {
+      ...batchPairConfigResponse.batch,
+      block_height: 2, // simulate stale node
+    },
+  };
+
+  // observables function
+  sendSecretClientContractQuery$.mockReturnValueOnce(
+    of(batchPairResponse1),
+  ).mockReturnValueOnce(
+    of(batchPairResponse1),
+  ).mockReturnValueOnce(
+    of(batchPairResponse1),
+  ).mockReturnValueOnce(
+    of(batchPairConfigResponse),
+  );
+
+  let output;
+  batchQuerySingleBatch$(input).subscribe({
+    next: (response) => {
+      output = response;
+    },
+  });
+
+  expect(msgBatchQuery).toHaveBeenNthCalledWith(1, input.queries);
+  expect(output).toStrictEqual(batchPairConfigParsed);
+
+  // async/await function
+  sendSecretClientContractQuery$.mockReturnValueOnce(
+    of(batchPairResponse1),
+  ).mockReturnValueOnce(
+    of(batchPairResponse1),
+  ).mockReturnValueOnce(
+    of(batchPairResponse1),
+  ).mockReturnValueOnce(
+    of(batchPairConfigResponse),
+  );
+  const response = await batchQuery(input);
+  expect(msgBatchQuery).toHaveBeenNthCalledWith(2, input.queries);
+  expect(response).toStrictEqual(batchPairConfigParsed);
+});
+
+test('it can call the single batch query service and detect query retry limit exceeded', async () => {
+  const input = {
+    contractAddress: 'CONTRACT_ADDRESS',
+    codeHash: 'CODE_HASH',
+    queries: ['BATCH_QUERY' as unknown as BatchQueryParams],
+    client: 'SECRET_CLIENT' as unknown as SecretNetworkClient,
+    minBlockHeightValidationOptions: {
+      minBlockHeight: 3,
+      maxRetries: 2,
+    },
+  };
+
+  const batchPairResponse1 = {
+    batch: {
+      ...batchPairConfigResponse.batch,
+      block_height: 2, // simulate stale node
+    },
+  };
+
+  // async/await function
+  sendSecretClientContractQuery$.mockReturnValueOnce(
+    of(batchPairResponse1),
+  ).mockReturnValueOnce(
+    of(batchPairResponse1),
+  ).mockReturnValueOnce(
+    of(batchPairResponse1),
+  ).mockReturnValueOnce(
+    of(batchPairConfigResponse), // will never reach final case due to retry limit
+  );
+
+  await expect(() => batchQuery(input)).rejects.toThrowError('Reached maximum retry attempts for stale node error.');
 });
 
 test('it can call the multi-batch query service on a single batch', async () => {

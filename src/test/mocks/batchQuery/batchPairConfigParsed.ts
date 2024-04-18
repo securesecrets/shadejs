@@ -44,6 +44,7 @@ const batchPairConfigParsed: BatchQueryParsedResponse = [{
     },
   },
   status: BatchItemResponseStatus.SUCCESS,
+  blockHeight: 3,
 },
 {
   id: 2,
@@ -89,6 +90,7 @@ const batchPairConfigParsed: BatchQueryParsedResponse = [{
     },
   },
   status: BatchItemResponseStatus.SUCCESS,
+  blockHeight: 3,
 }];
 
 export {
