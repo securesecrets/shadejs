@@ -43,6 +43,7 @@ type BatchVaults = BatchVaultsItem[]
 type BatchVaultsItem = {
   vaultRegistryContractAddress: string,
   vaults: Vaults,
+  blockHeight: number,
 }
 
 type Vaults = {
@@ -63,6 +64,7 @@ type Vault = {
     base: string,
     safe: string,
     lastAccruedAt: Date,
+    oracleDelay: number,
   },
   debt: {
     total: string,
@@ -93,6 +95,7 @@ type Vault = {
   status: LendContractStatus,
   openPositions: number,
   totalPositions: number,
+  whitelist: string[],
 }
 
 enum LendContractStatus {
