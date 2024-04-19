@@ -19,6 +19,7 @@ const vaultV2Parsed: Vault = {
     base: '3689766.59451',
     safe: '31325.698319',
     lastAccruedAt: new Date(1682191940000),
+    oracleDelay: 600,
   },
   debt: {
     total: '696262.021091',
@@ -49,6 +50,7 @@ const vaultV2Parsed: Vault = {
   status: LendContractStatus.NORMAL,
   openPositions: 183,
   totalPositions: 403,
+  whitelist: [],
 };
 
 const vaultsV2Parsed: Vaults = {
@@ -66,6 +68,7 @@ const vaultsV2Parsed: Vaults = {
       base: '3740763.561877',
       safe: '31445.759105',
       lastAccruedAt: new Date(1682191940000),
+      oracleDelay: 600,
     },
     debt: {
       total: '700859.978232',
@@ -96,6 +99,7 @@ const vaultsV2Parsed: Vaults = {
     status: LendContractStatus.NORMAL,
     openPositions: 182,
     totalPositions: 389,
+    whitelist: [],
   },
   2: {
     id: '2',
@@ -111,6 +115,7 @@ const vaultsV2Parsed: Vaults = {
       base: '350148.899892',
       safe: '73.431644',
       lastAccruedAt: new Date(1682191940000),
+      oracleDelay: 600,
     },
     debt: {
       total: '227873.904431360577633957',
@@ -141,6 +146,7 @@ const vaultsV2Parsed: Vaults = {
     status: LendContractStatus.NORMAL,
     openPositions: 15,
     totalPositions: 60,
+    whitelist: [],
   },
 };
 

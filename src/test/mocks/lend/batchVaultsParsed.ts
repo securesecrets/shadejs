@@ -22,6 +22,7 @@ const batchVaultsParsed: BatchVaults = [
           base: '69822.082224544587516946',
           safe: '3076.606761056046617547',
           lastAccruedAt: new Date(1681764653000),
+          oracleDelay: 600,
         },
         debt: {
           total: '12734.302492560037164766',
@@ -49,9 +50,10 @@ const batchVaultsParsed: BatchVaults = [
           callerShare: 0.1,
         },
         isProtocolOnly: false,
-        status: LendContractStatus.NORMAL,
+        status: LendContractStatus.DEPRECATED,
         openPositions: 32,
         totalPositions: 73,
+        whitelist: [],
       },
       2: {
         id: '2',
@@ -67,6 +69,7 @@ const batchVaultsParsed: BatchVaults = [
           base: '0',
           safe: '0.000004653229977094',
           lastAccruedAt: new Date(1681764653000),
+          oracleDelay: 600,
         },
         debt: {
           total: '0',
@@ -94,9 +97,10 @@ const batchVaultsParsed: BatchVaults = [
           callerShare: 0.1,
         },
         isProtocolOnly: false,
-        status: LendContractStatus.NORMAL,
+        status: LendContractStatus.DEPRECATED,
         openPositions: 3,
         totalPositions: 9,
+        whitelist: [],
       },
     },
     blockHeight: 1,
@@ -118,6 +122,7 @@ const batchVaultsParsed: BatchVaults = [
           base: '3740763.561877',
           safe: '31445.759105',
           lastAccruedAt: new Date(1682191940000),
+          oracleDelay: 600,
         },
         debt: {
           total: '700859.978232',
@@ -148,6 +153,7 @@ const batchVaultsParsed: BatchVaults = [
         status: LendContractStatus.NORMAL,
         openPositions: 182,
         totalPositions: 389,
+        whitelist: [],
       },
       2: {
         id: '2',
@@ -163,6 +169,7 @@ const batchVaultsParsed: BatchVaults = [
           base: '350148.899892',
           safe: '73.431644',
           lastAccruedAt: new Date(1682191940000),
+          oracleDelay: 600,
         },
         debt: {
           total: '227873.904431360577633957',
@@ -193,6 +200,7 @@ const batchVaultsParsed: BatchVaults = [
         status: LendContractStatus.NORMAL,
         openPositions: 15,
         totalPositions: 60,
+        whitelist: [],
       },
     },
     blockHeight: 1,
@@ -214,6 +222,7 @@ const batchVaultsParsed: BatchVaults = [
           base: '2.114626673839308796',
           safe: '4.026842206160691204',
           lastAccruedAt: new Date(1710183488000),
+          oracleDelay: 600,
         },
         debt: {
           total: '121848.577218',
@@ -244,6 +253,7 @@ const batchVaultsParsed: BatchVaults = [
         status: LendContractStatus.NORMAL,
         openPositions: 21,
         totalPositions: 23,
+        whitelist: [],
       },
       2: {
         id: '2',
@@ -259,6 +269,7 @@ const batchVaultsParsed: BatchVaults = [
           base: '5.699935097070694443',
           safe: '9.360727902929305557',
           lastAccruedAt: new Date(1710183538000),
+          oracleDelay: 600,
         },
         debt: {
           total: '64.898575',
@@ -289,6 +300,7 @@ const batchVaultsParsed: BatchVaults = [
         status: LendContractStatus.NORMAL,
         openPositions: 2,
         totalPositions: 2,
+        whitelist: [],
       },
     },
     blockHeight: 1,

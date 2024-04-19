@@ -17,7 +17,6 @@ import {
   NormalizationFactor,
   PositionResponse,
   PositionsResponse,
-  LendContractStatus,
 } from '~/types/contracts/lend/response';
 import {
   convertCoinFromUDenom,
@@ -58,6 +57,7 @@ function parseLendVault(vault: VaultResponse, vaultVersion: VaultVersion) {
     safe_collateral: safeCollateral,
     config: {
       max_ltv: maxLtv,
+      collateral_oracle_delay: collateralOracleDelay,
       fees: {
         interest_rate: interestRate,
         borrow_fee: borrowFee,
@@ -71,6 +71,7 @@ function parseLendVault(vault: VaultResponse, vaultVersion: VaultVersion) {
     open_positions: openPositions,
     position_id_counter: positionIdCounter,
   } = vault.vault;
+
   return {
     id,
     vaultVersion,
@@ -92,6 +93,7 @@ function parseLendVault(vault: VaultResponse, vaultVersion: VaultVersion) {
       base: convertCoinFromUDenom(baseCollateral, NormalizationFactor.LEND).toString(),
       safe: convertCoinFromUDenom(safeCollateral, NormalizationFactor.LEND).toString(),
       lastAccruedAt: new Date(Number(collateralLastAccrued) * 1000),
+      oracleDelay: Number(collateralOracleDelay),
     },
     debt: {
       total: convertCoinFromUDenom(debt.elastic, NormalizationFactor.LEND).toString(),
@@ -124,9 +126,10 @@ function parseLendVault(vault: VaultResponse, vaultVersion: VaultVersion) {
       callerShare: Number(liquidationFee.caller_share),
     },
     isProtocolOnly: isProtocol,
-    status: LendContractStatus.NORMAL,
+    status: vault.status,
     openPositions: Number(openPositions.value),
     totalPositions: Number(positionIdCounter.value),
+    whitelist: vault.whitelist,
   } as Vault;
 }
 

@@ -20,6 +20,7 @@ type Vault = {
     base: string,
     safe: string,
     lastAccruedAt: Date,
+    oracleDelay: number,
   },
   debt: {
     total: string, // aka "elastic"
@@ -50,6 +51,7 @@ type Vault = {
   status: LendContractStatus,
   openPositions: number,
   totalPositions: number,
+  whitelist: string[],
 }
 
 type Vaults = {
