@@ -99,6 +99,7 @@ const batchVaultsParsed: BatchVaults = [
         totalPositions: 9,
       },
     },
+    blockHeight: 1,
   },
   {
     vaultRegistryContractAddress: 'secret1qxk2scacpgj2mmm0af60674afl9e6qneg7yuny',
@@ -194,6 +195,7 @@ const batchVaultsParsed: BatchVaults = [
         totalPositions: 60,
       },
     },
+    blockHeight: 1,
   },
   {
     vaultRegistryContractAddress: 'secret1wj2czeeknya2n6jag7kpfxlm28dw7q96dgqmfs',
@@ -289,6 +291,7 @@ const batchVaultsParsed: BatchVaults = [
         totalPositions: 2,
       },
     },
+    blockHeight: 1,
   },
 ];
 

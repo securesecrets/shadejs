@@ -2,6 +2,7 @@ import {
   BatchQueryParams,
   Contract,
   BatchQueryParsedResponse,
+  MinBlockHeightValidationOptions,
 } from '~/types';
 import { batchQuery$ } from '~/contracts/services/batchQuery';
 import {
@@ -154,6 +155,7 @@ const parseBatchQueryVaultsInfo = (
 ): BatchVaults => response.map((item, index) => ({
   vaultRegistryContractAddress: item.id as string,
   vaults: parseLendVaults(item.response, vaultVersions[index]),
+  blockHeight: item.blockHeight,
 }));
 
 /**
@@ -218,6 +220,7 @@ const parseBatchQueryVaultsUserData = (
 ): BatchVaultsUserData => response.map((item) => ({
   vaultRegistryContractAddress: item.id as string,
   vaultsUserData: parseLendVaultsUserData(item.response),
+  blockHeight: item.blockHeight,
 }));
 
 /**
@@ -229,12 +232,14 @@ function queryVaults$({
   lcdEndpoint,
   chainId,
   vaultRegistryContracts,
+  minBlockHeightValidationOptions,
 }:{
   queryRouterContractAddress: string,
   queryRouterCodeHash?: string,
   lcdEndpoint?: string,
   chainId?: string,
-  vaultRegistryContracts: LendVaultRegistryContract[]
+  vaultRegistryContracts: LendVaultRegistryContract[],
+  minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
 }) {
   const queries:BatchQueryParams[] = vaultRegistryContracts.map((contract) => ({
     id: contract.address,
@@ -253,6 +258,7 @@ function queryVaults$({
     lcdEndpoint,
     chainId,
     queries,
+    minBlockHeightValidationOptions,
   }).pipe(
     map((response) => parseBatchQueryVaultsInfo(response, vaultVersions)),
     first(),
@@ -268,12 +274,14 @@ async function queryVaults({
   lcdEndpoint,
   chainId,
   vaultRegistryContracts,
+  minBlockHeightValidationOptions,
 }:{
   queryRouterContractAddress: string,
   queryRouterCodeHash?: string,
   lcdEndpoint?: string,
   chainId?: string,
   vaultRegistryContracts: LendVaultRegistryContract[]
+  minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
 }) {
   return lastValueFrom(queryVaults$({
     queryRouterContractAddress,
@@ -281,6 +289,7 @@ async function queryVaults({
     lcdEndpoint,
     chainId,
     vaultRegistryContracts,
+    minBlockHeightValidationOptions,
   }));
 }
 
@@ -354,6 +363,7 @@ function batchQueryVaultsUserData$({
   vaultRegistryContracts,
   permit,
   vaultIds,
+  minBlockHeightValidationOptions,
 }:{
   queryRouterContractAddress: string,
   queryRouterCodeHash?: string,
@@ -361,7 +371,8 @@ function batchQueryVaultsUserData$({
   chainId?: string,
   vaultRegistryContracts: Contract[],
   permit: AccountPermit,
-  vaultIds: string[]
+  vaultIds: string[],
+  minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
 }) {
   const queries:BatchQueryParams[] = vaultRegistryContracts.map((contract) => ({
     id: contract.address,
@@ -377,6 +388,7 @@ function batchQueryVaultsUserData$({
     lcdEndpoint,
     chainId,
     queries,
+    minBlockHeightValidationOptions,
   }).pipe(
     map(parseBatchQueryVaultsUserData),
     first(),
@@ -397,6 +409,7 @@ async function batchQueryVaultsUserData({
   vaultRegistryContracts,
   permit,
   vaultIds,
+  minBlockHeightValidationOptions,
 }:{
   queryRouterContractAddress: string,
   queryRouterCodeHash?: string,
@@ -404,7 +417,8 @@ async function batchQueryVaultsUserData({
   chainId?: string,
   vaultRegistryContracts: Contract[],
   permit: AccountPermit,
-  vaultIds: string[]
+  vaultIds: string[],
+  minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
 }) {
   return lastValueFrom(batchQueryVaultsUserData$({
     queryRouterContractAddress,
@@ -414,6 +428,7 @@ async function batchQueryVaultsUserData({
     vaultRegistryContracts,
     permit,
     vaultIds,
+    minBlockHeightValidationOptions,
   }));
 }
 

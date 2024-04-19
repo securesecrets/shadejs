@@ -59,6 +59,7 @@ type Vaults = {
 type BatchVaultsItem = {
   vaultRegistryContractAddress: string,
   vaults: Vaults,
+  blockHeight: number,
 }
 
 type BatchVaults = BatchVaultsItem[]
@@ -76,6 +77,7 @@ type VaultsUserData = {
 type BatchVaultsUserDataItem = {
   vaultRegistryContractAddress: string,
   vaultsUserData: VaultsUserData | null,
+  blockHeight: number,
 }
 
 type BatchVaultsUserData = BatchVaultsUserDataItem[]

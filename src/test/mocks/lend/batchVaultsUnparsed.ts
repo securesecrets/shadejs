@@ -130,6 +130,7 @@ const batchVaultsResponseUnparsed: BatchQueryParsedResponse = [
       total_pages: '1',
       total_vaults: '3',
     },
+    blockHeight: 1,
   },
   {
     id: 'secret1qxk2scacpgj2mmm0af60674afl9e6qneg7yuny',
@@ -260,6 +261,7 @@ const batchVaultsResponseUnparsed: BatchQueryParsedResponse = [
       total_pages: '1',
       total_vaults: '3',
     },
+    blockHeight: 1,
   },
   {
     id: 'secret1wj2czeeknya2n6jag7kpfxlm28dw7q96dgqmfs',
@@ -390,6 +392,7 @@ const batchVaultsResponseUnparsed: BatchQueryParsedResponse = [
       total_pages: '1',
       total_vaults: '3',
     },
+    blockHeight: 1,
   },
 ];
 
