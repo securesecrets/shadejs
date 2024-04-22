@@ -57,7 +57,7 @@ type Vault = {
   collateralAddress: string,
   silkMaxAllowance: string,
   silkAllowanceUsed: string,
-  maxLtv: number,
+  maxLtv: number, // decimal percent
   collateral: {
     total: string,
     elastic: string,
@@ -72,14 +72,14 @@ type Vault = {
     lastAccruedAt: Date,
   }
   interestRate: {
-    current: number,
+    current: number,  // decimal percent
     target: number,
     delta: number,
     ratePerSecond: number,
     lastUpdatedAt: Date,
   },
   borrowFee: {
-    current: number,
+    current: number,  // decimal percent
     target: number,
     delta: number,
     ratePerSecond: number,
