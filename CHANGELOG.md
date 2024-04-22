@@ -1,5 +1,11 @@
 # shadejs
 
+## 1.4.0
+
+### Minor Changes
+
+- a8b185f: lend vault queries
+
 ## 1.3.0
 
 ### Minor Changes
