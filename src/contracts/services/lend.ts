@@ -136,8 +136,8 @@ function parseLendVault(vault: VaultResponse, vaultVersion: VaultVersion) {
 /**
 * Parse lend vaults response
 */
-function parseLendVaults(vaults: VaultsResponse, vaultVersion: VaultVersion) {
-  return vaults.vaults.reduce((prev, vault) => {
+function parseLendVaults(vaults: VaultsResponse, vaultVersion: VaultVersion): Vaults {
+  return vaults.vaults.reduce((prev: Vaults, vault: VaultResponse) => {
     const {
       id: vaultId,
     } = vault.vault;
@@ -145,7 +145,7 @@ function parseLendVaults(vaults: VaultsResponse, vaultVersion: VaultVersion) {
       ...prev,
       [vaultId]: parseLendVault(vault, vaultVersion),
     };
-  }, {} as Vaults);
+  }, {});
 }
 
 /**
@@ -192,10 +192,10 @@ function parseLendVaultUserData(
 */
 function parseLendVaultsUserData(
   userPositions: PositionsResponse,
-) {
+): VaultsUserData | null {
   const { positions } = userPositions.positions;
   if (positions !== null) {
-    return positions.reduce((prev, curr) => {
+    return positions.reduce((prev: VaultsUserData, curr) => {
       const {
         collateral_amount: collateralAmount,
         debt_amount: debtAmount,
@@ -209,7 +209,7 @@ function parseLendVaultsUserData(
           debtAmount: convertCoinFromUDenom(debtAmount, 18).toString(),
         } as VaultUserData,
       };
-    }, {} as VaultsUserData);
+    }, {});
   }
   return null;
 }
