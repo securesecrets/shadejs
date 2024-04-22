@@ -1,6 +1,5 @@
 import {
   BatchQueryParams,
-  Contract,
   BatchQueryParsedResponse,
   MinBlockHeightValidationOptions,
 } from '~/types';
@@ -15,8 +14,6 @@ import {
   VaultResponse,
   VaultsResponse,
   NormalizationFactor,
-  PositionResponse,
-  PositionsResponse,
 } from '~/types/contracts/lend/response';
 import {
   convertCoinFromUDenom,
@@ -25,21 +22,14 @@ import {
 import {
   Vaults,
   Vault,
-  BatchVaults,
-  VaultUserData,
-  VaultsUserData,
-  BatchVaultsUserData,
-  VaultVersion,
+  BatchVaults, VaultVersion,
   LendVaultRegistryContract,
 } from '~/types/contracts/lend/model';
 import {
   msgGetVault,
   msgGetVaults,
-  msgGetVaultUserPosition,
-  msgGetVaultUserPositions,
 } from '~/contracts/definitions/lend';
 import { sendSecretClientContractQuery$ } from '~/client/services/clientServices';
-import { AccountPermit } from '~/types/permit';
 import BigNumber from 'bignumber.js';
 
 /**
@@ -158,71 +148,6 @@ const parseBatchQueryVaultsInfo = (
 ): BatchVaults => response.map((item, index) => ({
   vaultRegistryContractAddress: item.id as string,
   vaults: parseLendVaults(item.response, vaultVersions[index]),
-  blockHeight: item.blockHeight,
-}));
-
-/**
-* Parse lend single vault user data response
-*/
-function parseLendVaultUserData(
-  userPosition: PositionResponse,
-) {
-  const { position } = userPosition.position_info;
-  if (position !== null) {
-    const {
-      collateral_amount: collateralAmount,
-      debt_amount: debtAmount,
-      vault_id: vaultId,
-    } = position;
-
-    return {
-      vaultId,
-      collateralAmount: convertCoinFromUDenom(
-        collateralAmount,
-        NormalizationFactor.LEND,
-      ).toString(),
-      debtAmount: convertCoinFromUDenom(debtAmount, NormalizationFactor.LEND).toString(),
-    } as VaultUserData;
-  }
-  return null;
-}
-
-/**
-* Parse lend multiple vaults user data response
-*/
-function parseLendVaultsUserData(
-  userPositions: PositionsResponse,
-): VaultsUserData | null {
-  const { positions } = userPositions.positions;
-  if (positions !== null) {
-    return positions.reduce((prev: VaultsUserData, curr) => {
-      const {
-        collateral_amount: collateralAmount,
-        debt_amount: debtAmount,
-        vault_id: vaultId,
-      } = curr;
-      return {
-        ...prev,
-        [vaultId]: {
-          vaultId,
-          collateralAmount: convertCoinFromUDenom(collateralAmount, 18).toString(),
-          debtAmount: convertCoinFromUDenom(debtAmount, 18).toString(),
-        } as VaultUserData,
-      };
-    }, {});
-  }
-  return null;
-}
-
-/**
- * parses the vaults user data reponse from a batch query of
- * multiple vaults contracts
- */
-const parseBatchQueryVaultsUserData = (
-  response: BatchQueryParsedResponse,
-): BatchVaultsUserData => response.map((item) => ({
-  vaultRegistryContractAddress: item.id as string,
-  vaultsUserData: parseLendVaultsUserData(item.response),
   blockHeight: item.blockHeight,
 }));
 
@@ -352,151 +277,6 @@ async function queryVault({
   }));
 }
 
-/**
- * query the user data for multiple lend vault contracts
- *
- * EXPERIMENTAL QUERY. This has not yet been
- * validated/unit tested in shadeJS for production use
- */
-function batchQueryVaultsUserData$({
-  queryRouterContractAddress,
-  queryRouterCodeHash,
-  lcdEndpoint,
-  chainId,
-  vaultRegistryContracts,
-  permit,
-  vaultIds,
-  minBlockHeightValidationOptions,
-}:{
-  queryRouterContractAddress: string,
-  queryRouterCodeHash?: string,
-  lcdEndpoint?: string,
-  chainId?: string,
-  vaultRegistryContracts: Contract[],
-  permit: AccountPermit,
-  vaultIds: string[],
-  minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
-}) {
-  const queries:BatchQueryParams[] = vaultRegistryContracts.map((contract) => ({
-    id: contract.address,
-    contract: {
-      address: contract.address,
-      codeHash: contract.codeHash,
-    },
-    queryMsg: msgGetVaultUserPositions(permit, vaultIds),
-  }));
-  return batchQuery$({
-    contractAddress: queryRouterContractAddress,
-    codeHash: queryRouterCodeHash,
-    lcdEndpoint,
-    chainId,
-    queries,
-    minBlockHeightValidationOptions,
-  }).pipe(
-    map(parseBatchQueryVaultsUserData),
-    first(),
-  );
-}
-
-/**
- * query the info for multiple lend vault contracts
- *
- * EXPERIMENTAL QUERY. This has not yet been
- * validated/unit tested in shadeJS for production use
- */
-async function batchQueryVaultsUserData({
-  queryRouterContractAddress,
-  queryRouterCodeHash,
-  lcdEndpoint,
-  chainId,
-  vaultRegistryContracts,
-  permit,
-  vaultIds,
-  minBlockHeightValidationOptions,
-}:{
-  queryRouterContractAddress: string,
-  queryRouterCodeHash?: string,
-  lcdEndpoint?: string,
-  chainId?: string,
-  vaultRegistryContracts: Contract[],
-  permit: AccountPermit,
-  vaultIds: string[],
-  minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
-}) {
-  return lastValueFrom(batchQueryVaultsUserData$({
-    queryRouterContractAddress,
-    queryRouterCodeHash,
-    lcdEndpoint,
-    chainId,
-    vaultRegistryContracts,
-    permit,
-    vaultIds,
-    minBlockHeightValidationOptions,
-  }));
-}
-
-/**
- * Observable for querying a single vault user data
- *
- * EXPERIMENTAL QUERY. This has not yet been
- * validated/unit tested in shadeJS for production use
- */
-const queryVaultUserData$ = ({
-  vaultRegistryContractAddress,
-  vaultRegistryCodeHash,
-  vaultId,
-  lcdEndpoint,
-  chainId,
-  permit,
-}:{
-  vaultRegistryContractAddress: string,
-  vaultRegistryCodeHash?: string,
-  vaultId: string,
-  lcdEndpoint?: string,
-  chainId?: string,
-  permit: AccountPermit,
-}) => getActiveQueryClient$(lcdEndpoint, chainId).pipe(
-  switchMap(({ client }) => sendSecretClientContractQuery$({
-    queryMsg: msgGetVaultUserPosition(permit, vaultId),
-    client,
-    contractAddress: vaultRegistryContractAddress,
-    codeHash: vaultRegistryCodeHash,
-  })),
-  map((response) => parseLendVaultUserData(response as PositionResponse)),
-  first(),
-);
-
-/**
- * query the info for multiple lend vault contracts
- *
- * EXPERIMENTAL QUERY. This has not yet been
- * validated/unit tested in shadeJS for production use.
- */
-async function queryVaultUserData({
-  vaultRegistryContractAddress,
-  vaultRegistryCodeHash,
-  vaultId,
-  lcdEndpoint,
-  chainId,
-  permit,
-}:{
-  vaultRegistryContractAddress: string,
-  vaultRegistryCodeHash?: string,
-  vaultId: string,
-  lcdEndpoint?: string,
-  chainId?: string,
-  permit: AccountPermit,
-}) {
-  return lastValueFrom(queryVaultUserData$({
-    vaultRegistryContractAddress,
-    vaultRegistryCodeHash,
-    vaultId,
-    lcdEndpoint,
-    chainId,
-    permit,
-  }));
-}
-
 export {
   parseLendVault,
   parseLendVaults,
@@ -505,8 +285,4 @@ export {
   queryVaults,
   queryVault$,
   queryVault,
-  batchQueryVaultsUserData$,
-  batchQueryVaultsUserData,
-  queryVaultUserData,
-  queryVaultUserData$,
 };

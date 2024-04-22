@@ -66,24 +66,6 @@ type BatchVaultsItem = {
 
 type BatchVaults = BatchVaultsItem[]
 
-type VaultUserData = {
-  vaultId: string,
-  collateralAmount: string,
-  debtAmount: string,
-}
-
-type VaultsUserData = {
-  [vaultId: string]: VaultUserData,
-}
-
-type BatchVaultsUserDataItem = {
-  vaultRegistryContractAddress: string,
-  vaultsUserData: VaultsUserData | null,
-  blockHeight: number,
-}
-
-type BatchVaultsUserData = BatchVaultsUserDataItem[]
-
 type LendVaultRegistryContract = {
   address: string,
   codeHash: string,
@@ -94,9 +76,6 @@ export type {
   BatchVaults,
   Vault,
   Vaults,
-  VaultUserData,
-  VaultsUserData,
-  BatchVaultsUserData,
   LendVaultRegistryContract,
 };
 

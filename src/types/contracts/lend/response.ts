@@ -78,27 +78,9 @@ type VaultsResponse = {
   total_vaults: string,
 }
 
-type PositionInfo = {
-  vault_id: string,
-  debt_amount: string,
-  collateral_amount: string,
-}
-
-type PositionResponse = {
-  position_info: { position: PositionInfo | null },
-}
-
-type PositionsResponse = {
-  positions: {
-    positions: PositionInfo[] | null,
-  },
-}
-
 export type {
   VaultsResponse,
   VaultResponse,
-  PositionResponse,
-  PositionsResponse,
 };
 export {
   NormalizationFactor,
