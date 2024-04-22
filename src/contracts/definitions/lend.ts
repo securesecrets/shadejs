@@ -57,7 +57,7 @@ const msgBorrow = ({
   vaultId,
 }: {
   borrowAmount: string,
-  maxBorrowFee: string,
+  maxBorrowFee?: string,
   vaultId: string,
 }) => ({
   vault_action: {
