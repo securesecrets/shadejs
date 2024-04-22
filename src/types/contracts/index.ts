@@ -6,3 +6,4 @@ export * from './swap';
 export * from './derivativeScrt';
 export * from './derivativeShd';
 export * from './shadeStaking';
+export * from './lend';

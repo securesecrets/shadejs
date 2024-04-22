@@ -1,0 +1,60 @@
+{
+  "vault": {
+    "id": "1",
+    "epoch": "0",
+    "name": "WBTC Vault",
+    "collateral_addr": "secret1guyayjwg5f84daaxl7w84skd8naxvq8vz9upqx",
+    "safe_collateral": "3818529613891021645",
+    "collateral": {
+      "elastic": "2438346496108978355",
+      "base": "2438346496108978355",
+      "last_accrued": "1710183488",
+      "decimals": 8
+    },
+    "debt": {
+      "elastic": "143845576549000000000000",
+      "base": "143845576549000000000000",
+      "last_accrued": "1712343800",
+      "decimals": 6
+    },
+    "config": {
+      "max_ltv": "0.8",
+      "collateral_oracle_delay": "600",
+      "fees": {
+        "interest_rate": {
+          "last_changed": "1710183488",
+          "current": "0",
+          "target": "0",
+          "delta": "0.01",
+          "rate_per_second": "0"
+        },
+        "borrow_fee": {
+          "last_changed": "1710183488",
+          "current": "0",
+          "target": "0",
+          "delta": "0.01",
+          "rate_per_second": "0"
+        },
+        "liquidation_fee": {
+          "discount": "0.1",
+          "min_debt": "100000000000000000000",
+          "treasury_share": "0.2",
+          "caller_share": "0.1"
+        }
+      }
+    },
+    "allowance": {
+      "used": "143845576549000000000000",
+      "max": "300000000000000000000000"
+    },
+    "open_positions": {
+      "value": "20"
+    },
+    "is_protocol": false,
+    "position_id_counter": {
+      "value": "27"
+    }
+  },
+  "status": "normal",
+  "whitelist": []
+}

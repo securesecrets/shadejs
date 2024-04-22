@@ -1,0 +1,60 @@
+{
+  "vault": {
+    "id": "1",
+    "epoch": "0",
+    "name": "stkd-SCRT Vault",
+    "collateral_addr": "secret1k6u0cy4feepm6pehnz804zmwakuwdapm69tuc4",
+    "safe_collateral": "31325698319000000000000",
+    "collateral": {
+      "elastic": "3689766594510000000000000",
+      "base": "3689766594510000000000000",
+      "last_accrued": "1682191940",
+      "decimals": 6
+    },
+    "debt": {
+      "elastic": "696262021091000000000000",
+      "base": "696262021091000000000000",
+      "last_accrued": "1712343614",
+      "decimals": 6
+    },
+    "config": {
+      "max_ltv": "0.5",
+      "collateral_oracle_delay": "600",
+      "fees": {
+        "interest_rate": {
+          "last_changed": "1682191940",
+          "current": "0",
+          "target": "0",
+          "delta": "0.01",
+          "rate_per_second": "0"
+        },
+        "borrow_fee": {
+          "last_changed": "1682191940",
+          "current": "0",
+          "target": "0",
+          "delta": "0.01",
+          "rate_per_second": "0"
+        },
+        "liquidation_fee": {
+          "discount": "0.1",
+          "min_debt": "100000000000000000000",
+          "treasury_share": "0.2",
+          "caller_share": "0.1"
+        }
+      }
+    },
+    "allowance": {
+      "used": "696262021091000000000000",
+      "max": "850000000000000000000000"
+    },
+    "open_positions": {
+      "value": "183"
+    },
+    "is_protocol": false,
+    "position_id_counter": {
+      "value": "403"
+    }
+  },
+  "status": "normal",
+  "whitelist": []
+}
