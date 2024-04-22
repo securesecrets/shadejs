@@ -26,6 +26,7 @@ export default defineConfig({
         collapsed: false,
         items: [
           { text: 'Swap', link: '/queries/swap' },
+          { text: 'Lend', link: '/queries/lend' },
           { text: 'Oracle', link: '/queries/oracle' },
           { text: 'stkd-SCRT', link: '/queries/derivativeScrt' },
           { text: 'Shade Staking', link: '/queries/shadeStaking' },
