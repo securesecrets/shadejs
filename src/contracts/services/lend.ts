@@ -250,7 +250,7 @@ function queryVaults$({
       address: contract.address,
       codeHash: contract.codeHash,
     },
-    queryMsg: msgGetVaults(1), // starting page of 1, meaning that we will query all vaults
+    queryMsg: msgGetVaults('1'), // starting page of 1, meaning that we will query all vaults
   }));
 
   const vaultVersions = vaultRegistryContracts.map((contract) => contract.vaultVersion);

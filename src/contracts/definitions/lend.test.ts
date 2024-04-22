@@ -23,11 +23,11 @@ test('it tests the form of the vault info message', () => {
 });
 
 test('it tests the form of the multiple vaults info message', () => {
-  const inputStartingPageNumber = 1;
+  const inputStartingPageNumber = '1';
 
   const output = {
     vaults: {
-      starting_page: '1',
+      starting_page: inputStartingPageNumber,
     },
   };
   expect(msgGetVaults(inputStartingPageNumber)).toStrictEqual(output);

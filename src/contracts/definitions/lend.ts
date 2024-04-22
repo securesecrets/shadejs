@@ -12,11 +12,11 @@ const msgGetVault = (vaultId: string) => ({
 /**
  * message for the getting multiple vaults info.
  * @param startingPage The data is paginated and returned
- * for the starting page and all pages after. Use 1 to query all vaults.
+ * for the starting page and all pages after. Use "1" to query all vaults.
  */
-const msgGetVaults = (startingPage: number) => ({
+const msgGetVaults = (startingPage: string) => ({
   vaults: {
-    starting_page: startingPage.toString(),
+    starting_page: startingPage,
   },
 });
 
