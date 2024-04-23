@@ -14,7 +14,7 @@ import {
   VaultResponse,
   VaultsResponse,
   NormalizationFactor,
-} from '~/types/contracts/lend/response';
+} from '~/types/contracts/lend/vaultRegistry/response';
 import {
   convertCoinFromUDenom,
   getActiveQueryClient$,
@@ -22,15 +22,16 @@ import {
 import {
   Vaults,
   Vault,
-  BatchVaults, VaultVersion,
+  BatchVaults,
+  VaultVersion,
   LendVaultRegistryContract,
-} from '~/types/contracts/lend/model';
+} from '~/types/contracts/lend/vaultRegistry/model';
+import { sendSecretClientContractQuery$ } from '~/client/services/clientServices';
+import BigNumber from 'bignumber.js';
 import {
   msgGetVault,
   msgGetVaults,
-} from '~/contracts/definitions/lend';
-import { sendSecretClientContractQuery$ } from '~/client/services/clientServices';
-import BigNumber from 'bignumber.js';
+} from '~/contracts/definitions/lend/vaultRegistry';
 
 /**
 * Parse lend vault response

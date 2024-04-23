@@ -9,7 +9,7 @@ import {
   msgGetVaultUserPositions,
   msgBorrow,
   msgWithdraw,
-} from './lend';
+} from './vaultRegistry';
 
 test('it tests the form of the vault info message', () => {
   const inputVaultId = '1';

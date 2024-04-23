@@ -11,8 +11,8 @@ import vaultV2Response from '~/test/mocks/lend/vaultV2Response.json';
 import vaultsV2Response from '~/test/mocks/lend/vaultsV2Response.json';
 import vaultV3Response from '~/test/mocks/lend/vaultV3Response.json';
 import vaultsV3Response from '~/test/mocks/lend/vaultsV3Response.json';
-import { VaultVersion } from '~/types/contracts/lend/model';
-import { VaultResponse, VaultsResponse } from '~/types/contracts/lend/response';
+import { VaultVersion } from '~/types/contracts/lend/vaultRegistry/model';
+import { VaultResponse, VaultsResponse } from '~/types/contracts/lend/vaultRegistry/response';
 import {
   vaultV1Parsed,
   vaultsV1Parsed,
@@ -36,13 +36,13 @@ import {
   queryVaults,
   queryVault$,
   queryVault,
-} from './lend';
+} from './vaultRegistry';
 
 const sendSecretClientContractQuery$ = vi.hoisted(() => vi.fn());
 const batchQuery$ = vi.hoisted(() => vi.fn());
 
 beforeAll(() => {
-  vi.mock('~/contracts/definitions/lend', () => ({
+  vi.mock('~/contracts/definitions/lend/vaultRegistry', () => ({
     msgGetVaults: vi.fn(() => 'GET_VAULTS_MSG'),
     msgGetVault: vi.fn(() => 'GET_VAULT_MSG'),
   }));
