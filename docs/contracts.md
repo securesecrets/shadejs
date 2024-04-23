@@ -11,6 +11,10 @@ This page contains a list of deployed contracts.
 | Oracle             	| secret10n2xl5jmez6r9umtdrth78k0vwmce0l5m9f5dm 	| 32c4710842b97a526c243a68511b15f58d6e72a388af38a7221ff3244c754e91 	|
 | stkd-scrt          	| secret1k6u0cy4feepm6pehnz804zmwakuwdapm69tuc4 	| f6be719b3c6feb498d3554ca0398eb6b7e7db262acb33f84a8f12106da6bbb09 	|
 | Shade Staking      	| secret1y6px5x7jzrk8hyvy67f06ytn8v0jwculypwxws 	| 2a1ae7fd2be82931cb11d0ce82b2e243507f2006074e2f316da661beb1abe3c3 	|
+| Lend Vault Registry (V1)    	| secret18y86hldtdp9ndj0jekcch49kwr0gwy7upe3ffw 	| 148a525ec7bffedfc41cbc5339bf22d9e310d49b65831a269c86774fb732948c 	|
+| Lend Vault Registry (V2)    	| secret1qxk2scacpgj2mmm0af60674afl9e6qneg7yuny 	| ac5d501827d9a337a618ca493fcbf1323b20771378774a6bf466cb66361bf021 	|
+| Lend Vault Registry (V3)    	| secret1wj2czeeknya2n6jag7kpfxlm28dw7q96dgqmfs 	| d837f716de3732a4118fbcb6d4cd0ef1d84ee83fef924f27b7c2a821f8528b39 	|
+| Lend Stability Pool    	| secret1wdxqz26acf2e6rsac8007pd53ak7n8tgeqr46w 	| 4dcdce6a2f88ef2912b9988119b345b096909aa4ba3881eff19358d983c40210 	|
 
 ::: tip
 The ShadeSwap pairs contracts are accessible via the factory registered pairs query.
