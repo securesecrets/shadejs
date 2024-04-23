@@ -1,5 +1,12 @@
 # shadejs
 
+## 1.4.1
+
+### Patch Changes
+
+- b41191a: lend stability pool query
+- 2136ce7: lend contracts in docs
+
 ## 1.4.0
 
 ### Minor Changes
