@@ -2,8 +2,8 @@ import {
   Vault,
   VaultVersion,
   Vaults,
-} from '~/types/contracts/lend/model';
-import { LendContractStatus } from '~/types/contracts/lend/response';
+} from '~/types/contracts/lend/vaultRegistry/model';
+import { LendContractStatus } from '~/types/contracts/lend/vaultRegistry/response';
 
 const vaultV1Parsed: Vault = {
   id: '1',
