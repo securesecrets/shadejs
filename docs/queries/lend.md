@@ -130,3 +130,38 @@ async function queryVault({
 **output**
 
 See "Vault" type in the all vaults output.
+
+
+## Stability Pool
+Query info for the stability pool data
+
+**input**
+```ts
+function queryStabilityPoolInfo({
+  queryRouterContractAddress,
+  queryRouterCodeHash,
+  lcdEndpoint,
+  chainId,
+  stabilityPoolContractAddress,
+  stabilityPoolCodeHash,
+  minBlockHeightValidationOptions,
+}:{
+  queryRouterContractAddress: string,
+  queryRouterCodeHash?: string,
+  lcdEndpoint?: string,
+  chainId?: string,
+  stabilityPoolContractAddress: string,
+  stabilityPoolCodeHash: string,
+  minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
+}): Promise<StabilityPoolInfo>
+```
+
+**output**
+```ts
+type StabilityPoolInfo = {
+  silkDeposited: string,
+  bondAmount: string, // this is value used for calculation
+  // purposes. It does not represent a token amount.
+  blockHeight: number,
+}
+```
