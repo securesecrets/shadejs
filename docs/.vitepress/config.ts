@@ -31,6 +31,7 @@ export default defineConfig({
           { text: 'stkd-SCRT', link: '/queries/derivativeScrt' },
           { text: 'Shade Staking', link: '/queries/shadeStaking' },
           { text: 'Batch Query', link: '/queries/batch-query' },
+          { text: 'Silk', link: '/queries/silk' },
           { text: 'Snip20', link: '/queries/snip20' },
         ]
       },

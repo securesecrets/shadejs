@@ -15,6 +15,7 @@ This page contains a list of deployed contracts.
 | Lend Vault Registry (V2)    	| secret1qxk2scacpgj2mmm0af60674afl9e6qneg7yuny 	| ac5d501827d9a337a618ca493fcbf1323b20771378774a6bf466cb66361bf021 	|
 | Lend Vault Registry (V3)    	| secret1wj2czeeknya2n6jag7kpfxlm28dw7q96dgqmfs 	| d837f716de3732a4118fbcb6d4cd0ef1d84ee83fef924f27b7c2a821f8528b39 	|
 | Lend Stability Pool    	| secret1wdxqz26acf2e6rsac8007pd53ak7n8tgeqr46w 	| 4dcdce6a2f88ef2912b9988119b345b096909aa4ba3881eff19358d983c40210 	|
+| Index Oracle (SILK)  	| secret1552yh3rplmyrjwhcxrq0egg35uy6zwjtszecf0 	| 8d2b439383091ecb7806757a2b202e0056e542ade67951a0d5c352e74ce416cc 	|
 
 ::: tip
 The ShadeSwap pairs contracts are accessible via the factory registered pairs query.

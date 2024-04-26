@@ -24,7 +24,10 @@ import { batchQuery$ } from './batchQuery';
 const ORACLE_NORMALIZATION_FACTOR = 18;
 
 /**
- * parses the direct contract query into the data model
+ * parses the silk basket individual contract responses from the queries
+ * into the shared data model.
+ * This includes adding a parsing status to the output type for use in downstream
+ * error/retry handling
  */
 const parseSilkBasketAndPricesResponse = ({
   silkBasketResponse,
@@ -33,13 +36,12 @@ const parseSilkBasketAndPricesResponse = ({
   basketPricesResponseBlockHeight,
 }:{
   silkBasketResponse: SilkBasketResponse,
-  // return the prices batch data here for error handling purposes
+  // return the prices batch data here instead of raw response
+  // for error handling purposes
   batchBasketPricesResponse: BatchQueryParsedResponseItem,
   silkBasketResponseBlockHeight: number,
   basketPricesResponseBlockHeight: number,
 }): SilkBasket & { status: SilkBasketParsingStatus } => {
-  // error checking
-
   // block height validation
   // data should be returned in a single batch with a single block height and
   // never cause this error, but in case for any reason it does not, we will validate that here
@@ -168,8 +170,8 @@ function parseSilkBasketAndPricesResponseFromQueryRouter(
     throw new Error('prices response not found in query router response');
   }
 
-  // for price error state we will not throw an error here as there is still useful
-  // data to get out of the peg info that we would like to parse.
+  // for price error state we will not throw an error like we did with the basket
+  // data as there is still useful data to get out of the peg info that we would like to parse.
   // Instead, we will pass the full batch data into the parser (which includes the
   // error status) and handle the error downstream.
 
@@ -191,7 +193,7 @@ function querySilkBasket$({
   chainId,
   oracleContractAddress,
   oracleCodeHash,
-  silkBasketExpectedOracleKeys, // if keys are known in advance it will
+  silkBasketExpectedOracleKeys = [], // if keys are known in advance it will
   // increase the efficiency of the response, but even if keys are unknown or
   // incorrectly passed in compared to the state of the basket,
   // this service will self-correct using a retry on the actual keys found.
@@ -225,9 +227,7 @@ function querySilkBasket$({
       address: oracleContractAddress,
       codeHash: oracleCodeHash,
     },
-    queryMsg: silkBasketExpectedOracleKeys
-      ? msgQueryOraclePrices(silkBasketExpectedOracleKeys)
-      : msgQueryOraclePrices([]),
+    queryMsg: msgQueryOraclePrices(silkBasketExpectedOracleKeys),
   };
 
   return batchQuery$({
@@ -278,7 +278,7 @@ function querySilkBasket$({
 }
 
 /**
- * query the stability pool info
+ * query the silk basket data
  */
 function querySilkBasket({
   queryRouterContractAddress,
@@ -301,7 +301,7 @@ function querySilkBasket({
   chainId?: string,
   oracleContractAddress: string,
   oracleCodeHash: string,
-  silkBasketExpectedOracleKeys: string[]
+  silkBasketExpectedOracleKeys?: string[]
   silkIndexOracleContractAddress: string,
   silkIndexOracleCodeHash: string,
   minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
