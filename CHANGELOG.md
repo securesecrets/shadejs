@@ -1,5 +1,11 @@
 # shadejs
 
+## 1.5.0
+
+### Minor Changes
+
+- c49dea7: silk basket query
+
 ## 1.4.1
 
 ### Patch Changes
