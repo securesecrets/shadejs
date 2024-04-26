@@ -1,5 +1,11 @@
 # shadejs
 
+## 1.5.1
+
+### Patch Changes
+
+- ac69a0f: add missing exports for silk basket query
+
 ## 1.5.0
 
 ### Minor Changes
