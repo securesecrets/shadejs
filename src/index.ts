@@ -11,3 +11,4 @@ export {
 export * from './types';
 export * from '~/lib/apy/derivativeShd';
 export * from '~/lib/apy/derivativeScrt';
+export { calculateRewardPoolAPY } from '~/lib/apy/utils';
