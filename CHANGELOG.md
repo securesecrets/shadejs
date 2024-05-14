@@ -1,5 +1,11 @@
 # shadejs
 
+## 1.5.2
+
+### Patch Changes
+
+- 873366b: patching a missing export
+
 ## 1.5.1
 
 ### Patch Changes
