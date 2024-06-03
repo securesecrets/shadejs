@@ -1,5 +1,11 @@
 # shadejs
 
+## 1.5.3
+
+### Patch Changes
+
+- 9cacf49: remove available shd from dshd query
+
 ## 1.5.2
 
 ### Patch Changes
