@@ -27,7 +27,6 @@ const parseDerivativeShdStakingInfo = (
 ): ParsedStakingInfoResponse => ({
   unbondingTime: response.staking_info.unbonding_time,
   bondedShd: response.staking_info.bonded_shd,
-  availableShd: response.staking_info.available_shd,
   rewards: response.staking_info.rewards,
   totalDerivativeTokenSupply: response.staking_info.total_derivative_token_supply,
   price: convertCoinFromUDenom(

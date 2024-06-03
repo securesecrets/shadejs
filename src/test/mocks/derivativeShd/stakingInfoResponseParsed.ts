@@ -1,7 +1,6 @@
 export const stakingInfoResponseParsed = {
   unbondingTime: '60',
   bondedShd: '0',
-  availableShd: '0',
   rewards: '0',
   totalDerivativeTokenSupply: '0',
   price: 1,
