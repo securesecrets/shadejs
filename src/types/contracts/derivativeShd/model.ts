@@ -9,7 +9,6 @@ type ParsedFeeResponse = {
 type ParsedStakingInfoResponse = {
   unbondingTime: string,
   bondedShd: string,
-  availableShd: string,
   rewards: string,
   totalDerivativeTokenSupply: string,
   price: number,
