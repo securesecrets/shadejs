@@ -28,8 +28,6 @@ type StakingInfoResponse = {
     unbonding_time: string,
     // amount of bonded SHD
     bonded_shd: string,
-    // amount of available SHD not reserved for mature unbondings
-    available_shd: string,
     // unclaimed staking rewards
     rewards: string,
     // total supply of derivative token
