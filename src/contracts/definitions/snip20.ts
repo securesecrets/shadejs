@@ -30,7 +30,7 @@ const snip20 = {
       shouldFilterDecoys: boolean,
     }) {
       return {
-        transfer_history: {
+        transaction_history: {
           address: ownerAddress,
           page_size: pageSize,
           page,

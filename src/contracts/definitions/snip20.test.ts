@@ -28,7 +28,7 @@ test('it checks the shape of the snip20 transaction history query', () => {
     shouldFilterDecoys: true,
   };
   const output = {
-    transfer_history: {
+    transaction_history: {
       address: input.ownerAddress,
       page_size: input.pageSize,
       page: input.page,
