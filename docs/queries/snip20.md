@@ -178,8 +178,6 @@ console.log(output)
 
 ```
 
-```
-
 ## Get Transaction History
 
 **input**
