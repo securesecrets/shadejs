@@ -20,6 +20,7 @@ import {
   TransactionHistory,
   Snip20TransactionHistoryResponse,
   Snip20Tx,
+  Snip20TransferHistoryResponse,
 } from '~/types';
 import { batchQuery$ } from './batchQuery';
 
@@ -350,6 +351,143 @@ async function querySnip20TransactionHistory({
   }));
 }
 
+/**
+ * parses the snip20 transaction history response
+ */
+const parseSnip20TransferHistoryResponse = (
+  response: BatchQueryParsedResponse,
+): TransactionHistory => {
+  // validate that a single response is available, should only be true if parser is used incorrectly
+  if (response.length !== 1) {
+    throw new Error('Only one response is expected for the snip20 transaction history query');
+  }
+  const transactionHistoryResponse = response[0].response as Snip20TransferHistoryResponse;
+
+  if ('viewing_key_error' in transactionHistoryResponse) {
+    throw new Error(transactionHistoryResponse.viewing_key_error.msg);
+  }
+
+  const parsedTxs: Snip20Tx[] = transactionHistoryResponse.transfer_history.txs.map((tx) => ({
+    id: tx.id,
+    action: {
+      transfer: {
+        from: tx.from,
+        sender: tx.sender,
+        recipient: tx.receiver,
+      },
+    },
+    denom: tx.coins.denom,
+    amount: tx.coins.amount,
+    memo: tx.memo,
+    blockTime: tx.block_time,
+    blockHeight: tx.block_height,
+  }));
+
+  return {
+    txs: parsedTxs,
+    totalTransactions: undefined,
+    blockHeight: response[0].blockHeight,
+  };
+};
+
+/**
+ * query the snip20 transfer history
+ */
+function querySnip20TransferHistory$({
+  queryRouterContractAddress,
+  queryRouterCodeHash,
+  lcdEndpoint,
+  chainId,
+  snip20ContractAddress,
+  snip20CodeHash,
+  ownerAddress,
+  viewingKey,
+  page,
+  pageSize,
+  minBlockHeightValidationOptions,
+}:{
+  queryRouterContractAddress: string,
+  queryRouterCodeHash?: string,
+  lcdEndpoint?: string,
+  chainId?: string,
+  snip20ContractAddress: string,
+  snip20CodeHash: string,
+  ownerAddress: string,
+  viewingKey: string,
+  page: number,
+  pageSize: number,
+  minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
+}) {
+  const query:BatchQueryParams = {
+    id: snip20ContractAddress,
+    contract: {
+      address: snip20ContractAddress,
+      codeHash: snip20CodeHash,
+    },
+    queryMsg: snip20.queries.getTransferHistory({
+      ownerAddress,
+      viewingKey,
+      page,
+      pageSize,
+    }),
+  };
+
+  return batchQuery$({
+    contractAddress: queryRouterContractAddress,
+    codeHash: queryRouterCodeHash,
+    lcdEndpoint,
+    chainId,
+    queries: [query],
+    minBlockHeightValidationOptions,
+  }).pipe(
+    map(parseSnip20TransferHistoryResponse),
+    first(),
+  );
+}
+
+/**
+ * query the snip20 transfer history
+ */
+async function querySnip20TransferHistory({
+  queryRouterContractAddress,
+  queryRouterCodeHash,
+  lcdEndpoint,
+  chainId,
+  snip20ContractAddress,
+  snip20CodeHash,
+  ownerAddress,
+  viewingKey,
+  page,
+  pageSize,
+  minBlockHeightValidationOptions,
+}:{
+  queryRouterContractAddress: string,
+  queryRouterCodeHash?: string,
+  lcdEndpoint?: string,
+  chainId?: string,
+  snip20ContractAddress: string,
+  snip20CodeHash: string,
+  ownerAddress: string,
+  viewingKey: string,
+  page: number,
+  pageSize: number,
+  minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
+}) {
+  return lastValueFrom(querySnip20TransferHistory$({
+    queryRouterContractAddress,
+    queryRouterCodeHash,
+    lcdEndpoint,
+    chainId,
+    snip20ContractAddress,
+    snip20CodeHash,
+    ownerAddress,
+    viewingKey,
+    page,
+    pageSize,
+    minBlockHeightValidationOptions,
+  }));
+}
+
 export {
   querySnip20TokenInfo$,
   parseTokenInfo,
@@ -363,4 +501,7 @@ export {
   querySnip20TransactionHistory$,
   querySnip20TransactionHistory,
   parseSnip20TransactionHistoryResponse,
+  querySnip20TransferHistory$,
+  querySnip20TransferHistory,
+  parseSnip20TransferHistoryResponse,
 };
