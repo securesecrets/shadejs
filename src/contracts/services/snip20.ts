@@ -217,7 +217,6 @@ async function querySnip20Balance({
  * parses the snip20 transaction history response
  */
 const parseSnip20TransactionHistoryResponse = (
-  snip20TokenAddress: string,
   response: BatchQueryParsedResponse,
 ): TransactionHistory => {
   // validate that a single response is available, should only be true if parser is used incorrectly
@@ -242,7 +241,6 @@ const parseSnip20TransactionHistoryResponse = (
 
   return {
     txs: parsedTxs,
-    tokenAddress: snip20TokenAddress,
     totalTransactions: transactionHistoryResponse.transaction_history.total,
     blockHeight: response[0].blockHeight,
   };
@@ -301,7 +299,7 @@ function querySnip20TransactionHistory$({
     queries: [query],
     minBlockHeightValidationOptions,
   }).pipe(
-    map((response) => parseSnip20TransactionHistoryResponse(snip20ContractAddress, response)),
+    map(parseSnip20TransactionHistoryResponse),
     first(),
   );
 }

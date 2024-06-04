@@ -30,7 +30,6 @@ const transactionHistoryParsed: TransactionHistory = {
     blockTime: 1717689401,
     blockHeight: 14537363,
   }],
-  tokenAddress: 'MOCK_ADDRESS',
   totalTransactions: 99,
   blockHeight: 3,
 };

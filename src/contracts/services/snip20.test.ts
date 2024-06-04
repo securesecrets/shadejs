@@ -75,7 +75,6 @@ test('it can parse the batch snip20 token info query', () => {
 
 test('it can parse the batch snip20 token info query', () => {
   expect(parseSnip20TransactionHistoryResponse(
-    'MOCK_ADDRESS',
     batchSnip20TransactionHistoryUnparsed,
   )).toStrictEqual(transactionHistoryParsed);
 });

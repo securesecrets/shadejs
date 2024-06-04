@@ -12,7 +12,6 @@ type Snip20Tx = {
 
 type TransactionHistory = {
   txs: Snip20Tx[],
-  tokenAddress: string,
   totalTransactions?: number,
   blockHeight: number,
 }
