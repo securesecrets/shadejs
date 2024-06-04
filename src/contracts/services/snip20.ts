@@ -17,6 +17,9 @@ import {
   BatchQueryParams,
   BatchQueryParsedResponse,
   MinBlockHeightValidationOptions,
+  TransactionHistory,
+  Snip20TransactionHistoryResponse,
+  Snip20Tx,
 } from '~/types';
 import { batchQuery$ } from './batchQuery';
 
@@ -210,6 +213,143 @@ async function querySnip20Balance({
   }));
 }
 
+/**
+ * parses the snip20 transaction history response
+ */
+const parseSnip20TransactionHistoryResponse = (
+  response: BatchQueryParsedResponse,
+): TransactionHistory => {
+  // validate that a single response is available, should only be true if parser is used incorrectly
+  if (response.length !== 1) {
+    throw new Error('Only one response is expected for the snip20 transaction history query');
+  }
+  const transactionHistoryResponse = response[0].response as Snip20TransactionHistoryResponse;
+
+  if ('viewing_key_error' in transactionHistoryResponse) {
+    throw new Error(transactionHistoryResponse.viewing_key_error.msg);
+  }
+
+  const parsedTxs: Snip20Tx[] = transactionHistoryResponse.transaction_history.txs.map((tx) => ({
+    id: tx.id,
+    action: tx.action,
+    denom: tx.coins.denom,
+    amount: tx.coins.amount,
+    memo: tx.memo,
+    blockTime: tx.block_time,
+    blockHeight: tx.block_height,
+  }));
+
+  return {
+    txs: parsedTxs,
+    totalTransactions: transactionHistoryResponse.transaction_history.total,
+    blockHeight: response[0].blockHeight,
+  };
+};
+
+/**
+ * query the snip20 transaction history
+ */
+function querySnip20TransactionHistory$({
+  queryRouterContractAddress,
+  queryRouterCodeHash,
+  lcdEndpoint,
+  chainId,
+  snip20ContractAddress,
+  snip20CodeHash,
+  ownerAddress,
+  viewingKey,
+  page,
+  pageSize,
+  shouldFilterDecoys = true,
+  minBlockHeightValidationOptions,
+}:{
+  queryRouterContractAddress: string,
+  queryRouterCodeHash?: string,
+  lcdEndpoint?: string,
+  chainId?: string,
+  snip20ContractAddress: string,
+  snip20CodeHash: string,
+  ownerAddress: string,
+  viewingKey: string,
+  page: number,
+  pageSize: number,
+  shouldFilterDecoys?: boolean,
+  minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
+}) {
+  const query:BatchQueryParams = {
+    id: snip20ContractAddress,
+    contract: {
+      address: snip20ContractAddress,
+      codeHash: snip20CodeHash,
+    },
+    queryMsg: snip20.queries.getTransactionHistory({
+      ownerAddress,
+      viewingKey,
+      page,
+      pageSize,
+      shouldFilterDecoys,
+    }),
+  };
+
+  return batchQuery$({
+    contractAddress: queryRouterContractAddress,
+    codeHash: queryRouterCodeHash,
+    lcdEndpoint,
+    chainId,
+    queries: [query],
+    minBlockHeightValidationOptions,
+  }).pipe(
+    map(parseSnip20TransactionHistoryResponse),
+    first(),
+  );
+}
+
+/**
+ * query the snip20 transaction history
+ */
+async function querySnip20TransactionHistory({
+  queryRouterContractAddress,
+  queryRouterCodeHash,
+  lcdEndpoint,
+  chainId,
+  snip20ContractAddress,
+  snip20CodeHash,
+  ownerAddress,
+  viewingKey,
+  page,
+  pageSize,
+  shouldFilterDecoys,
+  minBlockHeightValidationOptions,
+}:{
+  queryRouterContractAddress: string,
+  queryRouterCodeHash?: string,
+  lcdEndpoint?: string,
+  chainId?: string,
+  snip20ContractAddress: string,
+  snip20CodeHash: string,
+  ownerAddress: string,
+  viewingKey: string,
+  page: number,
+  pageSize: number,
+  shouldFilterDecoys?: boolean,
+  minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
+}) {
+  return lastValueFrom(querySnip20TransactionHistory$({
+    queryRouterContractAddress,
+    queryRouterCodeHash,
+    lcdEndpoint,
+    chainId,
+    snip20ContractAddress,
+    snip20CodeHash,
+    ownerAddress,
+    viewingKey,
+    page,
+    pageSize,
+    shouldFilterDecoys,
+    minBlockHeightValidationOptions,
+  }));
+}
+
 export {
   querySnip20TokenInfo$,
   parseTokenInfo,
@@ -220,4 +360,7 @@ export {
   parseBatchQueryTokensInfo,
   batchQuerySnip20TokensInfo$,
   batchQuerySnip20TokensInfo,
+  querySnip20TransactionHistory$,
+  querySnip20TransactionHistory,
+  parseSnip20TransactionHistoryResponse,
 };
