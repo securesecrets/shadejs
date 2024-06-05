@@ -1,5 +1,12 @@
 # shadejs
 
+## 1.5.4
+
+### Patch Changes
+
+- ed5f747: snip20 transaction history using a batch query
+- 1cc4633: snip20 transfer history query
+
 ## 1.5.3
 
 ### Patch Changes
