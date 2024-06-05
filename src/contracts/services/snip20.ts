@@ -361,7 +361,7 @@ async function querySnip20TransactionHistory({
 }
 
 /**
- * parses the snip20 transaction history response
+ * parses the snip20 transfer history response
  */
 const parseSnip20TransferHistoryResponse = (
   response: BatchQueryParsedResponse,
