@@ -2,7 +2,7 @@
   "transfer_history": {
     "txs": [
       {
-        "id": 2209590,
+        "id": 1234567,
         "from": "FROM_ADDRESS",
         "sender": "SENDER_ADDRESS",
         "receiver": "RECEIVER_ADDRESS",
@@ -12,7 +12,7 @@
         }
       },
       {
-        "id": 2200693,
+        "id": 21345678,
         "from": "FROM_ADDRESS",
         "sender": "SENDER_ADDRESS",
         "receiver": "RECEIVER_ADDRESS",
