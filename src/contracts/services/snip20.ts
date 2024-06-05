@@ -24,6 +24,7 @@ import {
   Snip20TransactionHistoryResponse,
   Snip20Tx,
   Snip20TransferHistoryResponse,
+  BatchItemResponseStatus,
 } from '~/types';
 import { batchQuery$ } from './batchQuery';
 
@@ -235,6 +236,18 @@ const parseSnip20TransactionHistoryResponse = (
   }
   const transactionHistoryResponse = response[0].response as Snip20TransactionHistoryResponse;
 
+  // batch query error state can be converted into a thrown error here since we only are using
+  // the batch query router for a single query and don't need to pass any other data through
+  if (response[0].status === BatchItemResponseStatus.ERROR) {
+    throw new Error(JSON.stringify(transactionHistoryResponse));
+  }
+
+  // check for an object as the response
+  if (typeof transactionHistoryResponse !== 'object') {
+    throw new Error(`Unexpected Response: ${JSON.stringify(transactionHistoryResponse)}`);
+  }
+
+  // check for viewing key error
   if ('viewing_key_error' in transactionHistoryResponse) {
     throw new Error(transactionHistoryResponse.viewing_key_error.msg);
   }
@@ -372,6 +385,18 @@ const parseSnip20TransferHistoryResponse = (
   }
   const transactionHistoryResponse = response[0].response as Snip20TransferHistoryResponse;
 
+  // batch query error state can be converted into a thrown error here since we only are using
+  // the batch query router for a single query and don't need to pass any other data through
+  if (response[0].status === BatchItemResponseStatus.ERROR) {
+    throw new Error(JSON.stringify(transactionHistoryResponse));
+  }
+
+  // check for an object as the response
+  if (typeof transactionHistoryResponse !== 'object') {
+    throw new Error(`Unexpected Response: ${JSON.stringify(transactionHistoryResponse)}`);
+  }
+
+  // check for viewing key error
   if ('viewing_key_error' in transactionHistoryResponse) {
     throw new Error(transactionHistoryResponse.viewing_key_error.msg);
   }
