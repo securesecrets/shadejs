@@ -1,6 +1,63 @@
 import { test, expect } from 'vitest';
 import { snip20 } from '~/contracts/definitions/snip20';
 
+// QUERIES
+test('it checks the shape of the snip20 balance query', () => {
+  const output = {
+    balance: {
+      address: 'MOCK_ADDRESS',
+      key: 'MOCK_KEY',
+    },
+  };
+  expect(snip20.queries.getBalance('MOCK_ADDRESS', 'MOCK_KEY')).toStrictEqual(output);
+});
+
+test('it checks the shape of the snip20 token info query', () => {
+  const output = {
+    token_info: {},
+  };
+  expect(snip20.queries.tokenInfo()).toStrictEqual(output);
+});
+
+test('it checks the shape of the snip20 transaction history query', () => {
+  const input = {
+    ownerAddress: 'MOCK_OWNER_ADDRESS',
+    viewingKey: 'MOCK_VIEWING_KEY',
+    page: 1,
+    pageSize: 2,
+    shouldFilterDecoys: true,
+  };
+  const output = {
+    transaction_history: {
+      address: input.ownerAddress,
+      page_size: input.pageSize,
+      page: input.page,
+      key: input.viewingKey,
+      should_filter_decoys: input.shouldFilterDecoys,
+    },
+  };
+  expect(snip20.queries.getTransactionHistory(input)).toStrictEqual(output);
+});
+
+test('it checks the shape of the snip20 transfer history query', () => {
+  const input = {
+    ownerAddress: 'MOCK_OWNER_ADDRESS',
+    viewingKey: 'MOCK_VIEWING_KEY',
+    page: 1,
+    pageSize: 2,
+  };
+  const output = {
+    transfer_history: {
+      address: input.ownerAddress,
+      page_size: input.pageSize,
+      page: input.page,
+      key: input.viewingKey,
+    },
+  };
+  expect(snip20.queries.getTransferHistory(input)).toStrictEqual(output);
+});
+
+// EXECUTIONS
 test('it checks the shape of the snip20 send', () => {
   const params = {
     recipient: 'MOCK_RECIPIENT',
@@ -101,13 +158,6 @@ test('it checks the shape of the snip20 redeem', () => {
     denom: inputDenom,
     padding: mockPadding,
   })).toStrictEqual(output);
-});
-
-test('it checks the shape of the snip20 token info query', () => {
-  const output = {
-    token_info: {},
-  };
-  expect(snip20.queries.tokenInfo()).toStrictEqual(output);
 });
 
 test('it checks the shape of the snip20 increase allowance', () => {

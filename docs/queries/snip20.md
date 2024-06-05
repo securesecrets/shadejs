@@ -177,3 +177,97 @@ console.log(output)
 '123'
 
 ```
+
+## Get Transaction History
+
+**input**
+
+```ts
+async function querySnip20TransactionHistory({
+  queryRouterContractAddress,
+  queryRouterCodeHash,
+  lcdEndpoint,
+  chainId,
+  snip20ContractAddress,
+  snip20CodeHash,
+  ownerAddress,
+  viewingKey,
+  page,
+  pageSize,
+  shouldFilterDecoys,
+  minBlockHeightValidationOptions,
+}:{
+  queryRouterContractAddress: string,
+  queryRouterCodeHash?: string,
+  lcdEndpoint?: string,
+  chainId?: string,
+  snip20ContractAddress: string,
+  snip20CodeHash: string,
+  ownerAddress: string,
+  viewingKey: string,
+  page: number,
+  pageSize: number,
+  shouldFilterDecoys?: boolean,
+  minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
+}): Promise<TransactionHistory>
+```
+
+**output**
+
+```ts
+type Snip20Tx = {
+  id: number;
+  action: TxAction; // see secretJS types
+  denom: string,
+  amount: string,
+  memo?: string;
+  blockTime?: number;
+  blockHeight?: number;
+}
+
+type TransactionHistory = {
+  txs: Snip20Tx[],
+  tokenAddress: string,
+  totalTransactions?: number,
+  blockHeight: number,
+}
+```
+
+## Get Transfer History
+This query is used for legacy snip20s that do not support the newer transaction history query.
+
+**input**
+
+```ts
+async function querySnip20TransferHistory({
+  queryRouterContractAddress,
+  queryRouterCodeHash,
+  lcdEndpoint,
+  chainId,
+  snip20ContractAddress,
+  snip20CodeHash,
+  ownerAddress,
+  viewingKey,
+  page,
+  pageSize,
+  minBlockHeightValidationOptions,
+}:{
+  queryRouterContractAddress: string,
+  queryRouterCodeHash?: string,
+  lcdEndpoint?: string,
+  chainId?: string,
+  snip20ContractAddress: string,
+  snip20CodeHash: string,
+  ownerAddress: string,
+  viewingKey: string,
+  page: number,
+  pageSize: number,
+  minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
+}): Promise<TransactionHistory>
+```
+
+**output**
+
+```ts
+see querySnip20TransactionHistory for output type
+```

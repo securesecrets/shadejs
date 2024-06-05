@@ -1,0 +1,26 @@
+{
+  "transfer_history": {
+    "txs": [
+      {
+        "id": 1234567,
+        "from": "FROM_ADDRESS",
+        "sender": "SENDER_ADDRESS",
+        "receiver": "RECEIVER_ADDRESS",
+        "coins": {
+          "denom": "SSCRT",
+          "amount": "10000"
+        }
+      },
+      {
+        "id": 21345678,
+        "from": "FROM_ADDRESS",
+        "sender": "SENDER_ADDRESS",
+        "receiver": "RECEIVER_ADDRESS",
+        "coins": {
+          "denom": "SSCRT",
+          "amount": "100000"
+        }
+      }
+    ]
+  }
+}

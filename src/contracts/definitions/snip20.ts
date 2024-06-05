@@ -16,6 +16,51 @@ const snip20 = {
         token_info: {},
       };
     },
+    getTransactionHistory({
+      ownerAddress,
+      viewingKey,
+      page,
+      pageSize,
+      shouldFilterDecoys,
+    }:{
+      ownerAddress: string,
+      viewingKey: string,
+      page: number,
+      pageSize: number,
+      shouldFilterDecoys: boolean,
+    }) {
+      return {
+        transaction_history: {
+          address: ownerAddress,
+          page_size: pageSize,
+          page,
+          key: viewingKey,
+          should_filter_decoys: shouldFilterDecoys,
+        },
+      };
+    },
+    // transfer history is a query message used for older snip20s that do
+    // not support the newer transaction_history query
+    getTransferHistory({
+      ownerAddress,
+      viewingKey,
+      page,
+      pageSize,
+    }:{
+      ownerAddress: string,
+      viewingKey: string,
+      page: number,
+      pageSize: number,
+    }) {
+      return {
+        transfer_history: {
+          address: ownerAddress,
+          page_size: pageSize,
+          page,
+          key: viewingKey,
+        },
+      };
+    },
   },
   messages: {
     send({

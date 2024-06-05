@@ -1,0 +1,5 @@
+{
+  "viewing_key_error": {
+    "msg": "Wrong viewing key for this address or viewing key not set"
+  }
+}
