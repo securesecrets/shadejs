@@ -231,3 +231,43 @@ type TransactionHistory = {
   totalTransactions?: number,
   blockHeight: number,
 }
+```
+
+## Get Transfer History
+This query is used for legacy snip20s that do not support the newer transaction history query.
+
+**input**
+
+```ts
+async function querySnip20TransferHistory({
+  queryRouterContractAddress,
+  queryRouterCodeHash,
+  lcdEndpoint,
+  chainId,
+  snip20ContractAddress,
+  snip20CodeHash,
+  ownerAddress,
+  viewingKey,
+  page,
+  pageSize,
+  minBlockHeightValidationOptions,
+}:{
+  queryRouterContractAddress: string,
+  queryRouterCodeHash?: string,
+  lcdEndpoint?: string,
+  chainId?: string,
+  snip20ContractAddress: string,
+  snip20CodeHash: string,
+  ownerAddress: string,
+  viewingKey: string,
+  page: number,
+  pageSize: number,
+  minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
+}): Promise<TransactionHistory>
+```
+
+**output**
+
+```ts
+see querySnip20TransactionHistory for output type
+```
