@@ -11,7 +11,10 @@ import {
   TokenInfoResponse,
   BalanceResponse,
 } from '~/types/contracts/snip20/response';
-import { TokenInfo, BatchTokensInfo } from '~/types/contracts/snip20/model';
+import {
+  TokenInfo,
+  BatchTokensInfo,
+} from '~/types/contracts/snip20/model';
 import {
   Contract,
   BatchQueryParams,
@@ -24,6 +27,9 @@ import {
 } from '~/types';
 import { batchQuery$ } from './batchQuery';
 
+/**
+ * parses the token info response
+ */
 const parseTokenInfo = (response: TokenInfoResponse): TokenInfo => ({
   name: response.token_info.name,
   symbol: response.token_info.symbol,
@@ -43,6 +49,9 @@ const parseBatchQueryTokensInfo = (
   blockHeight: item.blockHeight,
 }));
 
+/**
+ * parses the balance response
+ */
 const parseBalance = (response: BalanceResponse): string => response.balance.amount;
 
 /**
@@ -391,7 +400,9 @@ const parseSnip20TransferHistoryResponse = (
 };
 
 /**
- * query the snip20 transfer history
+ * query the snip20 transfer history.
+ * This function should be used for legacy snip20s that
+ * do not support the newer transaction history query.
  */
 function querySnip20TransferHistory$({
   queryRouterContractAddress,
@@ -446,7 +457,9 @@ function querySnip20TransferHistory$({
 }
 
 /**
- * query the snip20 transfer history
+ * query the snip20 transfer history.
+ * This function should be used for legacy snip20s that
+ * do not support the newer transaction history query.
  */
 async function querySnip20TransferHistory({
   queryRouterContractAddress,
