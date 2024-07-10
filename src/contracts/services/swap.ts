@@ -516,6 +516,7 @@ function batchQueryPairsInfo$({
   pairsContracts,
   batchSize = SERVICE_BATCH_SIZE.PAIR_INFO,
   minBlockHeightValidationOptions,
+  blockHeight,
 }:{
   queryRouterContractAddress: string,
   queryRouterCodeHash?: string,
@@ -524,6 +525,7 @@ function batchQueryPairsInfo$({
   pairsContracts: Contract[],
   batchSize?: number,
   minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
+  blockHeight?: number,
 }) {
   const queries:BatchQueryParams[] = pairsContracts.map((contract) => ({
     id: contract.address,
@@ -541,6 +543,7 @@ function batchQueryPairsInfo$({
     queries,
     batchSize,
     minBlockHeightValidationOptions,
+    blockHeight,
   }).pipe(
     map(parseBatchQueryPairInfoResponse),
     first(),
@@ -558,6 +561,7 @@ async function batchQueryPairsInfo({
   pairsContracts,
   batchSize,
   minBlockHeightValidationOptions,
+  blockHeight,
 }:{
   queryRouterContractAddress: string,
   queryRouterCodeHash?: string,
@@ -566,6 +570,7 @@ async function batchQueryPairsInfo({
   pairsContracts: Contract[],
   batchSize?: number,
   minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
+  blockHeight?: number,
 }) {
   return lastValueFrom(batchQueryPairsInfo$({
     queryRouterContractAddress,
@@ -575,6 +580,7 @@ async function batchQueryPairsInfo({
     pairsContracts,
     batchSize,
     minBlockHeightValidationOptions,
+    blockHeight,
   }));
 }
 
