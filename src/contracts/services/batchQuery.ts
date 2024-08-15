@@ -70,12 +70,14 @@ const batchQuerySingleBatch$ = ({
   queries,
   client,
   minBlockHeightValidationOptions,
+  blockHeight,
 }:{
   contractAddress: string,
   codeHash?: string,
   queries: BatchQueryParams[],
   client: SecretNetworkClient,
   minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
+  blockHeight?: number,
 }) => {
   let retryCount = 0;
   return of(1).pipe( // placeholder observable of(1) used here so that we can start a data stream
@@ -85,6 +87,7 @@ const batchQuerySingleBatch$ = ({
       client,
       contractAddress,
       codeHash,
+      blockHeight,
     }).pipe(
       map((response) => response as BatchQueryResponse), // map used for typecast only
       switchMap((response) => {
@@ -137,6 +140,7 @@ const batchQuery$ = ({
   queries,
   batchSize,
   minBlockHeightValidationOptions,
+  blockHeight,
 }:{
   contractAddress: string,
   codeHash?: string,
@@ -145,6 +149,7 @@ const batchQuery$ = ({
   queries: BatchQueryParams[],
   batchSize?: number,
   minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
+  blockHeight?: number,
 }) => {
   // if batch size is passed in, convert single batch into multiple batches,
   // otherwise process all data in a single batch
@@ -160,6 +165,7 @@ const batchQuery$ = ({
         queries: batch,
         client,
         minBlockHeightValidationOptions,
+        blockHeight,
       })),
     ).pipe(
       concatAll(),
@@ -185,6 +191,7 @@ async function batchQuery({
   queries,
   batchSize,
   minBlockHeightValidationOptions,
+  blockHeight,
 }:{
   contractAddress: string,
   codeHash?: string,
@@ -193,6 +200,7 @@ async function batchQuery({
   queries: BatchQueryParams[],
   batchSize?: number,
   minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
+  blockHeight?: number,
 }) {
   return lastValueFrom(batchQuery$({
     contractAddress,
@@ -202,6 +210,7 @@ async function batchQuery({
     queries,
     batchSize,
     minBlockHeightValidationOptions,
+    blockHeight,
   }));
 }
 
