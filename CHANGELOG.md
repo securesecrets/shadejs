@@ -1,5 +1,11 @@
 # shadejs
 
+## 1.5.5
+
+### Patch Changes
+
+- 74393f0: query at a specific block height
+
 ## 1.5.4
 
 ### Patch Changes
