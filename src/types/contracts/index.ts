@@ -8,3 +8,4 @@ export * from './derivativeShd';
 export * from './shadeStaking';
 export * from './lend';
 export * from './silkBasket';
+export * from './moneyMarket';
