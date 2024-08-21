@@ -3,6 +3,23 @@ type Pagination = {
   page_size: number,
 }
 
+type ContractAndPagination = {
+  address: string,
+  codeHash: string,
+  page?: number,
+  pageSize?: number,
+}
+
+type ParsedPagination<T> = {
+  page: number,
+  pageSize: number,
+  totalPages: number,
+  totalItems: number,
+  data: {
+    [token: string]: T
+  },
+}
+
 type ParsedConfigResponse = {
   adminAuth: {
     contractAddress: string
@@ -28,6 +45,14 @@ type ParsedConfigResponse = {
   collateralDepositEnabled: boolean,
 }
 
+type BatchMoneyMarketConfig = {
+  moneyMarketContractAddress: string,
+  config: ParsedConfigResponse,
+  blockHeight: number,
+}
+
+type BatchMoneyMarketConfigs = BatchMoneyMarketConfig[];
+
 type ParsedMarketResponse = {
   marketToken: {
     contractAddress: string,
@@ -40,16 +65,10 @@ type ParsedMarketResponse = {
   decimals: number,
   oracleKey: string,
   interest: {
-    linear?: {
-      base: string,
-      slope: string,
-    },
-    piecewise_linear?: {
-      base: string,
-      slope1: string,
-      slope2: string,
-      optimalUtilisation: string,
-    }
+    base: string,
+    slope1: string,
+    slope2?: string,
+    optimalUtilisation?: string,
   },
   loanableAmount: string,
   lentAmount: string,
@@ -66,6 +85,83 @@ type ParsedMarketResponse = {
   interestAccrualEnabled: boolean,
 }
 
+type ParsedGetMarketsResponse = ParsedPagination<ParsedMarketResponse>;
+
+type BatchMoneyMarketGetMarket = {
+  moneyMarketContractAddress: string,
+  config: ParsedGetMarketsResponse,
+  blockHeight: number,
+}
+
+type BatchMoneyMarketGetMarkets = BatchMoneyMarketGetMarket[];
+
+type ParsedCollateralReponse = {
+  token: {
+    contractAddress: string,
+    codeHash: string,
+  },
+  collateralAmount: string,
+  decimals: number,
+  maxInitialLtv: string,
+  liquidationThreshold: string,
+  liquidationDiscount: string,
+  oracleKey: string,
+  depositEnabled: boolean,
+  liquidationEnabled: boolean,
+}
+
+type ParsedGetCollateralResponse = ParsedPagination<ParsedCollateralReponse>;
+
+type BatchMoneyMarketGetCollateral = {
+  moneyMarketContractAddress: string,
+  config: ParsedGetCollateralResponse,
+  blockHeight: number,
+}
+
+type BatchMoneyMarketGetCollaterals = BatchMoneyMarketGetCollateral[];
+
+type ParsedCalculatedUserCollateralReponse = {
+    [token: string]: {
+      token: string,
+      amount: string,
+      price: string,
+      value: string,
+    }
+}
+
+type ParsedCalculatedUserDebtResponse = {
+  [token: string]: {
+    token: string,
+    price: string,
+    principal: string,
+    principalValue: string,
+    interestAccrued: string,
+    interestAccruedValue: string,
+  }
+}
+
+type ParsedUserPositionResponse = {
+  id: string,
+  collateral: ParsedCalculatedUserCollateralReponse,
+  debt: ParsedCalculatedUserDebtResponse,
+  totalCollateralValue: string,
+  totalPrincipalValue: string,
+  totalInterestAccruedValue: string,
+  loanMaxPoint: string,
+  loanLiquidationPoint: string,
+}
+
 export type {
   Pagination,
+  ContractAndPagination,
+  ParsedPagination,
+  ParsedConfigResponse,
+  BatchMoneyMarketConfigs,
+  ParsedMarketResponse,
+  ParsedGetMarketsResponse,
+  ParsedCollateralReponse,
+  ParsedGetCollateralResponse,
+  ParsedUserPositionResponse,
+  BatchMoneyMarketGetMarkets,
+  BatchMoneyMarketGetCollaterals,
 };
