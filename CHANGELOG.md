@@ -1,5 +1,11 @@
 # shadejs
 
+## 1.5.6
+
+### Patch Changes
+
+- fae6c9c: Money market interface, pending tests and docs
+
 ## 1.5.5
 
 ### Patch Changes
