@@ -12,7 +12,7 @@ type ParsedOraclePriceResponse = {
     type: OracleErrorType,
     msg: any,
   },
-  blockHeight?: number // block height is only available when using a batch query router
+  blockHeight: number
 }
 
 type ParsedOraclePricesResponse = {
