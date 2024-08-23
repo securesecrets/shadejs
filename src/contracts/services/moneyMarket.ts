@@ -14,12 +14,13 @@ import {
   ContractAndPagination,
   Pagination, ParsedConfigResponse, ParsedGetCollateralResponse, ParsedGetMarketsResponse,
 } from '~/types/contracts/moneyMarket/model';
-import { msgQueryMoneyMarketCollaterals, msgQueryMoneyMarketConfig, msgQueryMoneyMarketMarkets } from '../definitions/moneyMarket';
-import { SERVICE_BATCH_SIZE } from './config';
-import { Contract } from '../../types/contracts/shared/index';
+import { Contract } from '~/types/contracts/shared/index';
 import {
-  BatchQueryParams, BatchQueryParsedResponse, MinBlockHeightValidationOptions, batchQuery$,
-} from '../..';
+  BatchQueryParams, BatchQueryParsedResponse,
+} from '~/types/contracts/batchQuery/model';
+import { MinBlockHeightValidationOptions } from '~/types';
+import { batchQuery$ } from './batchQuery';
+import { msgQueryMoneyMarketCollaterals, msgQueryMoneyMarketConfig, msgQueryMoneyMarketMarkets } from '../definitions/moneyMarket';
 
 /**
 * Parses the get markets query into a cleaner data model
@@ -319,7 +320,7 @@ function batchQueryMoneyMarketConfig$({
   lcdEndpoint,
   chainId,
   moneyMarketContracts,
-  batchSize = SERVICE_BATCH_SIZE.PAIR_INFO,
+  batchSize,
   minBlockHeightValidationOptions,
   blockHeight,
 }:{
@@ -407,7 +408,7 @@ function batchQueryMoneyMarketGetMarkets$({
   lcdEndpoint,
   chainId,
   moneyMarketContracts,
-  batchSize = SERVICE_BATCH_SIZE.PAIR_INFO,
+  batchSize,
   minBlockHeightValidationOptions,
   blockHeight,
 }:{
@@ -501,7 +502,7 @@ function batchQueryMoneyMarketGetCollateral$({
   lcdEndpoint,
   chainId,
   moneyMarketContracts,
-  batchSize = SERVICE_BATCH_SIZE.PAIR_INFO,
+  batchSize,
   minBlockHeightValidationOptions,
   blockHeight,
 }:{

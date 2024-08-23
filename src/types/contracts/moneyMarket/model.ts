@@ -15,9 +15,7 @@ type ParsedPagination<T> = {
   pageSize: number,
   totalPages: number,
   totalItems: number,
-  data: {
-    [token: string]: T
-  },
+  data: T,
 }
 
 type ParsedConfigResponse = {
@@ -85,7 +83,7 @@ type ParsedMarketResponse = {
   interestAccrualEnabled: boolean,
 }
 
-type ParsedGetMarketsResponse = ParsedPagination<ParsedMarketResponse>;
+type ParsedGetMarketsResponse = ParsedPagination<Record<string, ParsedMarketResponse>>;
 
 type BatchMoneyMarketGetMarket = {
   moneyMarketContractAddress: string,
@@ -110,7 +108,7 @@ type ParsedCollateralReponse = {
   liquidationEnabled: boolean,
 }
 
-type ParsedGetCollateralResponse = ParsedPagination<ParsedCollateralReponse>;
+type ParsedGetCollateralResponse = ParsedPagination<Record<string, ParsedCollateralReponse>>;
 
 type BatchMoneyMarketGetCollateral = {
   moneyMarketContractAddress: string,
