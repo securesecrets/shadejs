@@ -75,6 +75,7 @@ type ParsedMarketResponse = {
   interestPerUtoken: string,
   lastInterestAccrued: Date,
   maxSupplyAmount: string,
+  daoInterestFee: string,
   flashLoanInterest: string,
   supplyEnabled: boolean,
   borrowEnabled: boolean,
