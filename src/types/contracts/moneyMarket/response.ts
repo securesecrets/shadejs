@@ -1,46 +1,39 @@
 type ConfigResponse = {
-  config: {
-    admin_auth: {
-      address: string,
-      code_hash: string,
-    }
-    query_auth: {
-      address: string,
-      code_hash: string,
-    }
-    oracle: {
-      address: string,
-      code_hash: string,
-    }
-    fee_collector: string,
-    l_token_id: number,
-    l_token_code_hash: string,
-    l_token_blockchain_admin: string,
-    status: {
-      global_status: {
-        supply_enabled: boolean,
-        borrow_enabled: boolean,
-        repay_enabled: boolean,
-        liquidation_enabled: boolean,
-        interest_accrual_enabled: boolean,
-        collateral_deposit_enabled: boolean,
-      }
-    }
+  admin_auth: {
+    address: string,
+    code_hash: string,
+  }
+  query_auth: {
+    address: string,
+    code_hash: string,
+  }
+  oracle: {
+    address: string,
+    code_hash: string,
+  }
+  fee_collector: string,
+  l_token_id: number,
+  l_token_code_hash: string,
+  l_token_blockchain_admin: string,
+  status: {
+    supply_enabled: boolean,
+    borrow_enabled: boolean,
+    repay_enabled: boolean,
+    liquidation_enabled: boolean,
+    interest_accrual_enabled: boolean,
+    collateral_deposit_enabled: boolean,
   }
 }
 
 type PaginatedResponse<T> = {
-  paginated_response: {
-    page: number,
-    page_size: number,
-    total_pages: number,
-    total_items: number,
-    data: T[]
-  }
+  page: number,
+  page_size: number,
+  total_pages: number,
+  total_items: number,
+  data: T[]
 }
 
 type MarketReponse = {
-  market: {
     market_token: {
       address: string,
       code_hash: string,
@@ -52,21 +45,11 @@ type MarketReponse = {
     decimals: number,
     oracle_key: string,
     interest: {
-      inner: {
-        interest: {
-          linear?: {
-            base: string,
-            slope: string,
-          },
-          piecewise_linear?: {
-            base: string,
-            slope1: string,
-            slope2: string,
-            optimal_utilisation: string,
-          }
-        }
-      }
-    }
+      base: string,
+      slope1: string,
+      slope2: string,
+      optimal_utilisation: string,
+    },
     loanable: string,
     lent_amount: string,
     lifetime_interest_paid: string,
@@ -74,39 +57,33 @@ type MarketReponse = {
     interest_per_utoken: string,
     last_interest_accrued: number,
     max_supply: string,
+    dao_interest_fee: string,
     flash_loan_interest: string,
     status: {
-      market_status: {
         supply_enabled: boolean,
         borrow_enabled: boolean,
         repay_enabled: boolean,
         liquidation_enabled: boolean,
         interest_accrual_enabled: boolean,
-      }
     }
-  }
 }
 
 type GetMarketsResponse = PaginatedResponse<MarketReponse>;
 
 type CollateralReponse = {
-  collateral_state: {
-    token: {
-      address: string,
-      code_hash: string,
-    },
-    amount: string,
-    decimals: number,
-    max_initial_ltv: string,
-    liquidation_threshold: string,
-    liquidation_discount: string,
-    oracle_key: string,
-    status: {
-      collateral_status: {
-        deposit_enabled: boolean,
-        liquidation_enabled: boolean,
-      }
-    }
+  token: {
+    address: string,
+    code_hash: string,
+  },
+  amount: string,
+  decimals: number,
+  max_initial_ltv: string,
+  liquidation_threshold: string,
+  liquidation_discount: string,
+  oracle_key: string,
+  status: {
+    deposit_enabled: boolean,
+    liquidations_enabled: boolean,
   }
 }
 
