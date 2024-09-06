@@ -1,5 +1,11 @@
 # shadejs
 
+## 1.5.7
+
+### Patch Changes
+
+- ba06893: rectified the feature with the contract
+
 ## 1.5.6
 
 ### Patch Changes
