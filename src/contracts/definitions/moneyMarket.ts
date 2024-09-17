@@ -82,7 +82,7 @@ function msgMoneyMarketWithdrawCollateral({
   collateralTokenAddress: string,
 }) {
   return {
-    deposit_collateral: {
+    withdraw_collateral: {
       token: collateralTokenAddress,
       amount: withdrawAmount,
     },
