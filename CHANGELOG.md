@@ -1,5 +1,11 @@
 # shadejs
 
+## 1.5.8
+
+### Patch Changes
+
+- fee9669: fix withdraw collateral msg
+
 ## 1.5.7
 
 ### Patch Changes
