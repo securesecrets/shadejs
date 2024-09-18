@@ -1,5 +1,11 @@
 # shadejs
 
+## 1.5.9
+
+### Patch Changes
+
+- bf1571a: patched a parsing bug where contract address was being used for code hash
+
 ## 1.5.8
 
 ### Patch Changes
