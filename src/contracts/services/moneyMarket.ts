@@ -42,7 +42,7 @@ const parseMoneyMarketGetMarkets = (
       },
       lToken: {
         contractAddress: cur.l_token.address,
-        codeHash: cur.l_token.address,
+        codeHash: cur.l_token.code_hash,
       },
       decimals: cur.decimals,
       oracleKey: cur.oracle_key,
