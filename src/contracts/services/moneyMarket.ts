@@ -572,6 +572,83 @@ async function batchQueryMoneyMarketGetCollateral({
   }));
 }
 
+/**
+ * query the Public Logs for money market contracts
+ * NOT FOR PRODUCTION USE, CONTRACT IS IN DEVELOPMENT ON TESTNET ONLY
+ */
+/**
+ * Query the public events of a money market contract using RxJS
+ */
+function queryMoneyMarketPublicEvents$({
+  contractAddress,
+  codeHash,
+  lcdEndpoint,
+  chainId,
+  pagination,
+}: {
+  contractAddress: string,
+  codeHash?: string,
+  lcdEndpoint?: string,
+  chainId?: string,
+  pagination?: Pagination,
+}) {
+  const msgQueryMoneyMarketPublicEvents = (paginationParams?: Pagination) => ({
+    query_msg: {
+      public_events: {
+        pagination: paginationParams,
+      },
+    },
+  });
+
+  const parseMoneyMarketPublicEvents = (response: any) => ({
+    page: response.page,
+    pageSize: response.page_size,
+    totalPages: response.total_pages,
+    totalItems: response.total_items,
+    data: response.data.map((event: any) => ({
+      timestamp: event.timestamp,
+      action: event.action,
+    })),
+  });
+
+  return getActiveQueryClient$(lcdEndpoint, chainId).pipe(
+    switchMap(({ client }) => sendSecretClientContractQuery$({
+      queryMsg: msgQueryMoneyMarketPublicEvents(pagination),
+      client,
+      contractAddress,
+      codeHash,
+    })),
+    map((response) => parseMoneyMarketPublicEvents(response)),
+    first(),
+  );
+}
+
+async function queryMoneyMarketPublicEvents({
+  contractAddress,
+  codeHash,
+  lcdEndpoint,
+  chainId,
+  pageSize,
+  page,
+}: {
+  contractAddress: string,
+  codeHash?: string,
+  lcdEndpoint?: string,
+  chainId?: string,
+  pageSize?: number,
+  page?: number,
+}) {
+  return lastValueFrom(queryMoneyMarketPublicEvents$({
+    contractAddress,
+    codeHash,
+    lcdEndpoint,
+    chainId,
+    pagination: pageSize !== undefined && page !== undefined
+      ? { page_size: pageSize, page }
+      : undefined,
+  }));
+}
+
 export {
   queryMoneyMarketConfig,
   queryMoneyMarketGetMarkets,
@@ -582,4 +659,5 @@ export {
   batchQueryMoneyMarketConfig,
   batchQueryMoneyMarketGetMarkets,
   batchQueryMoneyMarketGetCollateral,
+  queryMoneyMarketPublicEvents,
 };
