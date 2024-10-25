@@ -150,6 +150,20 @@ type ParsedUserPositionResponse = {
   loanLiquidationPoint: string,
 }
 
+// New types for public events
+type PublicEvent = {
+  timestamp: number,
+  action: Record<string, any>
+}
+
+type PaginatedPublicEvent = {
+  page: number,
+  pageSize: number,
+  totalPages: number,
+  totalItems: number,
+  data: PublicEvent[],
+}
+
 export type {
   Pagination,
   ContractAndPagination,
@@ -163,4 +177,6 @@ export type {
   ParsedUserPositionResponse,
   BatchMoneyMarketGetMarkets,
   BatchMoneyMarketGetCollaterals,
+  PublicEvent,
+  PaginatedPublicEvent,
 };

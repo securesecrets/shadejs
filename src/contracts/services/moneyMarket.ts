@@ -659,5 +659,6 @@ export {
   batchQueryMoneyMarketConfig,
   batchQueryMoneyMarketGetMarkets,
   batchQueryMoneyMarketGetCollateral,
+  queryMoneyMarketPublicEvents$,
   queryMoneyMarketPublicEvents,
 };

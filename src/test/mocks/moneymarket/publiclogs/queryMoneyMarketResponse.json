@@ -1,0 +1,31 @@
+{
+    "batch": {
+      "block_height": 3,
+      "responses": [
+        {
+          "id": "1",
+          "response": {
+            "page": 0,
+            "page_size": 10,
+            "total_pages": 1,
+            "total_items": 2,
+            "data": [
+              {
+                "timestamp": 1693800000000,
+                "action": {
+                  "contract_init": {}
+                }
+              },
+              {
+                "timestamp": 1693805000000,
+                "action": {
+                  "contract_init": {}
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+  
