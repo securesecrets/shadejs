@@ -35,7 +35,8 @@ afterEach(() => {
 test('it should parse the public events response correctly', async () => {
   // Mock the service call with the modified JSON response data
   sendSecretClientContractQuery$.mockReturnValueOnce(
-    of(queryMoneyMarketResponse.batch.responses[0].response));
+    of(queryMoneyMarketResponse.batch.responses[0].response),
+  );
 
   // Define the input parameters
   const contractAddress = 'secret18537ttv4l4k2ea0xp6ay3sv4c243fyjtj2uqz7';
