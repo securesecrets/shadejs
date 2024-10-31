@@ -152,7 +152,7 @@ type ParsedUserPositionResponse = {
 
 // New types for public events
 type PublicEvent = {
-  timestamp: number,
+  timestamp: Date,
   action: Record<string, any>
 }
 

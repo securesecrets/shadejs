@@ -7,14 +7,14 @@ const queryMoneyMarketPublicEventsParsedMock: PaginatedPublicEvent = {
   totalItems: 2,
   data: [
     {
-      timestamp: 1693800000000,
+      timestamp: new Date(Date.now()),
       action: {
         contract_init: {
         },
       },
     },
     {
-      timestamp: 1693805000000,
+      timestamp: new Date(Date.now()),
       action: {
         contract_init: {
         },

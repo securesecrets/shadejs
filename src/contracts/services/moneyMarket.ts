@@ -572,6 +572,18 @@ async function batchQueryMoneyMarketGetCollateral({
   }));
 }
 
+// MoneyMarket Public Logs parsed response
+const parseMoneyMarketPublicEvents = (response: any) => ({
+  page: response.page,
+  pageSize: response.page_size,
+  totalPages: response.total_pages,
+  totalItems: response.total_items,
+  data: response.data.map((event: any) => ({
+    timestamp: event.timestamp,
+    action: event.action,
+  })),
+});
+
 /**
  * query the Public Logs for money market contracts
  * NOT FOR PRODUCTION USE, CONTRACT IS IN DEVELOPMENT ON TESTNET ONLY
@@ -579,50 +591,62 @@ async function batchQueryMoneyMarketGetCollateral({
 /**
  * Query the public events of a money market contract using RxJS
  */
+
 function queryMoneyMarketPublicEvents$({
   contractAddress,
   codeHash,
   lcdEndpoint,
   chainId,
   pagination,
+  batchSize,
+  minBlockHeightValidationOptions,
+  blockHeight,
 }: {
   contractAddress: string,
-  codeHash?: string,
+  codeHash: string,
   lcdEndpoint?: string,
   chainId?: string,
   pagination?: Pagination,
+  batchSize?: number,
+  minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
+  blockHeight?: number,
 }) {
-  const msgQueryMoneyMarketPublicEvents = (paginationParams?: Pagination) => ({
-    query_msg: {
-      public_events: {
-        pagination: paginationParams,
+  const queries: BatchQueryParams[] = [{
+    id: contractAddress,
+    contract: {
+      address: contractAddress,
+      codeHash,
+    },
+    queryMsg: {
+      query_msg: {
+        public_events: {
+          pagination,
+        },
       },
     },
-  });
+  }];
 
-  const parseMoneyMarketPublicEvents = (response: any) => ({
-    page: response.page,
-    pageSize: response.page_size,
-    totalPages: response.total_pages,
-    totalItems: response.total_items,
-    data: response.data.map((event: any) => ({
-      timestamp: event.timestamp,
-      action: event.action,
-    })),
-  });
-
-  return getActiveQueryClient$(lcdEndpoint, chainId).pipe(
-    switchMap(({ client }) => sendSecretClientContractQuery$({
-      queryMsg: msgQueryMoneyMarketPublicEvents(pagination),
-      client,
-      contractAddress,
-      codeHash,
-    })),
-    map((response) => parseMoneyMarketPublicEvents(response)),
+  return batchQuery$({
+    contractAddress,
+    codeHash,
+    lcdEndpoint,
+    chainId,
+    queries,
+    batchSize,
+    minBlockHeightValidationOptions,
+    blockHeight,
+  }).pipe(
+    map((response) => parseMoneyMarketPublicEvents(response[0].response)),
     first(),
   );
 }
 
+/**
+ * query the Public Logs for money market contracts
+ * NOT FOR PRODUCTION USE, CONTRACT IS IN DEVELOPMENT ON TESTNET ONLY
+ */
+/**
+ */
 async function queryMoneyMarketPublicEvents({
   contractAddress,
   codeHash,
@@ -632,7 +656,7 @@ async function queryMoneyMarketPublicEvents({
   page,
 }: {
   contractAddress: string,
-  codeHash?: string,
+  codeHash: string,
   lcdEndpoint?: string,
   chainId?: string,
   pageSize?: number,

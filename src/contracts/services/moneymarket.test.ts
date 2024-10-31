@@ -8,7 +8,7 @@ import {
 } from 'vitest';
 import { of } from 'rxjs';
 import { queryMoneyMarketPublicEvents$ } from '~/contracts/services/moneyMarket';
-import { queryMoneyMarketPublicEventsParsedMock } from '../../test/mocks/moneymarket/publiclogs/queryMoneyMarketParsed';
+import { queryMoneyMarketPublicEventsParsedMock } from '~/test/mocks/moneymarket/publiclogs/queryMoneyMarketParsed';
 import queryMoneyMarketResponse from '../../test/mocks/moneymarket/publiclogs/queryMoneyMarketResponse.json';
 
 // Mock the sendSecretClientContractQuery$ function
@@ -34,8 +34,22 @@ afterEach(() => {
 
 test('it should parse the public events response correctly', async () => {
   // Mock the service call with the modified JSON response data
+  // Encode JSON data in Base64 for the mock response
+  const base64EncodedId = Buffer.from(JSON.stringify("mock_id")).toString('base64');
+  const base64EncodedResponse = Buffer.from(JSON.stringify(queryMoneyMarketResponse.batch.responses[0].response)).toString('base64');
   sendSecretClientContractQuery$.mockReturnValueOnce(
-    of(queryMoneyMarketResponse.batch.responses[0].response),
+    of({
+      batch: {
+        responses: [{
+          id: base64EncodedId,
+          response: {
+            system_err: null,
+            response: base64EncodedResponse, // Ensure this is Base64 encoded as required
+          },
+        }],
+        block_height: 100,  // Mock block_height as required
+      },
+    })
   );
 
   // Define the input parameters
@@ -47,9 +61,16 @@ test('it should parse the public events response correctly', async () => {
   // Call the function to test
   const result$ = queryMoneyMarketPublicEvents$({
     contractAddress,
+    codeHash: 'MOCK_CODE_HASH', // Add the codeHash property
     lcdEndpoint,
     chainId,
     pagination,
+    batchSize: 1,
+    minBlockHeightValidationOptions: {
+      minBlockHeight: 3,
+      maxRetries: 3,
+    },
+    blockHeight: 100, 
   });
 
   // Convert the result$ observable to a promise and get the final value
