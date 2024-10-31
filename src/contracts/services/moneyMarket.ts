@@ -573,7 +573,7 @@ async function batchQueryMoneyMarketGetCollateral({
 }
 
 // MoneyMarket Public Logs parsed response
-const parseMoneyMarketPublicEvents = (response: any) => ({
+const parseMoneyMarketPublicLogs = (response: any) => ({
   page: response.page,
   pageSize: response.page_size,
   totalPages: response.total_pages,
@@ -592,7 +592,7 @@ const parseMoneyMarketPublicEvents = (response: any) => ({
  * Query the public events of a money market contract using RxJS
  */
 
-function queryMoneyMarketPublicEvents$({
+function queryMoneyMarketPublicLogs$({
   contractAddress,
   codeHash,
   lcdEndpoint,
@@ -636,7 +636,7 @@ function queryMoneyMarketPublicEvents$({
     minBlockHeightValidationOptions,
     blockHeight,
   }).pipe(
-    map((response) => parseMoneyMarketPublicEvents(response[0].response)),
+    map((response) => parseMoneyMarketPublicLogs(response[0].response)),
     first(),
   );
 }
@@ -647,7 +647,7 @@ function queryMoneyMarketPublicEvents$({
  */
 /**
  */
-async function queryMoneyMarketPublicEvents({
+async function queryMoneyMarketPublicLogs({
   contractAddress,
   codeHash,
   lcdEndpoint,
@@ -662,7 +662,7 @@ async function queryMoneyMarketPublicEvents({
   pageSize?: number,
   page?: number,
 }) {
-  return lastValueFrom(queryMoneyMarketPublicEvents$({
+  return lastValueFrom(queryMoneyMarketPublicLogs$({
     contractAddress,
     codeHash,
     lcdEndpoint,
@@ -683,6 +683,6 @@ export {
   batchQueryMoneyMarketConfig,
   batchQueryMoneyMarketGetMarkets,
   batchQueryMoneyMarketGetCollateral,
-  queryMoneyMarketPublicEvents$,
-  queryMoneyMarketPublicEvents,
+  queryMoneyMarketPublicLogs$,
+  queryMoneyMarketPublicLogs,
 };
