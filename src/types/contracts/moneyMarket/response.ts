@@ -123,19 +123,19 @@ type UserPositionResponse = {
 }
 
 // Flexible type for actions, leaving it as a JSON object (blob)
-type PublicEventResponse = {
+type PublicLogResponse = {
   timestamp: number,
   action: Record<string, any>, // Flexible JSON blob for action
 }
 
 // Paginated response type for public events
-type GetPublicEventsResponse = PaginatedResponse<PublicEventResponse>;
+type GetPublicLogsResponse = PaginatedResponse<PublicLogResponse>;
 
 export type {
   ConfigResponse,
   GetMarketsResponse,
   GetCollateralResponse,
   UserPositionResponse,
-  PublicEventResponse,
-  GetPublicEventsResponse,
+  PublicLogResponse,
+  GetPublicLogsResponse,
 };

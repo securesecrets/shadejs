@@ -1,6 +1,6 @@
-import { PaginatedPublicEvent } from '~/types/contracts/moneyMarket';
+import { PaginatedPublicLogs } from '~/types/contracts/moneyMarket';
 
-const queryMoneyMarketPublicLogsParsedMock: PaginatedPublicEvent = {
+const queryMoneyMarketPublicLogsParsedMock: PaginatedPublicLogs = {
   page: 0,
   pageSize: 10,
   totalPages: 1,

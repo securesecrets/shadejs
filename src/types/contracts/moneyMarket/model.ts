@@ -151,17 +151,17 @@ type ParsedUserPositionResponse = {
 }
 
 // New types for public events
-type PublicEvent = {
+type PublicLog = {
   timestamp: Date,
   action: Record<string, any>
 }
 
-type PaginatedPublicEvent = {
+type PaginatedPublicLogs = {
   page: number,
   pageSize: number,
   totalPages: number,
   totalItems: number,
-  data: PublicEvent[],
+  data: PublicLog[],
 }
 
 export type {
@@ -177,6 +177,6 @@ export type {
   ParsedUserPositionResponse,
   BatchMoneyMarketGetMarkets,
   BatchMoneyMarketGetCollaterals,
-  PublicEvent,
-  PaginatedPublicEvent,
+  PublicLog,
+  PaginatedPublicLogs,
 };
