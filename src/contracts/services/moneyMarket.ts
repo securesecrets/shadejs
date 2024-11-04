@@ -672,8 +672,8 @@ function batchQueryMoneyMarketPublicLogs$({
     },
     queryMsg: {
       public_events: {
-        pagination: contract.pageSize && contract.page ? 
-        { page_size: contract.pageSize, page: contract.page } : undefined,
+        pagination: contract.pageSize && contract.page
+          ? { page_size: contract.pageSize, page: contract.page } : undefined,
       },
     },
   }));
