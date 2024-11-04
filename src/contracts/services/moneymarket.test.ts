@@ -6,7 +6,7 @@ import {
   afterAll,
   afterEach,
 } from 'vitest';
-import { of } from 'rxjs';
+import { of, firstValueFrom } from 'rxjs';
 import { queryMoneyMarketPublicLogs$ } from '~/contracts/services/moneyMarket';
 import queryMoneyMarketResponse from '../../test/mocks/moneymarket/publiclogs/queryMoneyMarketResponse.json';
 
@@ -64,16 +64,10 @@ test('it should parse the public events response correctly', async () => {
     lcdEndpoint,
     chainId,
     pagination,
-    batchSize: 1,
-    minBlockHeightValidationOptions: {
-      minBlockHeight: 3,
-      maxRetries: 3,
-    },
-    blockHeight: 100,
   });
 
   // Convert the result$ observable to a promise and get the final value
-  const result = await result$.toPromise();
+  const result = await firstValueFrom(result$);
 
   // Validate the output against the expected parsed result
   expect(result).toBeDefined();

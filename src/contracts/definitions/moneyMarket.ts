@@ -181,7 +181,7 @@ function msgMoneyMarketRepay({
  * Query the Public Event Logs for momeymarket contract
  * NOT FOR PRODUCTION USE, CONTRACT IS IN DEVELOPMENT ON TESTNET ONLY
  */
-const msgQueryMoneyMarketPublicEvents = (
+const msgQueryMoneyMarketPublicLogs = (
   pagination?: Pagination,
 ) => ({
   get_public_log: {
@@ -200,5 +200,5 @@ export {
   msgMoneyMarketSupply,
   msgMoneyMarketWithdrawSupply,
   msgMoneyMarketRepay,
-  msgQueryMoneyMarketPublicEvents,
+  msgQueryMoneyMarketPublicLogs,
 };
