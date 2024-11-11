@@ -578,10 +578,12 @@ const parseMoneyMarketPublicLogs = (response: any) => ({
   pageSize: response.page_size,
   totalPages: response.total_pages,
   totalItems: response.total_items,
-  data: response.data ? response.data.map((event: any) => ({
-    timestamp: event.timestamp,
-    action: event.action,
-  })) : [],
+  data: response.data
+    ? response.data.map((event: any) => ({
+        timestamp: new Date(event.timestamp * 1000), // Convert UNIX timestamp to JS Date
+        action: event.action, // Pass the full action JSON object without further parsing
+      }))
+    : [],
 });
 
 /**
@@ -615,6 +617,10 @@ function queryMoneyMarketPublicLogs$({
   );
 }
 
+/**
+ * Query the Public Logs for a single money market contract
+ * NOT FOR PRODUCTION USE, CONTRACT IS IN DEVELOPMENT ON TESTNET ONLY
+ */
 async function queryMoneyMarketPublicLogs({
   contractAddress,
   codeHash,
@@ -646,8 +652,8 @@ async function queryMoneyMarketPublicLogs({
  * NOT FOR PRODUCTION USE, CONTRACT IS IN DEVELOPMENT ON TESTNET ONLY
  */
 function batchQueryMoneyMarketPublicLogs$({
-  queryRouterContractAddress,
-  queryRouterCodeHash,
+  queryPublicLogsContractAddress,
+  queryPublicLogsCodeHash,
   lcdEndpoint,
   chainId,
   moneyMarketContracts,
@@ -655,8 +661,8 @@ function batchQueryMoneyMarketPublicLogs$({
   minBlockHeightValidationOptions,
   blockHeight,
 }: {
-  queryRouterContractAddress: string,
-  queryRouterCodeHash?: string,
+  queryPublicLogsContractAddress: string,
+  queryPublicLogsCodeHash?: string,
   lcdEndpoint?: string,
   chainId?: string,
   moneyMarketContracts: ContractAndPagination[],
@@ -671,7 +677,7 @@ function batchQueryMoneyMarketPublicLogs$({
       codeHash: contract.codeHash,
     },
     queryMsg: {
-      public_events: {
+      get_public_logs: {
         pagination: contract.pageSize && contract.page
           ? { page_size: contract.pageSize, page: contract.page } : undefined,
       },
@@ -679,8 +685,8 @@ function batchQueryMoneyMarketPublicLogs$({
   }));
 
   return batchQuery$({
-    contractAddress: queryRouterContractAddress,
-    codeHash: queryRouterCodeHash,
+    contractAddress: queryPublicLogsContractAddress,
+    codeHash: queryPublicLogsCodeHash,
     lcdEndpoint,
     chainId,
     queries,
@@ -698,23 +704,23 @@ function batchQueryMoneyMarketPublicLogs$({
 }
 
 async function batchQueryMoneyMarketPublicLogs({
-  queryRouterContractAddress,
-  queryRouterCodeHash,
+  queryPublicLogsContractAddress,
+  queryPublicLogsCodeHash,
   lcdEndpoint,
   chainId,
   moneyMarketContracts,
   minBlockHeightValidationOptions,
 }: {
-  queryRouterContractAddress: string,
-  queryRouterCodeHash?: string,
+  queryPublicLogsContractAddress: string,
+  queryPublicLogsCodeHash?: string,
   lcdEndpoint?: string,
   chainId?: string,
   moneyMarketContracts: ContractAndPagination[],
   minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
 }) {
   return lastValueFrom(batchQueryMoneyMarketPublicLogs$({
-    queryRouterContractAddress,
-    queryRouterCodeHash,
+    queryPublicLogsContractAddress,
+    queryPublicLogsCodeHash,
     lcdEndpoint,
     chainId,
     moneyMarketContracts,

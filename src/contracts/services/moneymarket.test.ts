@@ -8,7 +8,7 @@ import {
 } from 'vitest';
 import { of, firstValueFrom } from 'rxjs';
 import { queryMoneyMarketPublicLogs$ } from '~/contracts/services/moneyMarket';
-import queryMoneyMarketResponse from '../../test/mocks/moneymarket/publiclogs/queryMoneyMarketResponse.json';
+import queryMoneyMarketResponse from '~/test/mocks/moneymarket/publiclogs/queryMoneyMarketResponse.json';
 
 // Mock the sendSecretClientContractQuery$ function
 const sendSecretClientContractQuery$ = vi.hoisted(() => vi.fn());
