@@ -580,9 +580,9 @@ const parseMoneyMarketPublicLogs = (response: any) => ({
   totalItems: response.total_items,
   data: response.data
     ? response.data.map((event: any) => ({
-        timestamp: new Date(event.timestamp * 1000), // Convert UNIX timestamp to JS Date
-        action: event.action, // Pass the full action JSON object without further parsing
-      }))
+      timestamp: new Date(event.timestamp * 1000), // Convert UNIX timestamp to JS Date
+      action: event.action, // Pass the full action JSON object without further parsing
+    }))
     : [],
 });
 
