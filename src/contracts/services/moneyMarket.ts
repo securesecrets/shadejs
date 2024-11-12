@@ -737,13 +737,13 @@ const parseBatchQueryMoneyMarketRewardPools = (response: any): PaginatedRewardPo
   debtMarket: response.id,
   blockHeight: response.blockHeight,
   data: response.data ? response.data.map((rewardPool: RewardPool) => ({
-      id: rewardPool.id,
-      amount: rewardPool.amount,
-      token: rewardPool.token,
-      start: rewardPool.start,
-      end: rewardPool.end,
-      rate: rewardPool.rate,
-    }))
+    id: rewardPool.id,
+    amount: rewardPool.amount,
+    token: rewardPool.token,
+    start: rewardPool.start,
+    end: rewardPool.end,
+    rate: rewardPool.rate,
+  }))
     : [],
 });
 
