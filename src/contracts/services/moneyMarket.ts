@@ -13,6 +13,7 @@ import {
   BatchMoneyMarketGetMarkets,
   ContractAndPagination,
   Pagination, ParsedConfigResponse, ParsedGetCollateralResponse, ParsedGetMarketsResponse,
+  RewardPool, PaginatedRewardPools,
 } from '~/types/contracts/moneyMarket/model';
 import { Contract } from '~/types/contracts/shared/index';
 import {
@@ -598,7 +599,7 @@ function queryMoneyMarketPublicLogs$({
   pagination,
 }: {
   contractAddress: string,
-  codeHash: string,
+  codeHash?: string,
   lcdEndpoint?: string,
   chainId?: string,
   pagination?: Pagination,
@@ -606,7 +607,7 @@ function queryMoneyMarketPublicLogs$({
   return getActiveQueryClient$(lcdEndpoint, chainId).pipe(
     switchMap(({ client }) => sendSecretClientContractQuery$({
       queryMsg: {
-        public_events: { pagination },
+        public_logs: { pagination },
       },
       client,
       contractAddress,
@@ -630,7 +631,7 @@ async function queryMoneyMarketPublicLogs({
   page,
 }: {
   contractAddress: string,
-  codeHash: string,
+  codeHash?: string,
   lcdEndpoint?: string,
   chainId?: string,
   pageSize?: number,
@@ -728,6 +729,101 @@ async function batchQueryMoneyMarketPublicLogs({
   }));
 }
 
+const parseBatchQueryMoneyMarketRewardPools = (response: any): PaginatedRewardPools => ({
+  page: response.page,
+  pageSize: response.page_size,
+  totalPages: response.total_pages,
+  totalItems: response.total_items,
+  debtMarket: response.id,
+  blockHeight: response.blockHeight,
+  data: response.data ? response.data.map((rewardPool: RewardPool) => ({
+      id: rewardPool.id,
+      amount: rewardPool.amount,
+      token: rewardPool.token,
+      start: rewardPool.start,
+      end: rewardPool.end,
+      rate: rewardPool.rate,
+    }))
+    : [],
+});
+
+function batchQueryMoneyMarketRewardPools$({
+  queryRouterContractAddress,
+  queryRouterCodeHash,
+  lcdEndpoint,
+  chainId,
+  moneyMarket,
+  debtMarkets,
+  batchSize,
+  minBlockHeightValidationOptions,
+  blockHeight,
+}: {
+  queryRouterContractAddress: string,
+  queryRouterCodeHash?: string,
+  lcdEndpoint?: string,
+  chainId?: string,
+  moneyMarket: Contract,
+  debtMarkets: string[],
+  batchSize?: number,
+  minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
+  blockHeight?: number,
+}) {
+  const queries = debtMarkets.map((debtMarket) => ({
+    id: debtMarket,
+    contract: {
+      address: moneyMarket.address,
+      codeHash: moneyMarket.codeHash,
+    },
+    queryMsg: {
+      reward_pools: {
+        market: debtMarket,
+      },
+    },
+  }));
+
+  return batchQuery$({
+    contractAddress: queryRouterContractAddress,
+    codeHash: queryRouterCodeHash,
+    lcdEndpoint,
+    chainId,
+    queries,
+    batchSize,
+    minBlockHeightValidationOptions,
+    blockHeight,
+  }).pipe(
+    map((response) => parseBatchQueryMoneyMarketRewardPools(response)),
+    first(),
+  );
+}
+
+async function batchQueryMoneyMarketRewardPools({
+  queryRouterContractAddress,
+  queryRouterCodeHash,
+  lcdEndpoint,
+  chainId,
+  moneyMarket,
+  debtMarkets,
+  minBlockHeightValidationOptions,
+}: {
+  queryRouterContractAddress: string,
+  queryRouterCodeHash?: string,
+  lcdEndpoint?: string,
+  chainId?: string,
+  moneyMarket: Contract,
+  debtMarkets: string[],
+  minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
+}) {
+  return lastValueFrom(batchQueryMoneyMarketRewardPools$({
+    queryRouterContractAddress,
+    queryRouterCodeHash,
+    lcdEndpoint,
+    chainId,
+    moneyMarket,
+    debtMarkets,
+    minBlockHeightValidationOptions,
+  }));
+}
+
 export {
   queryMoneyMarketConfig,
   queryMoneyMarketGetMarkets,
@@ -742,4 +838,6 @@ export {
   queryMoneyMarketPublicLogs,
   batchQueryMoneyMarketPublicLogs$,
   batchQueryMoneyMarketPublicLogs,
+  batchQueryMoneyMarketRewardPools$,
+  batchQueryMoneyMarketRewardPools,
 };

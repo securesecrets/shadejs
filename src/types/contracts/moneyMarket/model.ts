@@ -164,6 +164,25 @@ type PaginatedPublicLogs = {
   data: PublicLog[],
 }
 
+type RewardPool = {
+    id: string,
+    amount: string,
+    token: string,
+    start: string,
+    end: string,
+    rate: string,
+}
+
+type PaginatedRewardPools = {
+  page: number,
+  pageSize: number,
+  totalPages: number,
+  totalItems: number,
+  blockHeight: number,
+  debtMarket: string,
+  data: RewardPool[],
+}
+
 export type {
   Pagination,
   ContractAndPagination,
@@ -179,4 +198,6 @@ export type {
   BatchMoneyMarketGetCollaterals,
   PublicLog,
   PaginatedPublicLogs,
+  RewardPool,
+  PaginatedRewardPools,
 };
