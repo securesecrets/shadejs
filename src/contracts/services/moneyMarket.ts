@@ -13,7 +13,6 @@ import {
   BatchMoneyMarketGetMarkets,
   ContractAndPagination,
   Pagination, ParsedConfigResponse, ParsedGetCollateralResponse, ParsedGetMarketsResponse,
-  RewardPool, PaginatedRewardPools,
 } from '~/types/contracts/moneyMarket/model';
 import { Contract } from '~/types/contracts/shared/index';
 import {
@@ -124,7 +123,8 @@ const parseMoneyMarketGetCollateral = (
       collateralAmount: cur.amount,
       decimals: cur.decimals,
       maxInitialLtv: cur.max_initial_ltv,
-      liquidationThreshold: cur.liquidation_threshold,
+      publicLiquidationThreshold: cur.public_liquidation_threshold,
+      privateLiquidationThreshold: cur.private_liquidation_threshold,
       liquidationDiscount: cur.liquidation_discount,
       oracleKey: cur.oracle_key,
       depositEnabled: cur.status.deposit_enabled,
@@ -729,23 +729,20 @@ async function batchQueryMoneyMarketPublicLogs({
   }));
 }
 
-const parseBatchQueryMoneyMarketRewardPools = (response: any): PaginatedRewardPools => ({
-  page: response.page,
-  pageSize: response.page_size,
-  totalPages: response.total_pages,
-  totalItems: response.total_items,
-  debtMarket: response.id,
-  blockHeight: response.blockHeight,
-  data: response.data ? response.data.map((rewardPool: RewardPool) => ({
-    id: rewardPool.id,
-    amount: rewardPool.amount,
-    token: rewardPool.token,
-    start: rewardPool.start,
-    end: rewardPool.end,
-    rate: rewardPool.rate,
+const parseBatchQueryMoneyMarketRewardPools = (responses: any) => (
+  responses.map((response: any) => ({
+    debtMarket: response.id,
+    blockHeight: response.blockHeight,
+    rewardPools: response.response.map((pool: any) => ({
+      rewardPoolId: pool.id,
+      amount: pool.amount,
+      token: pool.token,
+      start: pool.start,
+      end: pool.end,
+      rate: pool.rate,
+    })),
   }))
-    : [],
-});
+);
 
 function batchQueryMoneyMarketRewardPools$({
   queryRouterContractAddress,
@@ -780,6 +777,7 @@ function batchQueryMoneyMarketRewardPools$({
       },
     },
   }));
+  console.error('shadejs reward pools batch queries', queries);
 
   return batchQuery$({
     contractAddress: queryRouterContractAddress,
@@ -791,7 +789,12 @@ function batchQueryMoneyMarketRewardPools$({
     minBlockHeightValidationOptions,
     blockHeight,
   }).pipe(
-    map((response) => parseBatchQueryMoneyMarketRewardPools(response)),
+    map((response) => {
+      console.error('Parsing', JSON.stringify(response));
+      const x = parseBatchQueryMoneyMarketRewardPools(response);
+      console.error('Parsed', JSON.stringify(x));
+      return x;
+    }),
     first(),
   );
 }
