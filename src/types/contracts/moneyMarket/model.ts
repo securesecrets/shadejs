@@ -176,7 +176,7 @@ type RewardPool = {
 
 type ParsedRewardPoolsResponse = {
     debtMarket: string,
-    blockHeight: string,
+    blockHeight: number,
     rewardPools: RewardPool[],
 }
 
