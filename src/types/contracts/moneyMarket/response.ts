@@ -78,7 +78,8 @@ type CollateralReponse = {
   amount: string,
   decimals: number,
   max_initial_ltv: string,
-  liquidation_threshold: string,
+  public_liquidation_threshold: string,
+  private_liquidation_threshold: string,
   liquidation_discount: string,
   oracle_key: string,
   status: {
