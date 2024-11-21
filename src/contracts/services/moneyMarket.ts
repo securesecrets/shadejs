@@ -777,7 +777,6 @@ function batchQueryMoneyMarketRewardPools$({
       },
     },
   }));
-  console.error('shadejs reward pools batch queries', queries);
 
   return batchQuery$({
     contractAddress: queryRouterContractAddress,
@@ -789,12 +788,7 @@ function batchQueryMoneyMarketRewardPools$({
     minBlockHeightValidationOptions,
     blockHeight,
   }).pipe(
-    map((response) => {
-      console.error('Parsing', JSON.stringify(response));
-      const x = parseBatchQueryMoneyMarketRewardPools(response);
-      console.error('Parsed', JSON.stringify(x));
-      return x;
-    }),
+    map((response) => parseBatchQueryMoneyMarketRewardPools(response)),
     first(),
   );
 }
