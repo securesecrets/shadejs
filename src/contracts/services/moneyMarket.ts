@@ -5,6 +5,11 @@ import {
   map,
   lastValueFrom,
 } from 'rxjs';
+
+import {
+  BatchQueryParsedResponse,
+  BatchQueryParams,
+} from '~/types/contracts/batchQuery/model';
 import { sendSecretClientContractQuery$ } from '~/client/services/clientServices';
 import { ConfigResponse, GetCollateralResponse, GetMarketsResponse } from '~/types/contracts/moneyMarket/response';
 import {
@@ -16,9 +21,6 @@ import {
   ParsedRewardPoolsResponse,
 } from '~/types/contracts/moneyMarket/model';
 import { Contract } from '~/types/contracts/shared/index';
-import {
-  BatchQueryParams, BatchQueryParsedResponse,
-} from '~/types/contracts/batchQuery/model';
 import { MinBlockHeightValidationOptions } from '~/types';
 import { batchQuery$ } from './batchQuery';
 import { msgQueryMoneyMarketCollaterals, msgQueryMoneyMarketConfig, msgQueryMoneyMarketMarkets } from '../definitions/moneyMarket';
@@ -730,7 +732,9 @@ async function batchQueryMoneyMarketPublicLogs({
   }));
 }
 
-const parseBatchQueryMoneyMarketRewardPools = (responses: any): ParsedRewardPoolsResponse[] => (
+const parseBatchQueryMoneyMarketRewardPools = (
+  responses: BatchQueryParsedResponse,
+): ParsedRewardPoolsResponse[] => (
   responses.map((response: any) => ({
     debtMarket: response.id,
     blockHeight: response.blockHeight,
