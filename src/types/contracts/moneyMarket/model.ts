@@ -166,7 +166,7 @@ type PaginatedPublicLogs = {
 }
 
 type RewardPool = {
-    id: string,
+    rewardPoolId: string,
     amount: string,
     token: string,
     start: string,
@@ -174,14 +174,10 @@ type RewardPool = {
     rate: string,
 }
 
-type PaginatedRewardPools = {
-  page: number,
-  pageSize: number,
-  totalPages: number,
-  totalItems: number,
-  blockHeight: number,
-  debtMarket: string,
-  data: RewardPool[],
+type ParsedRewardPoolsResponse = {
+    debtMarket: string,
+    blockHeight: string,
+    rewardPools: RewardPool[],
 }
 
 export type {
@@ -200,5 +196,5 @@ export type {
   PublicLog,
   PaginatedPublicLogs,
   RewardPool,
-  PaginatedRewardPools,
+  ParsedRewardPoolsResponse,
 };

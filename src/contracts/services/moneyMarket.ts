@@ -13,6 +13,7 @@ import {
   BatchMoneyMarketGetMarkets,
   ContractAndPagination,
   Pagination, ParsedConfigResponse, ParsedGetCollateralResponse, ParsedGetMarketsResponse,
+  ParsedRewardPoolsResponse,
 } from '~/types/contracts/moneyMarket/model';
 import { Contract } from '~/types/contracts/shared/index';
 import {
@@ -729,7 +730,7 @@ async function batchQueryMoneyMarketPublicLogs({
   }));
 }
 
-const parseBatchQueryMoneyMarketRewardPools = (responses: any) => (
+const parseBatchQueryMoneyMarketRewardPools = (responses: any): ParsedRewardPoolsResponse[] => (
   responses.map((response: any) => ({
     debtMarket: response.id,
     blockHeight: response.blockHeight,
