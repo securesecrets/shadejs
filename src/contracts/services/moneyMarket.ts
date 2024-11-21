@@ -610,7 +610,7 @@ function queryMoneyMarketPublicLogs$({
   return getActiveQueryClient$(lcdEndpoint, chainId).pipe(
     switchMap(({ client }) => sendSecretClientContractQuery$({
       queryMsg: {
-        public_logs: { pagination },
+        get_public_logs: { pagination },
       },
       client,
       contractAddress,
