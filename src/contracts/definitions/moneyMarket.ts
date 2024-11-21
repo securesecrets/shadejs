@@ -177,6 +177,10 @@ function msgMoneyMarketRepay({
   }).msg;
 }
 
+function msgMoneyMarketClaimRewards() {
+  return { claim_rewards: {} };
+}
+
 export {
   msgQueryMoneyMarketConfig,
   msgQueryMoneyMarketCollaterals,
@@ -188,4 +192,5 @@ export {
   msgMoneyMarketSupply,
   msgMoneyMarketWithdrawSupply,
   msgMoneyMarketRepay,
+  msgMoneyMarketClaimRewards,
 };
