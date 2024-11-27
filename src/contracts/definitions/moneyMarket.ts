@@ -177,6 +177,10 @@ function msgMoneyMarketRepay({
   }).msg;
 }
 
+function msgMoneyMarketClaimRewards() {
+  return { claim_rewards: {} };
+}
+
 /**
  * Query the Public Event Logs for momeymarket contract
  * NOT FOR PRODUCTION USE, CONTRACT IS IN DEVELOPMENT ON TESTNET ONLY
@@ -200,5 +204,6 @@ export {
   msgMoneyMarketSupply,
   msgMoneyMarketWithdrawSupply,
   msgMoneyMarketRepay,
+  msgMoneyMarketClaimRewards,
   msgQueryMoneyMarketPublicLogs,
 };
