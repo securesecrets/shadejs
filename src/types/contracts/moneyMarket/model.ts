@@ -174,6 +174,15 @@ type RewardPool = {
     rate: string,
 }
 
+type RewardPoolResponse = {
+    id: string,
+    amount: string,
+    token: string,
+    start: string,
+    end: string,
+    rate: string,
+}
+
 type ParsedRewardPoolsResponse = {
     debtMarket: string,
     blockHeight: number,
@@ -196,5 +205,6 @@ export type {
   PublicLog,
   PaginatedPublicLogs,
   RewardPool,
+  RewardPoolResponse,
   ParsedRewardPoolsResponse,
 };

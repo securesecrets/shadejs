@@ -9,6 +9,7 @@ import {
 import {
   BatchQueryParsedResponse,
   BatchQueryParams,
+  BatchQueryParsedResponseItem,
 } from '~/types/contracts/batchQuery/model';
 import { sendSecretClientContractQuery$ } from '~/client/services/clientServices';
 import { ConfigResponse, GetCollateralResponse, GetMarketsResponse } from '~/types/contracts/moneyMarket/response';
@@ -19,6 +20,7 @@ import {
   ContractAndPagination,
   Pagination, ParsedConfigResponse, ParsedGetCollateralResponse, ParsedGetMarketsResponse,
   ParsedRewardPoolsResponse,
+  RewardPoolResponse,
 } from '~/types/contracts/moneyMarket/model';
 import { Contract } from '~/types/contracts/shared/index';
 import { MinBlockHeightValidationOptions } from '~/types';
@@ -735,10 +737,10 @@ async function batchQueryMoneyMarketPublicLogs({
 const parseBatchQueryMoneyMarketRewardPools = (
   responses: BatchQueryParsedResponse,
 ): ParsedRewardPoolsResponse[] => (
-  responses.map((response: any) => ({
-    debtMarket: response.id,
+  responses.map((response: BatchQueryParsedResponseItem) => ({
+    debtMarket: response.id.toString(),
     blockHeight: response.blockHeight,
-    rewardPools: response.response.map((pool: any) => ({
+    rewardPools: response.response.map((pool: RewardPoolResponse) => ({
       rewardPoolId: pool.id,
       amount: pool.amount,
       token: pool.token,
