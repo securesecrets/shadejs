@@ -102,7 +102,8 @@ type ParsedCollateralReponse = {
   collateralAmount: string,
   decimals: number,
   maxInitialLtv: string,
-  liquidationThreshold: string,
+  publicLiquidationThreshold: string,
+  privateLiquidationThreshold: string,
   liquidationDiscount: string,
   oracleKey: string,
   depositEnabled: boolean,
@@ -150,6 +151,35 @@ type ParsedUserPositionResponse = {
   loanLiquidationPoint: string,
 }
 
+// New types for public events
+type PublicLog = {
+  timestamp: Date,
+  action: Record<string, any>
+}
+
+type PaginatedPublicLogs = {
+  page: number,
+  pageSize: number,
+  totalPages: number,
+  totalItems: number,
+  data: PublicLog[],
+}
+
+type RewardPool = {
+    rewardPoolId: string,
+    amount: string,
+    token: string,
+    start: string,
+    end: string,
+    rate: string,
+}
+
+type ParsedRewardPoolsResponse = {
+    debtMarket: string,
+    blockHeight: number,
+    rewardPools: RewardPool[],
+}
+
 export type {
   Pagination,
   ContractAndPagination,
@@ -163,4 +193,8 @@ export type {
   ParsedUserPositionResponse,
   BatchMoneyMarketGetMarkets,
   BatchMoneyMarketGetCollaterals,
+  PublicLog,
+  PaginatedPublicLogs,
+  RewardPool,
+  ParsedRewardPoolsResponse,
 };
