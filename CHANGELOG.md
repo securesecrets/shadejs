@@ -1,5 +1,11 @@
 # shadejs
 
+## 1.5.10
+
+### Patch Changes
+
+- ec0d62a: add batch query for shade staking
+
 ## 1.5.9
 
 ### Patch Changes
