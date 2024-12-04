@@ -8,13 +8,18 @@ import { of } from 'rxjs';
 import stakingOpportunityResponse from '~/test/mocks/shadeStaking/stakingOpportunityResponse.json';
 import { stakingOpportunityResponseParsed } from '~/test/mocks/shadeStaking/response';
 import {
+  batchQueryShadeStakingOpportunity,
+  batchQueryShadeStakingOpportunity$,
   parseStakingOpportunity,
   queryShadeStakingOpportunity,
   queryShadeStakingOpportunity$,
 } from '~/contracts/services/shadeStaking';
 import { StakingInfoServiceResponse } from '~/types/contracts/shadeStaking/index';
+import { batchStakingInfoUnparsed } from '~/test/mocks/shadeStaking/batchStakingInfoUnparsed';
+import { batchStakingInfoParsed } from '~/test/mocks/shadeStaking/batchStakingInfoParsed';
 
 const sendSecretClientContractQuery$ = vi.hoisted(() => vi.fn());
+const batchQuery$ = vi.hoisted(() => vi.fn());
 
 beforeAll(() => {
   vi.mock('~/contracts/definitions/shadeStaking', () => ({
@@ -27,6 +32,10 @@ beforeAll(() => {
 
   vi.mock('~/client/services/clientServices', () => ({
     sendSecretClientContractQuery$,
+  }));
+
+  vi.mock('~/contracts/services/batchQuery', () => ({
+    batchQuery$,
   }));
 });
 
@@ -75,4 +84,61 @@ test('it can call the query shade staking info service', async () => {
   });
 
   expect(output2).toStrictEqual(stakingOpportunityResponseParsed);
+});
+
+test('it can call the batch shade staking info query service', async () => {
+  const input = {
+    queryRouterContractAddress: 'CONTRACT_ADDRESS',
+    queryRouterCodeHash: 'CODE_HASH',
+    lcdEndpoint: 'LCD_ENDPOINT',
+    chainId: 'CHAIN_ID',
+    stakingContracts: [{
+      address: 'STAKING_ADDRESS',
+      codeHash: 'STAKING_CODE_HASH',
+    }],
+  };
+  // observables function
+  batchQuery$.mockReturnValueOnce(of(batchStakingInfoUnparsed));
+  let output;
+  batchQueryShadeStakingOpportunity$(input).subscribe({
+    next: (response) => {
+      output = response;
+    },
+  });
+
+  expect(batchQuery$).toHaveBeenCalledWith({
+    contractAddress: input.queryRouterContractAddress,
+    codeHash: input.queryRouterCodeHash,
+    lcdEndpoint: input.lcdEndpoint,
+    chainId: input.chainId,
+    queries: [{
+      id: input.stakingContracts[0].address,
+      contract: {
+        address: input.stakingContracts[0].address,
+        codeHash: input.stakingContracts[0].codeHash,
+      },
+      queryMsg: 'STAKING_INFO_MSG',
+    }],
+  });
+
+  expect(output).toStrictEqual(batchStakingInfoParsed);
+
+  // async/await function
+  batchQuery$.mockReturnValueOnce(of(batchStakingInfoUnparsed));
+  const response = await batchQueryShadeStakingOpportunity(input);
+  expect(batchQuery$).toHaveBeenCalledWith({
+    contractAddress: input.queryRouterContractAddress,
+    codeHash: input.queryRouterCodeHash,
+    lcdEndpoint: input.lcdEndpoint,
+    chainId: input.chainId,
+    queries: [{
+      id: input.stakingContracts[0].address,
+      contract: {
+        address: input.stakingContracts[0].address,
+        codeHash: input.stakingContracts[0].codeHash,
+      },
+      queryMsg: 'STAKING_INFO_MSG',
+    }],
+  });
+  expect(response).toStrictEqual(batchStakingInfoParsed);
 });

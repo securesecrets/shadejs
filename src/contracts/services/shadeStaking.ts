@@ -12,7 +12,15 @@ import {
   StakingInfoServiceResponse,
   StakingRewardPoolServiceModel,
   StakingInfoServiceModel,
+  BatchShadeStakingOpportunity,
 } from '~/types/contracts/shadeStaking/index';
+import {
+  BatchQueryParams,
+  BatchQueryParsedResponse,
+  Contract,
+  MinBlockHeightValidationOptions,
+} from '~/types';
+import { batchQuery$ } from './batchQuery';
 
 // data returned from the contract in normalized form with
 // 18 decimals, in addition to any decimals on the individual token
@@ -41,6 +49,18 @@ function parseStakingOpportunity(data: StakingInfoServiceResponse): StakingInfoS
     rewardPools,
   };
 }
+
+/**
+ * parses the staking info reponse from a batch query of
+ * multiple staking contracts
+ */
+const parseBatchQueryShadeStakingOpportunityResponse = (
+  response: BatchQueryParsedResponse,
+): BatchShadeStakingOpportunity => response.map((item) => ({
+  stakingContractAddress: item.id as string,
+  stakingInfo: parseStakingOpportunity(item.response),
+  blockHeight: item.blockHeight,
+}));
 
 /**
  * query the staking info from the shade staking contract
@@ -88,8 +108,77 @@ async function queryShadeStakingOpportunity({
   }));
 }
 
+/**
+ * query the staking info for multiple staking contracts at one time
+ */
+function batchQueryShadeStakingOpportunity$({
+  queryRouterContractAddress,
+  queryRouterCodeHash,
+  lcdEndpoint,
+  chainId,
+  stakingContracts,
+  minBlockHeightValidationOptions,
+}:{
+  queryRouterContractAddress: string,
+  queryRouterCodeHash?: string,
+  lcdEndpoint?: string,
+  chainId?: string,
+  stakingContracts: Contract[]
+  minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
+}) {
+  const queries:BatchQueryParams[] = stakingContracts.map((contract) => ({
+    id: contract.address,
+    contract: {
+      address: contract.address,
+      codeHash: contract.codeHash,
+    },
+    queryMsg: msgQueryShadeStakingOpportunity(),
+  }));
+  return batchQuery$({
+    contractAddress: queryRouterContractAddress,
+    codeHash: queryRouterCodeHash,
+    lcdEndpoint,
+    chainId,
+    queries,
+    minBlockHeightValidationOptions,
+  }).pipe(
+    map(parseBatchQueryShadeStakingOpportunityResponse),
+    first(),
+  );
+}
+
+/**
+ * query the staking info for multiple staking contracts at one time
+ */
+async function batchQueryShadeStakingOpportunity({
+  queryRouterContractAddress,
+  queryRouterCodeHash,
+  lcdEndpoint,
+  chainId,
+  stakingContracts,
+  minBlockHeightValidationOptions,
+}:{
+  queryRouterContractAddress: string,
+  queryRouterCodeHash?: string,
+  lcdEndpoint?: string,
+  chainId?: string,
+  stakingContracts: Contract[]
+  minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
+}) {
+  return lastValueFrom(batchQueryShadeStakingOpportunity$({
+    queryRouterContractAddress,
+    queryRouterCodeHash,
+    lcdEndpoint,
+    chainId,
+    stakingContracts,
+    minBlockHeightValidationOptions,
+  }));
+}
+
 export {
   parseStakingOpportunity,
   queryShadeStakingOpportunity$,
   queryShadeStakingOpportunity,
+  batchQueryShadeStakingOpportunity$,
+  batchQueryShadeStakingOpportunity,
 };
