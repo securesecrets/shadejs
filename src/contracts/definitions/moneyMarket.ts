@@ -177,6 +177,22 @@ function msgMoneyMarketRepay({
   }).msg;
 }
 
+function msgMoneyMarketClaimRewards() {
+  return { claim_rewards: {} };
+}
+
+/**
+ * Query the Public Event Logs for momeymarket contract
+ * NOT FOR PRODUCTION USE, CONTRACT IS IN DEVELOPMENT ON TESTNET ONLY
+ */
+const msgQueryMoneyMarketPublicLogs = (
+  pagination?: Pagination,
+) => ({
+  get_public_log: {
+    pagination,
+  },
+});
+
 export {
   msgQueryMoneyMarketConfig,
   msgQueryMoneyMarketCollaterals,
@@ -188,4 +204,6 @@ export {
   msgMoneyMarketSupply,
   msgMoneyMarketWithdrawSupply,
   msgMoneyMarketRepay,
+  msgMoneyMarketClaimRewards,
+  msgQueryMoneyMarketPublicLogs,
 };

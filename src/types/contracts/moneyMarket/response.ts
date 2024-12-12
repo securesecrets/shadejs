@@ -78,7 +78,8 @@ type CollateralReponse = {
   amount: string,
   decimals: number,
   max_initial_ltv: string,
-  liquidation_threshold: string,
+  public_liquidation_threshold: string,
+  private_liquidation_threshold: string,
   liquidation_discount: string,
   oracle_key: string,
   status: {
@@ -122,9 +123,20 @@ type UserPositionResponse = {
   }
 }
 
+// Flexible type for actions, leaving it as a JSON object (blob)
+type PublicLogResponse = {
+  timestamp: number,
+  action: Record<string, any>, // Flexible JSON blob for action
+}
+
+// Paginated response type for public events
+type GetPublicLogsResponse = PaginatedResponse<PublicLogResponse>;
+
 export type {
   ConfigResponse,
   GetMarketsResponse,
   GetCollateralResponse,
   UserPositionResponse,
+  PublicLogResponse,
+  GetPublicLogsResponse,
 };

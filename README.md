@@ -44,3 +44,8 @@ Docs will be available on a vitepress site. You can run the site locally with th
 ```
 $ yarn docs:dev
 ```
+
+## Building new version run
+```bash
+yarn changeset
+```
