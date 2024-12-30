@@ -1,5 +1,15 @@
 # shadejs
 
+## 1.6.0
+
+### Minor Changes
+
+- 63b774e: upgrade secretjs which includes breaking changes for the pre-upgraded version of secret network
+
+### Patch Changes
+
+- f79e968: SecretJs Bump
+
 ## 1.5.10
 
 ### Patch Changes
