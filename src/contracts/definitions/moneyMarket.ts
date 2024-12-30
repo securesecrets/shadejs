@@ -25,7 +25,7 @@ const msgQueryMoneyMarketCollaterals = (
  * Query the markets' state and config info
  * NOT FOR PRODUCTION USE, CONTRACT IS IN DEVELOPMENT ON TESTNET ONLY
  */
-const msgQueryMoneyMarketMarkets = (
+const msgQueryMoneyMarketVaults = (
   pagination?: Pagination,
 ) => ({
   get_markets: {
@@ -196,7 +196,7 @@ const msgQueryMoneyMarketPublicLogs = (
 export {
   msgQueryMoneyMarketConfig,
   msgQueryMoneyMarketCollaterals,
-  msgQueryMoneyMarketMarkets,
+  msgQueryMoneyMarketVaults,
   msgQueryMoneyMarketUserPosition,
   msgMoneyMarketBorrow,
   msgMoneyMarketWithdrawCollateral,

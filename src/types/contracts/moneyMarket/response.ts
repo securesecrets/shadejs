@@ -68,7 +68,7 @@ type MarketReponse = {
     }
 }
 
-type GetMarketsResponse = PaginatedResponse<MarketReponse>;
+type GetVaultsResponse = PaginatedResponse<MarketReponse>;
 
 type CollateralReponse = {
   token: {
@@ -134,7 +134,7 @@ type GetPublicLogsResponse = PaginatedResponse<PublicLogResponse>;
 
 export type {
   ConfigResponse,
-  GetMarketsResponse,
+  GetVaultsResponse,
   GetCollateralResponse,
   UserPositionResponse,
   PublicLogResponse,

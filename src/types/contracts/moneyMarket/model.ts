@@ -84,15 +84,15 @@ type ParsedMarketResponse = {
   interestAccrualEnabled: boolean,
 }
 
-type ParsedGetMarketsResponse = ParsedPagination<Record<string, ParsedMarketResponse>>;
+type ParsedGetVaultsResponse = ParsedPagination<Record<string, ParsedMarketResponse>>;
 
 type BatchMoneyMarketGetMarket = {
   moneyMarketContractAddress: string,
-  config: ParsedGetMarketsResponse,
+  config: ParsedGetVaultsResponse,
   blockHeight: number,
 }
 
-type BatchMoneyMarketGetMarkets = BatchMoneyMarketGetMarket[];
+type BatchMoneyMarketGetVaults = BatchMoneyMarketGetMarket[];
 
 type ParsedCollateralReponse = {
   token: {
@@ -184,7 +184,7 @@ type RewardPoolResponse = {
 }
 
 type ParsedRewardPoolsResponse = {
-    debtMarket: string,
+    vault: string,
     blockHeight: number,
     rewardPools: RewardPool[],
 }
@@ -196,11 +196,11 @@ export type {
   ParsedConfigResponse,
   BatchMoneyMarketConfigs,
   ParsedMarketResponse,
-  ParsedGetMarketsResponse,
+  ParsedGetVaultsResponse,
   ParsedCollateralReponse,
   ParsedGetCollateralResponse,
   ParsedUserPositionResponse,
-  BatchMoneyMarketGetMarkets,
+  BatchMoneyMarketGetVaults,
   BatchMoneyMarketGetCollaterals,
   PublicLog,
   PaginatedPublicLogs,
