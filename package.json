@@ -42,7 +42,7 @@
   "dependencies": {
     "bignumber.js": "^9.1.2",
     "rxjs": "^7.8.1",
-    "secretjs": "^1.12.1",
+    "secretjs": "1.15.0",
     "vite": "^4.5.0",
     "whatwg-fetch": "^3.6.19"
   },
