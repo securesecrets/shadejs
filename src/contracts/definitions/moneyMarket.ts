@@ -22,13 +22,13 @@ const msgQueryMoneyMarketCollaterals = (
 });
 
 /**
- * Query the markets' state and config info
+ * Query the vaults' state and config info
  * NOT FOR PRODUCTION USE, CONTRACT IS IN DEVELOPMENT ON TESTNET ONLY
  */
 const msgQueryMoneyMarketVaults = (
   pagination?: Pagination,
 ) => ({
-  get_markets: {
+  get_vaults: {
     pagination,
   },
 });
