@@ -40,10 +40,10 @@ const parseMoneyMarketGetVaults = (
   totalItems: response.total_items,
   data: response.data.reduce((prev, cur) => ({
     ...prev,
-    [cur.market_token.address]: {
-      marketToken: {
-        contractAddress: cur.market_token.address,
-        codeHash: cur.market_token.code_hash,
+    [cur.token.address]: {
+      token: {
+        contractAddress: cur.token.address,
+        codeHash: cur.token.code_hash,
       },
       lToken: {
         contractAddress: cur.l_token.address,
@@ -133,7 +133,7 @@ const parseMoneyMarketGetCollateral = (
       liquidationDiscount: cur.liquidation_discount,
       oracleKey: cur.oracle_key,
       depositEnabled: cur.status.deposit_enabled,
-      liquidationEnabled: cur.status.liquidations_enabled,
+      liquidationEnabled: cur.status.liquidation_enabled,
     },
   }), {}),
 });
@@ -186,7 +186,10 @@ const queryMoneyMarketGetCollateral$ = ({
     contractAddress,
     codeHash,
   })),
-  map((response) => parseMoneyMarketGetCollateral(response as GetCollateralResponse)),
+  map((response) => {
+    console.error('COL response', response);
+    return parseMoneyMarketGetCollateral(response as GetCollateralResponse);
+  }),
   first(),
 );
 
@@ -426,6 +429,7 @@ function batchQueryMoneyMarketGetVaults$({
   minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
   blockHeight?: number,
 }) {
+  console.error('moneyMarketContracts', moneyMarketContracts);
   const queries:BatchQueryParams[] = moneyMarketContracts.map((contract) => ({
     id: contract.address,
     contract: {
@@ -544,7 +548,10 @@ function batchQueryMoneyMarketGetCollateral$({
     minBlockHeightValidationOptions,
     blockHeight,
   }).pipe(
-    map(parseBatchQueryMoneyMarketGetCollateral),
+    map((response) => {
+      console.error('response', response);
+      return parseBatchQueryMoneyMarketGetCollateral(response);
+    }),
     first(),
   );
 }

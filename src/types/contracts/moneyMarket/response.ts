@@ -33,8 +33,8 @@ type PaginatedResponse<T> = {
   data: T[]
 }
 
-type MarketReponse = {
-    market_token: {
+type VaultResponse = {
+    token: {
       address: string,
       code_hash: string,
     },
@@ -68,9 +68,9 @@ type MarketReponse = {
     }
 }
 
-type GetVaultsResponse = PaginatedResponse<MarketReponse>;
+type GetVaultsResponse = PaginatedResponse<VaultResponse>;
 
-type CollateralReponse = {
+type CollateralResponse = {
   token: {
     address: string,
     code_hash: string,
@@ -84,13 +84,13 @@ type CollateralReponse = {
   oracle_key: string,
   status: {
     deposit_enabled: boolean,
-    liquidations_enabled: boolean,
+    liquidation_enabled: boolean,
   }
 }
 
-type GetCollateralResponse = PaginatedResponse<CollateralReponse>;
+type GetCollateralResponse = PaginatedResponse<CollateralResponse>;
 
-type CalculatedUserCollateralReponse = {
+type CalculatedUserCollateralResponse = {
   calculated_user_collateral: {
     token: string,
     amount: string,
@@ -113,7 +113,7 @@ type CalculatedUserDebtResponse = {
 type UserPositionResponse = {
   calcualted_user_position: {
     id: string,
-    collateral: CalculatedUserCollateralReponse[],
+    collateral: CalculatedUserCollateralResponse[],
     debt: CalculatedUserDebtResponse[],
     total_collateral_value: string,
     total_principal_value: string,

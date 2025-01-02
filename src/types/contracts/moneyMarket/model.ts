@@ -51,8 +51,8 @@ type BatchMoneyMarketConfig = {
 
 type BatchMoneyMarketConfigs = BatchMoneyMarketConfig[];
 
-type ParsedMarketResponse = {
-  marketToken: {
+type ParsedVaultResponse = {
+  token: {
     contractAddress: string,
     codeHash: string,
   },
@@ -84,7 +84,7 @@ type ParsedMarketResponse = {
   interestAccrualEnabled: boolean,
 }
 
-type ParsedGetVaultsResponse = ParsedPagination<Record<string, ParsedMarketResponse>>;
+type ParsedGetVaultsResponse = ParsedPagination<Record<string, ParsedVaultResponse>>;
 
 type BatchMoneyMarketGetMarket = {
   moneyMarketContractAddress: string,
@@ -94,7 +94,7 @@ type BatchMoneyMarketGetMarket = {
 
 type BatchMoneyMarketGetVaults = BatchMoneyMarketGetMarket[];
 
-type ParsedCollateralReponse = {
+type ParsedCollateralResponse = {
   token: {
     contractAddress: string,
     codeHash: string,
@@ -110,7 +110,7 @@ type ParsedCollateralReponse = {
   liquidationEnabled: boolean,
 }
 
-type ParsedGetCollateralResponse = ParsedPagination<Record<string, ParsedCollateralReponse>>;
+type ParsedGetCollateralResponse = ParsedPagination<Record<string, ParsedCollateralResponse>>;
 
 type BatchMoneyMarketGetCollateral = {
   moneyMarketContractAddress: string,
@@ -120,7 +120,7 @@ type BatchMoneyMarketGetCollateral = {
 
 type BatchMoneyMarketGetCollaterals = BatchMoneyMarketGetCollateral[];
 
-type ParsedCalculatedUserCollateralReponse = {
+type ParsedCalculatedUserCollateralResponse = {
     [token: string]: {
       token: string,
       amount: string,
@@ -142,7 +142,7 @@ type ParsedCalculatedUserDebtResponse = {
 
 type ParsedUserPositionResponse = {
   id: string,
-  collateral: ParsedCalculatedUserCollateralReponse,
+  collateral: ParsedCalculatedUserCollateralResponse,
   debt: ParsedCalculatedUserDebtResponse,
   totalCollateralValue: string,
   totalPrincipalValue: string,
@@ -195,9 +195,9 @@ export type {
   ParsedPagination,
   ParsedConfigResponse,
   BatchMoneyMarketConfigs,
-  ParsedMarketResponse,
+  ParsedVaultResponse,
   ParsedGetVaultsResponse,
-  ParsedCollateralReponse,
+  ParsedCollateralResponse,
   ParsedGetCollateralResponse,
   ParsedUserPositionResponse,
   BatchMoneyMarketGetVaults,
