@@ -186,10 +186,7 @@ const queryMoneyMarketGetCollateral$ = ({
     contractAddress,
     codeHash,
   })),
-  map((response) => {
-    console.error('COL response', response);
-    return parseMoneyMarketGetCollateral(response as GetCollateralResponse);
-  }),
+  map((response) => parseMoneyMarketGetCollateral(response as GetCollateralResponse)),
   first(),
 );
 
@@ -429,7 +426,6 @@ function batchQueryMoneyMarketGetVaults$({
   minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
   blockHeight?: number,
 }) {
-  console.error('moneyMarketContracts', moneyMarketContracts);
   const queries:BatchQueryParams[] = moneyMarketContracts.map((contract) => ({
     id: contract.address,
     contract: {
@@ -548,10 +544,7 @@ function batchQueryMoneyMarketGetCollateral$({
     minBlockHeightValidationOptions,
     blockHeight,
   }).pipe(
-    map((response) => {
-      console.error('response', response);
-      return parseBatchQueryMoneyMarketGetCollateral(response);
-    }),
+    map((response) => parseBatchQueryMoneyMarketGetCollateral(response)),
     first(),
   );
 }
