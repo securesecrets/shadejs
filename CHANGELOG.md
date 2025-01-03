@@ -1,5 +1,11 @@
 # shadejs
 
+## 1.6.1
+
+### Patch Changes
+
+- 23bbb4c: change secret endpoints to new api after upgrade
+
 ## 1.6.0
 
 ### Minor Changes
