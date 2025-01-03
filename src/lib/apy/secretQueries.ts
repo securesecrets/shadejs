@@ -5,22 +5,25 @@ import {
   lastValueFrom,
   map,
   first, switchMap,
+  from,
+  mergeMap,
+  toArray,
 } from 'rxjs';
 import { fromFetch } from 'rxjs/fetch';
 import { createFetch } from '~/client/services/createFetch';
-import {
-  SecretValidatorItemResponse,
-} from '~/types/apy';
-
 import { QuerySupplyOfResponse } from 'secretjs/dist/grpc_gateway/cosmos/bank/v1beta1/query.pb';
 import { getActiveQueryClient$ } from '~/client';
-import { secretClientTokenSupplyQuery$ } from '~/client/services/clientServices';
+import {
+  secretClientTokenSupplyQuery$,
+  secretClientValidatorQuery$,
+} from '~/client/services/clientServices';
+import { QueryValidatorResponse } from 'secretjs/dist/grpc_gateway/cosmos/staking/v1beta1/query.pb';
+import { ValidatorRate } from '~/types/apy';
 
 enum SecretQueryOptions {
   INFLATION = '/cosmos/mint/v1beta1/inflation',
   TOTAL_STAKED = '/cosmos/staking/v1beta1/pool',
   TAXES = '/cosmos/distribution/v1beta1/params',
-  VALIDATORS = '/cosmos/staking/v1beta1/validators',
 }
 
 /**
@@ -33,11 +36,11 @@ function parseSecretQueryResponse<ResponseType>(
   switch (query) {
     case SecretQueryOptions.INFLATION:
       return {
-        secretInflationPercent: response?.inflation,
+        secretInflationPercent: Number(response?.inflation),
       } as ResponseType;
     case SecretQueryOptions.TOTAL_STAKED:
       return {
-        secretTotalStakedRaw: response?.pool?.bonded_tokens,
+        secretTotalStakedRaw: Number(response?.pool?.bonded_tokens),
       }as ResponseType;
     case SecretQueryOptions.TAXES:
       if (response.params
@@ -52,17 +55,6 @@ function parseSecretQueryResponse<ResponseType>(
         }as ResponseType;
       }
       return response as ResponseType;
-    case SecretQueryOptions.VALIDATORS: {
-      const parsedValidators = response?.validators?.map((
-        nextValidator: SecretValidatorItemResponse,
-      ) => ({
-        ratePercent: Number(nextValidator.commission.commission_rates.rate),
-        validatorAddress: nextValidator.operator_address,
-      }));
-      return {
-        secretValidators: parsedValidators,
-      } as ResponseType;
-    }
     default:
       return response as ResponseType;
   }
@@ -148,8 +140,25 @@ const parseTotalSupplyResponse = (response:QuerySupplyOfResponse) => {
   return Number(response.amount.amount);
 };
 
+const parseValidatorResponse = (response: QueryValidatorResponse): ValidatorRate => {
+  if (response === undefined
+    || response.validator === undefined
+    || response.validator?.commission === undefined
+    || response.validator?.commission?.commission_rates === undefined
+    || response.validator?.operator_address === undefined
+    || response.validator?.commission?.commission_rates?.rate === undefined
+
+  ) {
+    throw new Error('Validator commission not found');
+  }
+  return {
+    validatorAddress: response.validator.operator_address,
+    ratePercent: Number(response.validator.commission.commission_rates.rate),
+  };
+};
+
 /**
- * query the staking info from the shade staking contract
+ * query the SCRT token total supply
  */
 const queryScrtTotalSupply$ = (
   lcdEndpoint?: string,
@@ -160,6 +169,40 @@ const queryScrtTotalSupply$ = (
   first(),
 );
 
+/**
+ * query the validator commission for an individual validator
+ */
+const queryValidatorCommission$ = ({
+  lcdEndpoint,
+  chainId,
+  validatorAddress,
+}:{
+  lcdEndpoint?: string,
+  chainId?: string,
+  validatorAddress: string,
+}) => getActiveQueryClient$(lcdEndpoint, chainId).pipe(
+  switchMap(({ client }) => secretClientValidatorQuery$(client, validatorAddress)),
+  map((response) => parseValidatorResponse(response)),
+  first(),
+);
+
+/**
+ * query the commission for multiple validators
+ */
+const queryValidatorsCommission$ = ({
+  lcdEndpoint,
+  chainId,
+  validatorAddresses,
+}: {
+  lcdEndpoint?: string;
+  chainId?: string;
+  validatorAddresses: string[];
+}) => from(validatorAddresses).pipe(
+  mergeMap((
+    validatorAddress,
+  ) => queryValidatorCommission$({ lcdEndpoint, chainId, validatorAddress })),
+  toArray(),
+);
 export {
   SecretQueryOptions,
   parseSecretQueryResponse,
@@ -168,4 +211,6 @@ export {
   secretChainQueries$,
   secretChainQueries,
   queryScrtTotalSupply$,
+  queryValidatorCommission$,
+  queryValidatorsCommission$,
 };

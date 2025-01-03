@@ -37,11 +37,6 @@ test('it can parse chain queries', () => {
   )).toStrictEqual({ secretTaxes: { foundationTaxPercent: 11, communityTaxPercent: 10 } });
 
   expect(parseSecretQueryResponse(
-    { validators: [{ commission: { commission_rates: { rate: '10' } }, operator_address: 'MOCK_ADDRESS' }] },
-    SecretQueryOptions.VALIDATORS,
-  )).toStrictEqual({ secretValidators: [{ ratePercent: 10, validatorAddress: 'MOCK_ADDRESS' }] });
-
-  expect(parseSecretQueryResponse(
     'nonsence',
     '/nonsence/api',
   )).toStrictEqual('nonsence');

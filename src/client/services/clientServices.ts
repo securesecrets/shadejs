@@ -74,7 +74,16 @@ const secretClientTokenSupplyQuery$ = (
   })),
 ));
 
+// This function queries the total supply of the a token
+const secretClientValidatorQuery$ = (
+  client: SecretNetworkClient,
+  validatorAddress: string,
+) => createFetchClient(defer(
+  () => from(client.query.staking.validator({ validator_addr: validatorAddress })),
+));
+
 export {
   sendSecretClientContractQuery$,
   secretClientTokenSupplyQuery$,
+  secretClientValidatorQuery$,
 };

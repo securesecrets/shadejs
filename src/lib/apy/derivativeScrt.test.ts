@@ -8,6 +8,7 @@ import { of } from 'rxjs';
 import chainQueryParsedResponse from '~/test/mocks/secretChainQueries/chainQueryParsedResponse.json';
 import { queryDerivativeScrtInfo$ } from '~/contracts/services/derivativeScrt';
 import stakingInfoResponseMainnet from '~/test/mocks/derivativeScrt/stakingInfoResponseMainnet.json';
+import { mockValidatorsCommissions } from '~/test/mocks/secretChainQueries/validatorsCommissionsParsedResponse';
 import {
   secretChainQueries$,
   SecretQueryOptions,
@@ -22,6 +23,7 @@ beforeAll(() => {
     ...(await importOriginal()),
     secretChainQueries$: vi.fn(() => of(chainQueryParsedResponse)),
     queryScrtTotalSupply$: vi.fn(() => of(292470737038201)),
+    queryValidatorsCommission$: vi.fn(() => of(mockValidatorsCommissions)),
   }));
 
   vi.mock('~/contracts/services/derivativeScrt', () => ({
