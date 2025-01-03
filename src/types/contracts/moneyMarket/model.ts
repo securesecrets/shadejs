@@ -31,16 +31,26 @@ type ParsedConfigResponse = {
     contractAddress: string,
     codeHash: string,
   },
+  swapRouter: {
+    contractAddress: string,
+    codeHash: string,
+  },
   feeCollector: string,
   lTokenId: number,
   lTokenCodeHash: string,
   lTokenBlockchainAdmin: string,
+  privateLiquidationProtocolFee: string,
+  publicLiquidationProtocolFee: string,
+  maxConstantProductPriceImpact: string,
+  maxStableswapTvlPercent: string,
+  privateLiquidationInterval: number,
   supplyEnabled: boolean,
   borrowEnabled: boolean,
   repayEnabled: boolean,
   liquidationEnabled: boolean,
   interestAccrualEnabled: boolean,
   collateralDepositEnabled: boolean,
+  flashLoanEnabled: boolean,
 }
 
 type BatchMoneyMarketConfig = {
@@ -51,8 +61,8 @@ type BatchMoneyMarketConfig = {
 
 type BatchMoneyMarketConfigs = BatchMoneyMarketConfig[];
 
-type ParsedMarketResponse = {
-  marketToken: {
+type ParsedVaultResponse = {
+  token: {
     contractAddress: string,
     codeHash: string,
   },
@@ -66,7 +76,7 @@ type ParsedMarketResponse = {
     base: string,
     slope1: string,
     slope2?: string,
-    optimalUtilisation?: string,
+    optimalUtilization?: string,
   },
   loanableAmount: string,
   lentAmount: string,
@@ -84,17 +94,17 @@ type ParsedMarketResponse = {
   interestAccrualEnabled: boolean,
 }
 
-type ParsedGetMarketsResponse = ParsedPagination<Record<string, ParsedMarketResponse>>;
+type ParsedGetVaultsResponse = ParsedPagination<Record<string, ParsedVaultResponse>>;
 
 type BatchMoneyMarketGetMarket = {
   moneyMarketContractAddress: string,
-  config: ParsedGetMarketsResponse,
+  config: ParsedGetVaultsResponse,
   blockHeight: number,
 }
 
-type BatchMoneyMarketGetMarkets = BatchMoneyMarketGetMarket[];
+type BatchMoneyMarketGetVaults = BatchMoneyMarketGetMarket[];
 
-type ParsedCollateralReponse = {
+type ParsedCollateralResponse = {
   token: {
     contractAddress: string,
     codeHash: string,
@@ -110,7 +120,7 @@ type ParsedCollateralReponse = {
   liquidationEnabled: boolean,
 }
 
-type ParsedGetCollateralResponse = ParsedPagination<Record<string, ParsedCollateralReponse>>;
+type ParsedGetCollateralResponse = ParsedPagination<Record<string, ParsedCollateralResponse>>;
 
 type BatchMoneyMarketGetCollateral = {
   moneyMarketContractAddress: string,
@@ -120,7 +130,7 @@ type BatchMoneyMarketGetCollateral = {
 
 type BatchMoneyMarketGetCollaterals = BatchMoneyMarketGetCollateral[];
 
-type ParsedCalculatedUserCollateralReponse = {
+type ParsedCalculatedUserCollateralResponse = {
     [token: string]: {
       token: string,
       amount: string,
@@ -142,7 +152,7 @@ type ParsedCalculatedUserDebtResponse = {
 
 type ParsedUserPositionResponse = {
   id: string,
-  collateral: ParsedCalculatedUserCollateralReponse,
+  collateral: ParsedCalculatedUserCollateralResponse,
   debt: ParsedCalculatedUserDebtResponse,
   totalCollateralValue: string,
   totalPrincipalValue: string,
@@ -184,7 +194,7 @@ type RewardPoolResponse = {
 }
 
 type ParsedRewardPoolsResponse = {
-    debtMarket: string,
+    vault: string,
     blockHeight: number,
     rewardPools: RewardPool[],
 }
@@ -195,12 +205,12 @@ export type {
   ParsedPagination,
   ParsedConfigResponse,
   BatchMoneyMarketConfigs,
-  ParsedMarketResponse,
-  ParsedGetMarketsResponse,
-  ParsedCollateralReponse,
+  ParsedVaultResponse,
+  ParsedGetVaultsResponse,
+  ParsedCollateralResponse,
   ParsedGetCollateralResponse,
   ParsedUserPositionResponse,
-  BatchMoneyMarketGetMarkets,
+  BatchMoneyMarketGetVaults,
   BatchMoneyMarketGetCollaterals,
   PublicLog,
   PaginatedPublicLogs,

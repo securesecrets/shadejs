@@ -4725,10 +4725,10 @@ safe-regex-test@^1.0.0:
   resolved "https://registry.yarnpkg.com/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
   integrity sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
 
-secretjs@1.15.0-beta.0:
-  version "1.15.0-beta.0"
-  resolved "https://registry.yarnpkg.com/secretjs/-/secretjs-1.15.0-beta.0.tgz#ee1953dbdf3d4379ee15259012c9529d05708fa0"
-  integrity sha512-zxFVWixArto6qd2+h9f4HEGTtlD2ZB0dggDsFdkHyXNA7728vVX0QWFfKcnxR04mqOtr7CnASxxTTSK42EFoKQ==
+secretjs@1.15.0:
+  version "1.15.0"
+  resolved "https://registry.yarnpkg.com/secretjs/-/secretjs-1.15.0.tgz#0fd87c9e329cf43dbf67e6232d0df03a323c3573"
+  integrity sha512-R+EUWc/6HLUWQpck/rbhfFvJjyxOkZqZ/dOVgNY1i/4UoVavy0T4PmeWfh0yexkCYgAybljdD/efp0WveW4Xfg==
   dependencies:
     "@cosmjs/amino" "^0.32.4"
     "@cosmjs/encoding" "0.32.3"
