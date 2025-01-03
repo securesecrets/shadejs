@@ -25,19 +25,6 @@ type SecretTaxesResponse = {
   },
 }
 
-type SecretValidatorItemResponse = {
-  operator_address: string,
-  commission: {
-    commission_rates: {
-      rate: string,
-    },
-  },
-}
-
-type SecretValidatorsResponse = {
-  result: SecretValidatorItemResponse[],
-}
-
 type ValidatorRate = {
   validatorAddress: string,
   ratePercent: number,
@@ -59,8 +46,6 @@ export type {
   SecretTotalSupplyResponse,
   SecretTotalStakedResponse,
   SecretTaxesResponse,
-  SecretValidatorItemResponse,
-  SecretValidatorsResponse,
   ValidatorRate,
   SecretChainDataQueryModel,
 };
