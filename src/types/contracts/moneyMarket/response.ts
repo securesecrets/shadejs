@@ -11,10 +11,19 @@ type ConfigResponse = {
     address: string,
     code_hash: string,
   }
+  swap_router: {
+    address: string,
+    code_hash: string,
+  },
   fee_collector: string,
   l_token_id: number,
   l_token_code_hash: string,
   l_token_blockchain_admin: string,
+  private_liquidation_protocol_fee: string,
+  public_liquidation_protocol_fee: string,
+  max_constant_product_price_impact: string,
+  max_stableswap_tvl_percent: string,
+  private_liquidation_interval: number,
   status: {
     supply_enabled: boolean,
     borrow_enabled: boolean,
@@ -22,7 +31,8 @@ type ConfigResponse = {
     liquidation_enabled: boolean,
     interest_accrual_enabled: boolean,
     collateral_deposit_enabled: boolean,
-  }
+    flash_loan_enabled: boolean,
+  },
 }
 
 type PaginatedResponse<T> = {
@@ -48,7 +58,7 @@ type VaultResponse = {
       base: string,
       slope1: string,
       slope2: string,
-      optimal_utilisation: string,
+      optimal_utilization: string,
     },
     loanable: string,
     lent_amount: string,

@@ -55,8 +55,8 @@ const parseMoneyMarketGetVaults = (
         base: cur.interest.base,
         slope1: cur.interest.slope1,
         slope2: cur.interest.slope2,
-        optimalUtilisation:
-          cur.interest.optimal_utilisation,
+        optimalUtilization:
+          cur.interest.optimal_utilization,
       },
       loanableAmount: cur.loanable,
       lentAmount: cur.lent_amount,
@@ -95,16 +95,26 @@ const parseMoneyMarketConfig = (
     contractAddress: response.oracle.address,
     codeHash: response.query_auth.code_hash,
   },
+  swapRouter: {
+    contractAddress: response.swap_router.address,
+    codeHash: response.swap_router.code_hash,
+  },
   feeCollector: response.fee_collector,
   lTokenId: response.l_token_id,
   lTokenCodeHash: response.l_token_code_hash,
   lTokenBlockchainAdmin: response.l_token_blockchain_admin,
+  privateLiquidationProtocolFee: response.private_liquidation_protocol_fee,
+  publicLiquidationProtocolFee: response.public_liquidation_protocol_fee,
+  maxConstantProductPriceImpact: response.max_constant_product_price_impact,
+  maxStableswapTvlPercent: response.max_stableswap_tvl_percent,
+  privateLiquidationInterval: response.private_liquidation_interval,
   supplyEnabled: response.status.supply_enabled,
   borrowEnabled: response.status.borrow_enabled,
   repayEnabled: response.status.repay_enabled,
   liquidationEnabled: response.status.liquidation_enabled,
   interestAccrualEnabled: response.status.interest_accrual_enabled,
   collateralDepositEnabled: response.status.collateral_deposit_enabled,
+  flashLoanEnabled: response.status.flash_loan_enabled,
 });
 
 /**
