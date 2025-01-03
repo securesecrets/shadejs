@@ -21,6 +21,7 @@ beforeAll(() => {
   vi.mock('~/lib/apy/secretQueries', async (importOriginal: any) => ({
     ...(await importOriginal()),
     secretChainQueries$: vi.fn(() => of(chainQueryParsedResponse)),
+    queryScrtTotalSupply$: vi.fn(() => of(292470737038201)),
   }));
 
   vi.mock('~/contracts/services/derivativeScrt', () => ({

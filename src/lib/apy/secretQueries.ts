@@ -4,6 +4,7 @@ import {
   forkJoin,
   lastValueFrom,
   map,
+  first, switchMap,
 } from 'rxjs';
 import { fromFetch } from 'rxjs/fetch';
 import { createFetch } from '~/client/services/createFetch';
@@ -11,12 +12,15 @@ import {
   SecretValidatorItemResponse,
 } from '~/types/apy';
 
+import { QuerySupplyOfResponse } from 'secretjs/dist/grpc_gateway/cosmos/bank/v1beta1/query.pb';
+import { getActiveQueryClient$ } from '~/client';
+import { secretClientTokenSupplyQuery$ } from '~/client/services/clientServices';
+
 enum SecretQueryOptions {
-  INFLATION = '/minting/inflation',
-  TOTAL_SUPPLY = '/cosmos/bank/v1beta1/supply/uscrt',
-  TOTAL_STAKED = '/staking/pool',
-  TAXES = '/distribution/parameters',
-  VALIDATORS = '/staking/validators',
+  INFLATION = '/cosmos/mint/v1beta1/inflation',
+  TOTAL_STAKED = '/cosmos/staking/v1beta1/pool',
+  TAXES = '/cosmos/distribution/v1beta1/params',
+  VALIDATORS = '/cosmos/staking/v1beta1/validators',
 }
 
 /**
@@ -29,31 +33,27 @@ function parseSecretQueryResponse<ResponseType>(
   switch (query) {
     case SecretQueryOptions.INFLATION:
       return {
-        secretInflationPercent: response?.result,
+        secretInflationPercent: response?.inflation,
       } as ResponseType;
-    case SecretQueryOptions.TOTAL_SUPPLY:
-      return {
-        secretTotalSupplyRaw: response?.amount?.amount,
-      }as ResponseType;
     case SecretQueryOptions.TOTAL_STAKED:
       return {
-        secretTotalStakedRaw: response?.result?.bonded_tokens,
+        secretTotalStakedRaw: response?.pool?.bonded_tokens,
       }as ResponseType;
     case SecretQueryOptions.TAXES:
-      if (response.result
-          && response.result.community_tax
-          && response.result.secret_foundation_tax
+      if (response.params
+          && response.params.community_tax
+          && response.params.secret_foundation_tax
       ) {
         return {
           secretTaxes: {
-            foundationTaxPercent: Number(response.result.secret_foundation_tax),
-            communityTaxPercent: Number(response.result.community_tax),
+            foundationTaxPercent: Number(response.params.secret_foundation_tax),
+            communityTaxPercent: Number(response.params.community_tax),
           },
         }as ResponseType;
       }
       return response as ResponseType;
     case SecretQueryOptions.VALIDATORS: {
-      const parsedValidators = response?.result?.map((
+      const parsedValidators = response?.validators?.map((
         nextValidator: SecretValidatorItemResponse,
       ) => ({
         ratePercent: Number(nextValidator.commission.commission_rates.rate),
@@ -138,6 +138,28 @@ async function secretChainQueries<ResponseType>(
   return lastValueFrom(secretChainQueries$(url, queries));
 }
 
+const parseTotalSupplyResponse = (response:QuerySupplyOfResponse) => {
+  if (response === undefined
+    || response.amount === undefined
+    || response.amount.amount === undefined
+  ) {
+    throw new Error('No response from the total supply query');
+  }
+  return Number(response.amount.amount);
+};
+
+/**
+ * query the staking info from the shade staking contract
+ */
+const queryScrtTotalSupply$ = (
+  lcdEndpoint?: string,
+  chainId?: string,
+) => getActiveQueryClient$(lcdEndpoint, chainId).pipe(
+  switchMap(({ client }) => secretClientTokenSupplyQuery$(client, 'uscrt')),
+  map((response) => parseTotalSupplyResponse(response)),
+  first(),
+);
+
 export {
   SecretQueryOptions,
   parseSecretQueryResponse,
@@ -145,4 +167,5 @@ export {
   secretChainQuery,
   secretChainQueries$,
   secretChainQueries,
+  queryScrtTotalSupply$,
 };

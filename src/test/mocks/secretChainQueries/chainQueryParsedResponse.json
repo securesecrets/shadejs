@@ -1,6 +1,5 @@
 {
   "secretInflationPercent": 0.09,
-  "secretTotalSupplyRaw": 292470737038201,
   "secretTotalStakedRaw": 161156183048148,
   "secretTaxes": {
     "foundationTaxPercent": 0,

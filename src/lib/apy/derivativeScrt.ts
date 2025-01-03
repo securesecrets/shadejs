@@ -8,9 +8,10 @@ import {
 import { convertCoinFromUDenom } from '~/lib/utils';
 import { queryDerivativeScrtInfo$ } from '~/contracts/services/derivativeScrt';
 import {
+  queryScrtTotalSupply$,
   secretChainQueries$,
   SecretQueryOptions,
-} from './secretQueries';
+} from '~/lib/apy/secretQueries';
 import { calcAggregateAPR, calcAPY } from './utils';
 
 const SECRET_DECIMALS = 6;
@@ -39,6 +40,7 @@ function calculateDerivativeScrtApy$({
   const queries = Object.values(SecretQueryOptions);
   return forkJoin({
     chainParameters: secretChainQueries$<SecretChainDataQueryModel>(lcdEndpoint, queries),
+    scrtTotalSupplyRaw: queryScrtTotalSupply$(lcdEndpoint),
     derivativeInfo: queryDerivativeScrtInfo$({
       queryRouterContractAddress,
       queryRouterCodeHash,
@@ -50,6 +52,7 @@ function calculateDerivativeScrtApy$({
   }).pipe(
     map((response: {
       chainParameters: SecretChainDataQueryModel,
+      scrtTotalSupplyRaw: number,
       derivativeInfo: DerivativeScrtInfo,
     }) => {
       const apr = calcAggregateAPR({
@@ -61,7 +64,7 @@ function calculateDerivativeScrtApy$({
           SECRET_DECIMALS,
         ).toNumber(),
         totalScrtSupply: convertCoinFromUDenom(
-          response.chainParameters.secretTotalSupplyRaw,
+          response.scrtTotalSupplyRaw,
           SECRET_DECIMALS,
         ).toNumber(),
         foundationTax: response.chainParameters.secretTaxes!.foundationTaxPercent,

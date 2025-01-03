@@ -22,27 +22,22 @@ beforeAll(async () => {
 
 test('it can parse chain queries', () => {
   expect(parseSecretQueryResponse(
-    { result: 10 },
+    { inflation: 10 },
     SecretQueryOptions.INFLATION,
   )).toStrictEqual({ secretInflationPercent: 10 });
 
   expect(parseSecretQueryResponse(
-    { amount: { amount: 10 } },
-    SecretQueryOptions.TOTAL_SUPPLY,
-  )).toStrictEqual({ secretTotalSupplyRaw: 10 });
-
-  expect(parseSecretQueryResponse(
-    { result: { bonded_tokens: 10 } },
+    { pool: { bonded_tokens: 10 } },
     SecretQueryOptions.TOTAL_STAKED,
   )).toStrictEqual({ secretTotalStakedRaw: 10 });
 
   expect(parseSecretQueryResponse(
-    { result: { community_tax: '10', secret_foundation_tax: '11' } },
+    { params: { community_tax: '10', secret_foundation_tax: '11' } },
     SecretQueryOptions.TAXES,
   )).toStrictEqual({ secretTaxes: { foundationTaxPercent: 11, communityTaxPercent: 10 } });
 
   expect(parseSecretQueryResponse(
-    { result: [{ commission: { commission_rates: { rate: '10' } }, operator_address: 'MOCK_ADDRESS' }] },
+    { validators: [{ commission: { commission_rates: { rate: '10' } }, operator_address: 'MOCK_ADDRESS' }] },
     SecretQueryOptions.VALIDATORS,
   )).toStrictEqual({ secretValidators: [{ ratePercent: 10, validatorAddress: 'MOCK_ADDRESS' }] });
 
