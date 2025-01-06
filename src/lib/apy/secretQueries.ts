@@ -5,9 +5,10 @@ import {
   lastValueFrom,
   map,
   first, switchMap,
-  from,
-  mergeMap,
-  toArray,
+  expand,
+  of,
+  takeWhile,
+  reduce,
 } from 'rxjs';
 import { fromFetch } from 'rxjs/fetch';
 import { createFetch } from '~/client/services/createFetch';
@@ -16,8 +17,9 @@ import { getActiveQueryClient$ } from '~/client';
 import {
   secretClientTokenSupplyQuery$,
   secretClientValidatorQuery$,
+  secretClientValidatorsQuery$,
 } from '~/client/services/clientServices';
-import { QueryValidatorResponse } from 'secretjs/dist/grpc_gateway/cosmos/staking/v1beta1/query.pb';
+import { QueryValidatorResponse, QueryValidatorsResponse } from 'secretjs/dist/grpc_gateway/cosmos/staking/v1beta1/query.pb';
 import { ValidatorRate } from '~/types/apy';
 
 enum SecretQueryOptions {
@@ -157,6 +159,29 @@ const parseValidatorResponse = (response: QueryValidatorResponse): ValidatorRate
   };
 };
 
+const parseValidatorsResponse = (response: QueryValidatorsResponse): ValidatorRate[] => {
+  if (response === undefined
+    || response.validators === undefined
+  ) {
+    throw new Error('Validators commissions not found');
+  }
+
+  return response.validators.map((validator) => {
+    if (validator === undefined
+      || validator.commission === undefined
+      || validator.commission.commission_rates === undefined
+      || validator.operator_address === undefined
+      || validator.commission.commission_rates.rate === undefined
+    ) {
+      throw new Error('Validator commission not found');
+    }
+    return {
+      validatorAddress: validator.operator_address,
+      ratePercent: Number(validator.commission.commission_rates.rate),
+    };
+  });
+};
+
 /**
  * query the SCRT token total supply
  */
@@ -187,22 +212,58 @@ const queryValidatorCommission$ = ({
 );
 
 /**
- * query the commission for multiple validators
+ * query the commission for all validators
  */
-const queryValidatorsCommission$ = ({
+const queryAllValidatorsCommissions$ = ({
   lcdEndpoint,
   chainId,
-  validatorAddresses,
-}: {
-  lcdEndpoint?: string;
-  chainId?: string;
-  validatorAddresses: string[];
-}) => from(validatorAddresses).pipe(
-  mergeMap((
-    validatorAddress,
-  ) => queryValidatorCommission$({ lcdEndpoint, chainId, validatorAddress })),
-  toArray(),
+  limit,
+}:{
+  lcdEndpoint?: string,
+  chainId?: string,
+  limit?: number,
+}) => getActiveQueryClient$(lcdEndpoint, chainId).pipe(
+  switchMap(({ client }) => {
+    const initialOffset = 0;
+    return of({
+      validators: [],
+      offset: initialOffset,
+      totalItems: undefined,
+    }).pipe(
+      expand(({ offset }) => secretClientValidatorsQuery$({
+        client,
+        offset,
+        limit,
+      }).pipe(
+        map((response) => {
+          const validators = response.validators === undefined
+            ? []
+            : parseValidatorsResponse(response);
+
+          const newOffset = offset + validators.length;
+          return {
+            validators,
+            offset: newOffset,
+            // non-null assertation used because the parser would
+            // have already caught issues with undefined
+            totalItems: Number(response.pagination!.total),
+          };
+        }),
+      )),
+      takeWhile(
+        ({
+          offset, totalItems,
+        }) => offset < totalItems || totalItems === undefined,
+        true, // include the last value
+      ),
+      reduce((
+        allValidators,
+        { validators },
+      ) => allValidators.concat(validators), [] as ValidatorRate[]),
+    );
+  }),
 );
+
 export {
   SecretQueryOptions,
   parseSecretQueryResponse,
@@ -212,5 +273,5 @@ export {
   secretChainQueries,
   queryScrtTotalSupply$,
   queryValidatorCommission$,
-  queryValidatorsCommission$,
+  queryAllValidatorsCommissions$,
 };
