@@ -1,11 +1,12 @@
 import {
   SecretChainDataQueryModel,
+  ValidatorRate,
 } from '~/types/apy';
 import {
+  first,
   forkJoin,
   lastValueFrom,
   map,
-  switchMap,
 } from 'rxjs';
 import {
   DerivativeScrtInfo,
@@ -14,7 +15,7 @@ import { convertCoinFromUDenom } from '~/lib/utils';
 import { queryDerivativeScrtInfo$ } from '~/contracts/services/derivativeScrt';
 import {
   queryScrtTotalSupply$,
-  queryValidatorsCommission$,
+  queryAllValidatorsCommissions$,
   secretChainQueries$,
   SecretQueryOptions,
 } from '~/lib/apy/secretQueries';
@@ -47,6 +48,11 @@ function calculateDerivativeScrtApy$({
   return forkJoin({
     chainParameters: secretChainQueries$<SecretChainDataQueryModel>(lcdEndpoint, queries),
     scrtTotalSupplyRaw: queryScrtTotalSupply$(lcdEndpoint, chainId),
+    validatorCommissions: queryAllValidatorsCommissions$({
+      lcdEndpoint,
+      chainId,
+      limit: undefined, // no limit on the batch size, let secretjs handle this for us
+    }),
     derivativeInfo: queryDerivativeScrtInfo$({
       queryRouterContractAddress,
       queryRouterCodeHash,
@@ -56,36 +62,30 @@ function calculateDerivativeScrtApy$({
       chainId,
     }),
   }).pipe(
-    switchMap((response: {
+    map((response: {
       chainParameters: SecretChainDataQueryModel,
       scrtTotalSupplyRaw: number,
+      validatorCommissions: ValidatorRate[],
       derivativeInfo: DerivativeScrtInfo,
-    }) => queryValidatorsCommission$({
-      lcdEndpoint,
-      chainId,
-      validatorAddresses: response.derivativeInfo.validators.map((
-        validator,
-      ) => validator.validatorAddress),
-    }).pipe(
-      map((validatorCommissions) => {
-        const apr = calcAggregateAPR({
-          networkValidatorList: validatorCommissions,
-          validatorSet: response.derivativeInfo.validators,
-          inflationRate: response.chainParameters.secretInflationPercent,
-          totalScrtStaked: convertCoinFromUDenom(
-            response.chainParameters.secretTotalStakedRaw,
-            SECRET_DECIMALS,
-          ).toNumber(),
-          totalScrtSupply: convertCoinFromUDenom(
-            response.scrtTotalSupplyRaw,
-            SECRET_DECIMALS,
-          ).toNumber(),
-          foundationTax: response.chainParameters.secretTaxes!.foundationTaxPercent,
-          communityTax: response.chainParameters.secretTaxes!.communityTaxPercent,
-        });
-        return calcAPY(365, apr);
-      }),
-    )),
+    }) => {
+      const apr = calcAggregateAPR({
+        networkValidatorList: response.validatorCommissions,
+        validatorSet: response.derivativeInfo.validators,
+        inflationRate: response.chainParameters.secretInflationPercent,
+        totalScrtStaked: convertCoinFromUDenom(
+          response.chainParameters.secretTotalStakedRaw,
+          SECRET_DECIMALS,
+        ).toNumber(),
+        totalScrtSupply: convertCoinFromUDenom(
+          response.scrtTotalSupplyRaw,
+          SECRET_DECIMALS,
+        ).toNumber(),
+        foundationTax: response.chainParameters.secretTaxes!.foundationTaxPercent,
+        communityTax: response.chainParameters.secretTaxes!.communityTaxPercent,
+      });
+      return calcAPY(365, apr);
+    }),
+    first(),
   );
 }
 

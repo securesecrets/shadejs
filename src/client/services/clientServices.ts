@@ -74,7 +74,7 @@ const secretClientTokenSupplyQuery$ = (
   })),
 ));
 
-// This function queries the total supply of the a token
+// This function queries the individual validator data
 const secretClientValidatorQuery$ = (
   client: SecretNetworkClient,
   validatorAddress: string,
@@ -82,8 +82,27 @@ const secretClientValidatorQuery$ = (
   () => from(client.query.staking.validator({ validator_addr: validatorAddress })),
 ));
 
+// This function queries a single page of multiple validators data
+const secretClientValidatorsQuery$ = ({
+  client,
+  offset,
+  limit,
+}:{
+  client: SecretNetworkClient,
+  offset?: number,
+  limit?: number,
+}) => createFetchClient(defer(
+  () => from(client.query.staking.validators({
+    pagination: {
+      offset: offset ? offset.toString() : undefined,
+      limit: limit ? limit.toString() : undefined,
+    },
+  })),
+));
+
 export {
   sendSecretClientContractQuery$,
   secretClientTokenSupplyQuery$,
   secretClientValidatorQuery$,
+  secretClientValidatorsQuery$,
 };
