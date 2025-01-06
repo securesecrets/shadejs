@@ -1,5 +1,11 @@
 # shadejs
 
+## 1.6.2
+
+### Patch Changes
+
+- a079550: change from individual validator queries to batch data
+
 ## 1.6.1
 
 ### Patch Changes
