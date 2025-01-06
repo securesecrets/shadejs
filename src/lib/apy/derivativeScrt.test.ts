@@ -23,7 +23,7 @@ beforeAll(() => {
     ...(await importOriginal()),
     secretChainQueries$: vi.fn(() => of(chainQueryParsedResponse)),
     queryScrtTotalSupply$: vi.fn(() => of(292470737038201)),
-    queryValidatorsCommission$: vi.fn(() => of(mockValidatorsCommissions)),
+    queryAllValidatorsCommissions$: vi.fn(() => of(mockValidatorsCommissions)),
   }));
 
   vi.mock('~/contracts/services/derivativeScrt', () => ({
