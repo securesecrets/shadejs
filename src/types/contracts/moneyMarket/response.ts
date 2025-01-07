@@ -11,10 +11,19 @@ type ConfigResponse = {
     address: string,
     code_hash: string,
   }
+  swap_router: {
+    address: string,
+    code_hash: string,
+  },
   fee_collector: string,
   l_token_id: number,
   l_token_code_hash: string,
   l_token_blockchain_admin: string,
+  private_liquidation_protocol_fee: string,
+  public_liquidation_protocol_fee: string,
+  max_constant_product_price_impact: string,
+  max_stableswap_tvl_percent: string,
+  private_liquidation_interval: number,
   status: {
     supply_enabled: boolean,
     borrow_enabled: boolean,
@@ -22,7 +31,8 @@ type ConfigResponse = {
     liquidation_enabled: boolean,
     interest_accrual_enabled: boolean,
     collateral_deposit_enabled: boolean,
-  }
+    flash_loan_enabled: boolean,
+  },
 }
 
 type PaginatedResponse<T> = {
@@ -33,8 +43,8 @@ type PaginatedResponse<T> = {
   data: T[]
 }
 
-type MarketReponse = {
-    market_token: {
+type VaultResponse = {
+    token: {
       address: string,
       code_hash: string,
     },
@@ -48,7 +58,7 @@ type MarketReponse = {
       base: string,
       slope1: string,
       slope2: string,
-      optimal_utilisation: string,
+      optimal_utilization: string,
     },
     loanable: string,
     lent_amount: string,
@@ -68,9 +78,9 @@ type MarketReponse = {
     }
 }
 
-type GetMarketsResponse = PaginatedResponse<MarketReponse>;
+type GetVaultsResponse = PaginatedResponse<VaultResponse>;
 
-type CollateralReponse = {
+type CollateralResponse = {
   token: {
     address: string,
     code_hash: string,
@@ -84,13 +94,13 @@ type CollateralReponse = {
   oracle_key: string,
   status: {
     deposit_enabled: boolean,
-    liquidations_enabled: boolean,
+    liquidation_enabled: boolean,
   }
 }
 
-type GetCollateralResponse = PaginatedResponse<CollateralReponse>;
+type GetCollateralResponse = PaginatedResponse<CollateralResponse>;
 
-type CalculatedUserCollateralReponse = {
+type CalculatedUserCollateralResponse = {
   calculated_user_collateral: {
     token: string,
     amount: string,
@@ -113,7 +123,7 @@ type CalculatedUserDebtResponse = {
 type UserPositionResponse = {
   calcualted_user_position: {
     id: string,
-    collateral: CalculatedUserCollateralReponse[],
+    collateral: CalculatedUserCollateralResponse[],
     debt: CalculatedUserDebtResponse[],
     total_collateral_value: string,
     total_principal_value: string,
@@ -134,7 +144,7 @@ type GetPublicLogsResponse = PaginatedResponse<PublicLogResponse>;
 
 export type {
   ConfigResponse,
-  GetMarketsResponse,
+  GetVaultsResponse,
   GetCollateralResponse,
   UserPositionResponse,
   PublicLogResponse,

@@ -15,7 +15,7 @@ const queryMoneyMarketPublicLogsParsedMock: PaginatedPublicLogs = {
           flash_loan_interest: '1',
           interest: {
             base: '0.02',
-            optimal_utilisation: '0.7',
+            optimal_utilization: '0.7',
             slope1: '0.1',
             slope2: '0.2',
           },
