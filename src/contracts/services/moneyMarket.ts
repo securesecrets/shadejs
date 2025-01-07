@@ -28,7 +28,7 @@ import { batchQuery$ } from './batchQuery';
 import { msgQueryMoneyMarketCollaterals, msgQueryMoneyMarketConfig, msgQueryMoneyMarketVaults } from '../definitions/moneyMarket';
 
 /**
-* Parses the get markets query into a cleaner data model
+* Parses the get vaults query into a cleaner data model
  * NOT FOR PRODUCTION USE, CONTRACT IS IN DEVELOPMENT ON TESTNET ONLY
 */
 const parseMoneyMarketGetVaults = (
@@ -201,7 +201,7 @@ const queryMoneyMarketGetCollateral$ = ({
 );
 
 /**
- * query the money market markets
+ * query the money market vaults
  * NOT FOR PRODUCTION USE, CONTRACT IS IN DEVELOPMENT ON TESTNET ONLY
  */
 const queryMoneyMarketGetVaults$ = ({
@@ -251,7 +251,7 @@ async function queryMoneyMarketConfig({
 }
 
 /**
- * query the money market get markets query
+ * query the money market get vaults query
  * NOT FOR PRODUCTION USE, CONTRACT IS IN DEVELOPMENT ON TESTNET ONLY
  */
 async function queryMoneyMarketGetVaults({
@@ -414,7 +414,7 @@ const parseBatchQueryMoneyMarketGetVaults = (
 }));
 
 /**
- * query the markets for money market contracts at one time
+ * query the vaults for money market contracts at one time
  * NOT FOR PRODUCTION USE, CONTRACT IS IN DEVELOPMENT ON TESTNET ONLY
  */
 function batchQueryMoneyMarketGetVaults$({
@@ -466,7 +466,7 @@ function batchQueryMoneyMarketGetVaults$({
 }
 
 /**
- * query the markets for money market contracts at one time
+ * query the vaults for money market contracts at one time
  * NOT FOR PRODUCTION USE, CONTRACT IS IN DEVELOPMENT ON TESTNET ONLY
  */
 async function batchQueryMoneyMarketGetVaults({
