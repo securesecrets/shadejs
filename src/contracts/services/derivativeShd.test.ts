@@ -29,6 +29,7 @@ beforeAll(() => {
 test('it can parse the staking info', () => {
   expect(parseDerivativeShdStakingInfo(
     stakingInfoResponse as StakingInfoResponse,
+    8,
   )).toStrictEqual(stakingInfoResponseParsed);
 });
 
@@ -41,6 +42,7 @@ test('it can call the query staking info service', async () => {
     codeHash: 'CODE_HASH',
     lcdEndpoint: 'LCD_ENDPOINT',
     chainId: 'CHAIN_ID',
+    decimals: 8,
   };
 
   let output;
