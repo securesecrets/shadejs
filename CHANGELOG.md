@@ -1,5 +1,11 @@
 # shadejs
 
+## 1.7.0
+
+### Minor Changes
+
+- 86af5b6: adding decimals as a required arg to queryDerivativeShdStakingInfo
+
 ## 1.6.2
 
 ### Patch Changes
