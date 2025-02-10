@@ -5,7 +5,6 @@ import {
   map,
   lastValueFrom,
 } from 'rxjs';
-
 import {
   BatchQueryParsedResponse,
   BatchQueryParams,
@@ -45,9 +44,9 @@ const parseMoneyMarketGetVaults = (
         contractAddress: cur.token.address,
         codeHash: cur.token.code_hash,
       },
-      lToken: {
-        contractAddress: cur.l_token.address,
-        codeHash: cur.l_token.code_hash,
+      xToken: {
+        contractAddress: cur.x_token.address,
+        codeHash: cur.x_token.code_hash,
       },
       decimals: cur.decimals,
       oracleKey: cur.oracle_key,
@@ -65,6 +64,7 @@ const parseMoneyMarketGetVaults = (
       interestPerUtoken: cur.interest_per_utoken,
       lastInterestAccrued: new Date(cur.last_interest_accrued),
       maxSupplyAmount: cur.max_supply,
+      maxBorrowAmount: cur.max_borrow,
       daoInterestFee: cur.dao_interest_fee,
       flashLoanInterest: cur.flash_loan_interest,
       supplyEnabled: cur.status.supply_enabled,
@@ -72,6 +72,7 @@ const parseMoneyMarketGetVaults = (
       repayEnabled: cur.status.repay_enabled,
       liquidationEnabled: cur.status.liquidation_enabled,
       interestAccrualEnabled: cur.status.interest_accrual_enabled,
+      flashLoanEnabled: cur.status.flash_loan_enabled,
     },
   }), {}),
 });
@@ -100,21 +101,25 @@ const parseMoneyMarketConfig = (
     codeHash: response.swap_router.code_hash,
   },
   feeCollector: response.fee_collector,
-  lTokenId: response.l_token_id,
-  lTokenCodeHash: response.l_token_code_hash,
-  lTokenBlockchainAdmin: response.l_token_blockchain_admin,
+  xTokenId: response.x_token_id,
+  xTokenCodeHash: response.x_token_code_hash,
+  xTokenBlockchainAdmin: response.x_token_blockchain_admin,
   privateLiquidationProtocolFee: response.private_liquidation_protocol_fee,
   publicLiquidationProtocolFee: response.public_liquidation_protocol_fee,
   maxConstantProductPriceImpact: response.max_constant_product_price_impact,
   maxStableswapTvlPercent: response.max_stableswap_tvl_percent,
+  maxOracleDelayInterval: response.max_oracle_delay_interval,
   privateLiquidationInterval: response.private_liquidation_interval,
   supplyEnabled: response.status.supply_enabled,
   borrowEnabled: response.status.borrow_enabled,
   repayEnabled: response.status.repay_enabled,
   liquidationEnabled: response.status.liquidation_enabled,
+  privateLiquidationEnabled: response.status.private_liquidation_enabled,
   interestAccrualEnabled: response.status.interest_accrual_enabled,
   collateralDepositEnabled: response.status.collateral_deposit_enabled,
   flashLoanEnabled: response.status.flash_loan_enabled,
+  collateralSwapEnabled: response.status.collateral_swap_enabled,
+  lpClaimOnLiquidateEnabled: response.status.lp_claim_on_liquidate_enabled,
 });
 
 /**
@@ -137,13 +142,21 @@ const parseMoneyMarketGetCollateral = (
       },
       collateralAmount: cur.amount,
       decimals: cur.decimals,
-      maxInitialLtv: cur.max_initial_ltv,
+      depositCap: cur.deposit_limit,
+      maxBorrowLtv: cur.max_borrow_ltv,
       publicLiquidationThreshold: cur.public_liquidation_threshold,
       privateLiquidationThreshold: cur.private_liquidation_threshold,
       liquidationDiscount: cur.liquidation_discount,
       oracleKey: cur.oracle_key,
       depositEnabled: cur.status.deposit_enabled,
       liquidationEnabled: cur.status.liquidation_enabled,
+      collateralSwapEnabled: cur.status.collateral_swap_enabled,
+      isLpToken: cur.is_lp_token,
+      lpStakingContract: cur.lp_staking_contract ? {
+        contractAddress: cur.lp_staking_contract.address,
+        codeHash: cur.lp_staking_contract.code_hash,
+      } : undefined,
+      lpStakingRewardFee: cur.lp_staking_reward_fee ? cur.lp_staking_reward_fee : undefined,
     },
   }), {}),
 });
