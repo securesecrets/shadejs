@@ -4,9 +4,7 @@ import {
   first,
   map,
   lastValueFrom,
-  tap,
 } from 'rxjs';
-
 import {
   BatchQueryParsedResponse,
   BatchQueryParams,
@@ -184,7 +182,6 @@ const queryMoneyMarketConfig$ = ({
     contractAddress,
     codeHash,
   })),
-  tap((response) => console.log('response 1', JSON.stringify(response))),
   map((response) => parseMoneyMarketConfig(response as ConfigResponse)),
   first(),
 );
@@ -212,7 +209,6 @@ const queryMoneyMarketGetCollateral$ = ({
     contractAddress,
     codeHash,
   })),
-  tap((response) => console.log('response 2', response)),
   map((response) => parseMoneyMarketGetCollateral(response as GetCollateralResponse)),
   first(),
 );
@@ -240,7 +236,6 @@ const queryMoneyMarketGetVaults$ = ({
     contractAddress,
     codeHash,
   })),
-  tap((response) => console.log('response 3', response)),
   map((response) => parseMoneyMarketGetVaults(response as GetVaultsResponse)),
   first(),
 );
@@ -384,7 +379,6 @@ function batchQueryMoneyMarketConfig$({
     minBlockHeightValidationOptions,
     blockHeight,
   }).pipe(
-    tap((response) => console.log('response 4', JSON.stringify(response))),
     map(parseBatchQueryMoneyMarketConfig),
     first(),
   );
@@ -479,7 +473,6 @@ function batchQueryMoneyMarketGetVaults$({
     minBlockHeightValidationOptions,
     blockHeight,
   }).pipe(
-    tap((response) => console.log('response 5', JSON.stringify(response))),
     map(parseBatchQueryMoneyMarketGetVaults),
     first(),
   );
@@ -574,7 +567,6 @@ function batchQueryMoneyMarketGetCollateral$({
     minBlockHeightValidationOptions,
     blockHeight,
   }).pipe(
-    tap((response) => console.log('response 6', JSON.stringify(response))),
     map((response) => parseBatchQueryMoneyMarketGetCollateral(response)),
     first(),
   );
@@ -649,7 +641,6 @@ function queryMoneyMarketPublicLogs$({
       contractAddress,
       codeHash,
     })),
-    tap((response) => console.log('response 7', response)),
     map((response) => parseMoneyMarketPublicLogs(response)),
     first(),
   );
@@ -732,7 +723,6 @@ function batchQueryMoneyMarketPublicLogs$({
     minBlockHeightValidationOptions,
     blockHeight,
   }).pipe(
-    tap((response) => console.log('response 8', JSON.stringify(response))),
     map((response) => response.map((item) => ({
       moneyMarketContractAddress: item.id as string,
       publicLogs: parseMoneyMarketPublicLogs(item.response),
@@ -828,7 +818,6 @@ function batchQueryMoneyMarketRewardPools$({
     minBlockHeightValidationOptions,
     blockHeight,
   }).pipe(
-    tap((response) => console.log('response 9', response)),
     map((response) => parseBatchQueryMoneyMarketRewardPools(response)),
     first(),
   );
