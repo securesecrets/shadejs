@@ -36,21 +36,25 @@ type ParsedConfigResponse = {
     codeHash: string,
   },
   feeCollector: string,
-  lTokenId: number,
-  lTokenCodeHash: string,
-  lTokenBlockchainAdmin: string,
+  xTokenId: number,
+  xTokenCodeHash: string,
+  xTokenBlockchainAdmin: string,
   privateLiquidationProtocolFee: string,
   publicLiquidationProtocolFee: string,
   maxConstantProductPriceImpact: string,
   maxStableswapTvlPercent: string,
+  maxOracleDelayInterval: number,
   privateLiquidationInterval: number,
   supplyEnabled: boolean,
   borrowEnabled: boolean,
   repayEnabled: boolean,
   liquidationEnabled: boolean,
+  privateLiquidationEnabled: boolean,
   interestAccrualEnabled: boolean,
   collateralDepositEnabled: boolean,
   flashLoanEnabled: boolean,
+  collateralSwapEnabled: boolean,
+  lpClaimOnLiquidateEnabled: boolean
 }
 
 type BatchMoneyMarketConfig = {
@@ -66,7 +70,7 @@ type ParsedVaultResponse = {
     contractAddress: string,
     codeHash: string,
   },
-  lToken: {
+  xToken: {
     contractAddress: string,
     codeHash: string,
   },
@@ -85,13 +89,16 @@ type ParsedVaultResponse = {
   interestPerUtoken: string,
   lastInterestAccrued: Date,
   maxSupplyAmount: string,
+  maxBorrowAmount: string,
   daoInterestFee: string,
+  daoFlashLoanInterestFee: string,
   flashLoanInterest: string,
   supplyEnabled: boolean,
   borrowEnabled: boolean,
   repayEnabled: boolean,
   liquidationEnabled: boolean,
   interestAccrualEnabled: boolean,
+  flashLoanEnabled: boolean,
 }
 
 type ParsedGetVaultsResponse = ParsedPagination<Record<string, ParsedVaultResponse>>;
@@ -111,13 +118,21 @@ type ParsedCollateralResponse = {
   },
   collateralAmount: string,
   decimals: number,
-  maxInitialLtv: string,
+  depositCap: string,
+  maxBorrowLtv: string,
   publicLiquidationThreshold: string,
   privateLiquidationThreshold: string,
   liquidationDiscount: string,
   oracleKey: string,
   depositEnabled: boolean,
   liquidationEnabled: boolean,
+  collateralSwapEnabled: boolean,
+  isLpToken: boolean,
+  lpStakingContract?: {
+    contractAddress: string,
+    codeHash: string,
+  },
+  lpStakingRewardFee?: string,
 }
 
 type ParsedGetCollateralResponse = ParsedPagination<Record<string, ParsedCollateralResponse>>;

@@ -16,22 +16,26 @@ type ConfigResponse = {
     code_hash: string,
   },
   fee_collector: string,
-  l_token_id: number,
-  l_token_code_hash: string,
-  l_token_blockchain_admin: string,
+  x_token_id: number,
+  x_token_code_hash: string,
+  x_token_blockchain_admin: string,
   private_liquidation_protocol_fee: string,
   public_liquidation_protocol_fee: string,
   max_constant_product_price_impact: string,
   max_stableswap_tvl_percent: string,
+  max_oracle_delay_interval: number,
   private_liquidation_interval: number,
   status: {
     supply_enabled: boolean,
     borrow_enabled: boolean,
     repay_enabled: boolean,
     liquidation_enabled: boolean,
+    private_liquidation_enabled: boolean,
     interest_accrual_enabled: boolean,
     collateral_deposit_enabled: boolean,
     flash_loan_enabled: boolean,
+    collateral_swap_enabled: boolean,
+    lp_claim_on_liquidate_enabled: boolean
   },
 }
 
@@ -48,7 +52,7 @@ type VaultResponse = {
       address: string,
       code_hash: string,
     },
-    l_token: {
+    x_token: {
       address: string,
       code_hash: string,
     },
@@ -67,7 +71,9 @@ type VaultResponse = {
     interest_per_utoken: string,
     last_interest_accrued: number,
     max_supply: string,
+    max_borrow: string,
     dao_interest_fee: string,
+    dao_flash_loan_interest_fee: string,
     flash_loan_interest: string,
     status: {
         supply_enabled: boolean,
@@ -75,6 +81,7 @@ type VaultResponse = {
         repay_enabled: boolean,
         liquidation_enabled: boolean,
         interest_accrual_enabled: boolean,
+        flash_loan_enabled: boolean,
     }
 }
 
@@ -87,7 +94,8 @@ type CollateralResponse = {
   },
   amount: string,
   decimals: number,
-  max_initial_ltv: string,
+  deposit_limit: string,
+  max_borrow_ltv: string,
   public_liquidation_threshold: string,
   private_liquidation_threshold: string,
   liquidation_discount: string,
@@ -95,7 +103,14 @@ type CollateralResponse = {
   status: {
     deposit_enabled: boolean,
     liquidation_enabled: boolean,
+    collateral_swap_enabled: boolean,
   }
+  is_lp_token: boolean,
+  lp_staking_contract?: {
+    address: string,
+    code_hash: string,
+  },
+  lp_staking_reward_fee?: string,
 }
 
 type GetCollateralResponse = PaginatedResponse<CollateralResponse>;
