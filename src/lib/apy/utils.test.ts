@@ -2,8 +2,8 @@ import {
   test,
   expect,
 } from 'vitest';
-import chainQueryParsedResponse from '~/test/mocks/secretChainQueries/chainQueryParsedResponse.json';
 import stakingInfoResponseMainnet from '~/test/mocks/derivativeScrt/stakingInfoResponseMainnet.json';
+import { mockValidatorsCommissions } from '~/test/mocks/secretChainQueries/validatorsCommissionsParsedResponse';
 import {
   getValidatorCommission,
   calcValidatorAPR,
@@ -14,7 +14,7 @@ import {
 
 test('It gets a validator commission', () => {
   expect(() => getValidatorCommission('MOCK_VAL_ADDR', [])).toThrowError(/^Error: validator address MOCK_VAL_ADDR not found in list$/);
-  expect(getValidatorCommission('secretvaloper1rfnmcuwzf3zn7r025j9zr3ncc7mt9ge56l7se7', chainQueryParsedResponse.secretValidators)).toStrictEqual(0.08);
+  expect(getValidatorCommission('secretvaloper1rfnmcuwzf3zn7r025j9zr3ncc7mt9ge56l7se7', mockValidatorsCommissions)).toStrictEqual(0.08);
 });
 
 test('It calculates APR for a given validator', () => {
@@ -30,7 +30,7 @@ test('It calculates APR for a given validator', () => {
 
 test('It can calculate aggregate apr for a list of validators', () => {
   expect(calcAggregateAPR({
-    networkValidatorList: chainQueryParsedResponse.secretValidators,
+    networkValidatorList: mockValidatorsCommissions,
     validatorSet: stakingInfoResponseMainnet.validators,
     inflationRate: 100,
     totalScrtStaked: 1234567891234,
