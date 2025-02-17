@@ -64,6 +64,45 @@ const sendSecretClientContractQuery$ = ({
     first(),
   );
 
+// This function queries the total supply of the a token
+const secretClientTokenSupplyQuery$ = (
+  client: SecretNetworkClient,
+  denom: string,
+) => createFetchClient(defer(
+  () => from(client.query.bank.supplyOf({
+    denom,
+  })),
+));
+
+// This function queries the individual validator data
+const secretClientValidatorQuery$ = (
+  client: SecretNetworkClient,
+  validatorAddress: string,
+) => createFetchClient(defer(
+  () => from(client.query.staking.validator({ validator_addr: validatorAddress })),
+));
+
+// This function queries a single page of multiple validators data
+const secretClientValidatorsQuery$ = ({
+  client,
+  offset,
+  limit,
+}:{
+  client: SecretNetworkClient,
+  offset?: number,
+  limit?: number,
+}) => createFetchClient(defer(
+  () => from(client.query.staking.validators({
+    pagination: {
+      offset: offset ? offset.toString() : undefined,
+      limit: limit ? limit.toString() : undefined,
+    },
+  })),
+));
+
 export {
   sendSecretClientContractQuery$,
+  secretClientTokenSupplyQuery$,
+  secretClientValidatorQuery$,
+  secretClientValidatorsQuery$,
 };

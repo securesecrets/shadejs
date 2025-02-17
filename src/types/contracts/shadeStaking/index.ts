@@ -36,8 +36,17 @@ type StakingInfoServiceModel = {
     rewardPools: StakingRewardPoolServiceModel[],
 }
 
+type BatchSingleShadeStakingOpportunity = {
+    stakingContractAddress: string,
+    stakingInfo: StakingInfoServiceModel,
+    blockHeight: number,
+  }
+
+  type BatchShadeStakingOpportunity = BatchSingleShadeStakingOpportunity[]
+
 export type {
   StakingInfoServiceResponse,
   StakingRewardPoolServiceModel,
   StakingInfoServiceModel,
+  BatchShadeStakingOpportunity,
 };
