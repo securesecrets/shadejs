@@ -44,3 +44,15 @@ Docs will be available on a vitepress site. You can run the site locally with th
 ```
 $ yarn docs:dev
 ```
+
+## Building new version run for deployment via Github
+```bash
+yarn changeset
+```
+
+
+## Publish ShadeJs manually
+```bash
+yarn build
+npm publish --tag beta
+```

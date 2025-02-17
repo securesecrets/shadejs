@@ -31,16 +31,30 @@ type ParsedConfigResponse = {
     contractAddress: string,
     codeHash: string,
   },
+  swapRouter: {
+    contractAddress: string,
+    codeHash: string,
+  },
   feeCollector: string,
-  lTokenId: number,
-  lTokenCodeHash: string,
-  lTokenBlockchainAdmin: string,
+  xTokenId: number,
+  xTokenCodeHash: string,
+  xTokenBlockchainAdmin: string,
+  privateLiquidationProtocolFee: string,
+  publicLiquidationProtocolFee: string,
+  maxConstantProductPriceImpact: string,
+  maxStableswapTvlPercent: string,
+  maxOracleDelayInterval: number,
+  privateLiquidationInterval: number,
   supplyEnabled: boolean,
   borrowEnabled: boolean,
   repayEnabled: boolean,
   liquidationEnabled: boolean,
+  privateLiquidationEnabled: boolean,
   interestAccrualEnabled: boolean,
   collateralDepositEnabled: boolean,
+  flashLoanEnabled: boolean,
+  collateralSwapEnabled: boolean,
+  lpClaimOnLiquidateEnabled: boolean
 }
 
 type BatchMoneyMarketConfig = {
@@ -51,12 +65,12 @@ type BatchMoneyMarketConfig = {
 
 type BatchMoneyMarketConfigs = BatchMoneyMarketConfig[];
 
-type ParsedMarketResponse = {
-  marketToken: {
+type ParsedVaultResponse = {
+  token: {
     contractAddress: string,
     codeHash: string,
   },
-  lToken: {
+  xToken: {
     contractAddress: string,
     codeHash: string,
   },
@@ -66,7 +80,7 @@ type ParsedMarketResponse = {
     base: string,
     slope1: string,
     slope2?: string,
-    optimalUtilisation?: string,
+    optimalUtilization?: string,
   },
   loanableAmount: string,
   lentAmount: string,
@@ -75,41 +89,53 @@ type ParsedMarketResponse = {
   interestPerUtoken: string,
   lastInterestAccrued: Date,
   maxSupplyAmount: string,
+  maxBorrowAmount: string,
   daoInterestFee: string,
+  daoFlashLoanInterestFee: string,
   flashLoanInterest: string,
   supplyEnabled: boolean,
   borrowEnabled: boolean,
   repayEnabled: boolean,
   liquidationEnabled: boolean,
   interestAccrualEnabled: boolean,
+  flashLoanEnabled: boolean,
 }
 
-type ParsedGetMarketsResponse = ParsedPagination<Record<string, ParsedMarketResponse>>;
+type ParsedGetVaultsResponse = ParsedPagination<Record<string, ParsedVaultResponse>>;
 
 type BatchMoneyMarketGetMarket = {
   moneyMarketContractAddress: string,
-  config: ParsedGetMarketsResponse,
+  config: ParsedGetVaultsResponse,
   blockHeight: number,
 }
 
-type BatchMoneyMarketGetMarkets = BatchMoneyMarketGetMarket[];
+type BatchMoneyMarketGetVaults = BatchMoneyMarketGetMarket[];
 
-type ParsedCollateralReponse = {
+type ParsedCollateralResponse = {
   token: {
     contractAddress: string,
     codeHash: string,
   },
   collateralAmount: string,
   decimals: number,
-  maxInitialLtv: string,
-  liquidationThreshold: string,
+  depositCap: string,
+  maxBorrowLtv: string,
+  publicLiquidationThreshold: string,
+  privateLiquidationThreshold: string,
   liquidationDiscount: string,
   oracleKey: string,
   depositEnabled: boolean,
   liquidationEnabled: boolean,
+  collateralSwapEnabled: boolean,
+  isLpToken: boolean,
+  lpStakingContract?: {
+    contractAddress: string,
+    codeHash: string,
+  },
+  lpStakingRewardFee?: string,
 }
 
-type ParsedGetCollateralResponse = ParsedPagination<Record<string, ParsedCollateralReponse>>;
+type ParsedGetCollateralResponse = ParsedPagination<Record<string, ParsedCollateralResponse>>;
 
 type BatchMoneyMarketGetCollateral = {
   moneyMarketContractAddress: string,
@@ -119,7 +145,7 @@ type BatchMoneyMarketGetCollateral = {
 
 type BatchMoneyMarketGetCollaterals = BatchMoneyMarketGetCollateral[];
 
-type ParsedCalculatedUserCollateralReponse = {
+type ParsedCalculatedUserCollateralResponse = {
     [token: string]: {
       token: string,
       amount: string,
@@ -141,7 +167,7 @@ type ParsedCalculatedUserDebtResponse = {
 
 type ParsedUserPositionResponse = {
   id: string,
-  collateral: ParsedCalculatedUserCollateralReponse,
+  collateral: ParsedCalculatedUserCollateralResponse,
   debt: ParsedCalculatedUserDebtResponse,
   totalCollateralValue: string,
   totalPrincipalValue: string,
@@ -150,17 +176,60 @@ type ParsedUserPositionResponse = {
   loanLiquidationPoint: string,
 }
 
+// New types for public events
+type PublicLog = {
+  timestamp: Date,
+  action: Record<string, any>
+}
+
+type PaginatedPublicLogs = {
+  page: number,
+  pageSize: number,
+  totalPages: number,
+  totalItems: number,
+  data: PublicLog[],
+}
+
+type RewardPool = {
+    rewardPoolId: string,
+    amount: string,
+    token: string,
+    start: string,
+    end: string,
+    rate: string,
+}
+
+type RewardPoolResponse = {
+    id: string,
+    amount: string,
+    token: string,
+    start: string,
+    end: string,
+    rate: string,
+}
+
+type ParsedRewardPoolsResponse = {
+    vault: string,
+    blockHeight: number,
+    rewardPools: RewardPool[],
+}
+
 export type {
   Pagination,
   ContractAndPagination,
   ParsedPagination,
   ParsedConfigResponse,
   BatchMoneyMarketConfigs,
-  ParsedMarketResponse,
-  ParsedGetMarketsResponse,
-  ParsedCollateralReponse,
+  ParsedVaultResponse,
+  ParsedGetVaultsResponse,
+  ParsedCollateralResponse,
   ParsedGetCollateralResponse,
   ParsedUserPositionResponse,
-  BatchMoneyMarketGetMarkets,
+  BatchMoneyMarketGetVaults,
   BatchMoneyMarketGetCollaterals,
+  PublicLog,
+  PaginatedPublicLogs,
+  RewardPool,
+  RewardPoolResponse,
+  ParsedRewardPoolsResponse,
 };

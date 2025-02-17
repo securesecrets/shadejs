@@ -5,44 +5,48 @@ import {
   map,
   lastValueFrom,
 } from 'rxjs';
+import {
+  BatchQueryParsedResponse,
+  BatchQueryParams,
+  BatchQueryParsedResponseItem,
+} from '~/types/contracts/batchQuery/model';
 import { sendSecretClientContractQuery$ } from '~/client/services/clientServices';
-import { ConfigResponse, GetCollateralResponse, GetMarketsResponse } from '~/types/contracts/moneyMarket/response';
+import { ConfigResponse, GetCollateralResponse, GetVaultsResponse } from '~/types/contracts/moneyMarket/response';
 import {
   BatchMoneyMarketConfigs,
   BatchMoneyMarketGetCollaterals,
-  BatchMoneyMarketGetMarkets,
+  BatchMoneyMarketGetVaults,
   ContractAndPagination,
-  Pagination, ParsedConfigResponse, ParsedGetCollateralResponse, ParsedGetMarketsResponse,
+  Pagination, ParsedConfigResponse, ParsedGetCollateralResponse, ParsedGetVaultsResponse,
+  ParsedRewardPoolsResponse,
+  RewardPoolResponse,
 } from '~/types/contracts/moneyMarket/model';
 import { Contract } from '~/types/contracts/shared/index';
-import {
-  BatchQueryParams, BatchQueryParsedResponse,
-} from '~/types/contracts/batchQuery/model';
 import { MinBlockHeightValidationOptions } from '~/types';
 import { batchQuery$ } from './batchQuery';
-import { msgQueryMoneyMarketCollaterals, msgQueryMoneyMarketConfig, msgQueryMoneyMarketMarkets } from '../definitions/moneyMarket';
+import { msgQueryMoneyMarketCollaterals, msgQueryMoneyMarketConfig, msgQueryMoneyMarketVaults } from '../definitions/moneyMarket';
 
 /**
-* Parses the get markets query into a cleaner data model
+* Parses the get vaults query into a cleaner data model
  * NOT FOR PRODUCTION USE, CONTRACT IS IN DEVELOPMENT ON TESTNET ONLY
 */
-const parseMoneyMarketGetMarkets = (
-  response: GetMarketsResponse,
-): ParsedGetMarketsResponse => ({
+const parseMoneyMarketGetVaults = (
+  response: GetVaultsResponse,
+): ParsedGetVaultsResponse => ({
   page: response.page,
   pageSize: response.page_size,
   totalPages: response.total_pages,
   totalItems: response.total_items,
   data: response.data.reduce((prev, cur) => ({
     ...prev,
-    [cur.market_token.address]: {
-      marketToken: {
-        contractAddress: cur.market_token.address,
-        codeHash: cur.market_token.code_hash,
+    [cur.token.address]: {
+      token: {
+        contractAddress: cur.token.address,
+        codeHash: cur.token.code_hash,
       },
-      lToken: {
-        contractAddress: cur.l_token.address,
-        codeHash: cur.l_token.code_hash,
+      xToken: {
+        contractAddress: cur.x_token.address,
+        codeHash: cur.x_token.code_hash,
       },
       decimals: cur.decimals,
       oracleKey: cur.oracle_key,
@@ -50,8 +54,8 @@ const parseMoneyMarketGetMarkets = (
         base: cur.interest.base,
         slope1: cur.interest.slope1,
         slope2: cur.interest.slope2,
-        optimalUtilisation:
-          cur.interest.optimal_utilisation,
+        optimalUtilization:
+          cur.interest.optimal_utilization,
       },
       loanableAmount: cur.loanable,
       lentAmount: cur.lent_amount,
@@ -60,6 +64,7 @@ const parseMoneyMarketGetMarkets = (
       interestPerUtoken: cur.interest_per_utoken,
       lastInterestAccrued: new Date(cur.last_interest_accrued),
       maxSupplyAmount: cur.max_supply,
+      maxBorrowAmount: cur.max_borrow,
       daoInterestFee: cur.dao_interest_fee,
       flashLoanInterest: cur.flash_loan_interest,
       supplyEnabled: cur.status.supply_enabled,
@@ -67,6 +72,7 @@ const parseMoneyMarketGetMarkets = (
       repayEnabled: cur.status.repay_enabled,
       liquidationEnabled: cur.status.liquidation_enabled,
       interestAccrualEnabled: cur.status.interest_accrual_enabled,
+      flashLoanEnabled: cur.status.flash_loan_enabled,
     },
   }), {}),
 });
@@ -90,16 +96,30 @@ const parseMoneyMarketConfig = (
     contractAddress: response.oracle.address,
     codeHash: response.query_auth.code_hash,
   },
+  swapRouter: {
+    contractAddress: response.swap_router.address,
+    codeHash: response.swap_router.code_hash,
+  },
   feeCollector: response.fee_collector,
-  lTokenId: response.l_token_id,
-  lTokenCodeHash: response.l_token_code_hash,
-  lTokenBlockchainAdmin: response.l_token_blockchain_admin,
+  xTokenId: response.x_token_id,
+  xTokenCodeHash: response.x_token_code_hash,
+  xTokenBlockchainAdmin: response.x_token_blockchain_admin,
+  privateLiquidationProtocolFee: response.private_liquidation_protocol_fee,
+  publicLiquidationProtocolFee: response.public_liquidation_protocol_fee,
+  maxConstantProductPriceImpact: response.max_constant_product_price_impact,
+  maxStableswapTvlPercent: response.max_stableswap_tvl_percent,
+  maxOracleDelayInterval: response.max_oracle_delay_interval,
+  privateLiquidationInterval: response.private_liquidation_interval,
   supplyEnabled: response.status.supply_enabled,
   borrowEnabled: response.status.borrow_enabled,
   repayEnabled: response.status.repay_enabled,
   liquidationEnabled: response.status.liquidation_enabled,
+  privateLiquidationEnabled: response.status.private_liquidation_enabled,
   interestAccrualEnabled: response.status.interest_accrual_enabled,
   collateralDepositEnabled: response.status.collateral_deposit_enabled,
+  flashLoanEnabled: response.status.flash_loan_enabled,
+  collateralSwapEnabled: response.status.collateral_swap_enabled,
+  lpClaimOnLiquidateEnabled: response.status.lp_claim_on_liquidate_enabled,
 });
 
 /**
@@ -122,12 +142,21 @@ const parseMoneyMarketGetCollateral = (
       },
       collateralAmount: cur.amount,
       decimals: cur.decimals,
-      maxInitialLtv: cur.max_initial_ltv,
-      liquidationThreshold: cur.liquidation_threshold,
+      depositCap: cur.deposit_limit,
+      maxBorrowLtv: cur.max_borrow_ltv,
+      publicLiquidationThreshold: cur.public_liquidation_threshold,
+      privateLiquidationThreshold: cur.private_liquidation_threshold,
       liquidationDiscount: cur.liquidation_discount,
       oracleKey: cur.oracle_key,
       depositEnabled: cur.status.deposit_enabled,
-      liquidationEnabled: cur.status.liquidations_enabled,
+      liquidationEnabled: cur.status.liquidation_enabled,
+      collateralSwapEnabled: cur.status.collateral_swap_enabled,
+      isLpToken: cur.is_lp_token,
+      lpStakingContract: cur.lp_staking_contract ? {
+        contractAddress: cur.lp_staking_contract.address,
+        codeHash: cur.lp_staking_contract.code_hash,
+      } : undefined,
+      lpStakingRewardFee: cur.lp_staking_reward_fee ? cur.lp_staking_reward_fee : undefined,
     },
   }), {}),
 });
@@ -185,10 +214,10 @@ const queryMoneyMarketGetCollateral$ = ({
 );
 
 /**
- * query the money market markets
+ * query the money market vaults
  * NOT FOR PRODUCTION USE, CONTRACT IS IN DEVELOPMENT ON TESTNET ONLY
  */
-const queryMoneyMarketGetMarkets$ = ({
+const queryMoneyMarketGetVaults$ = ({
   contractAddress,
   codeHash,
   lcdEndpoint,
@@ -202,12 +231,12 @@ const queryMoneyMarketGetMarkets$ = ({
   pagination?: Pagination,
 }) => getActiveQueryClient$(lcdEndpoint, chainId).pipe(
   switchMap(({ client }) => sendSecretClientContractQuery$({
-    queryMsg: msgQueryMoneyMarketMarkets(pagination),
+    queryMsg: msgQueryMoneyMarketVaults(pagination),
     client,
     contractAddress,
     codeHash,
   })),
-  map((response) => parseMoneyMarketGetMarkets(response as GetMarketsResponse)),
+  map((response) => parseMoneyMarketGetVaults(response as GetVaultsResponse)),
   first(),
 );
 
@@ -235,10 +264,10 @@ async function queryMoneyMarketConfig({
 }
 
 /**
- * query the money market get markets query
+ * query the money market get vaults query
  * NOT FOR PRODUCTION USE, CONTRACT IS IN DEVELOPMENT ON TESTNET ONLY
  */
-async function queryMoneyMarketGetMarkets({
+async function queryMoneyMarketGetVaults({
   contractAddress,
   codeHash,
   lcdEndpoint,
@@ -253,7 +282,7 @@ async function queryMoneyMarketGetMarkets({
   pageSize?: number,
   page?: number,
 }) {
-  return lastValueFrom(queryMoneyMarketGetMarkets$({
+  return lastValueFrom(queryMoneyMarketGetVaults$({
     contractAddress,
     codeHash,
     lcdEndpoint,
@@ -389,19 +418,19 @@ async function batchQueryMoneyMarketConfig({
  * multiple money market contracts
  * NOT FOR PRODUCTION USE, CONTRACT IS IN DEVELOPMENT ON TESTNET ONLY
  */
-const parseBatchQueryMoneyMarketGetMarkets = (
+const parseBatchQueryMoneyMarketGetVaults = (
   response: BatchQueryParsedResponse,
-): BatchMoneyMarketGetMarkets => response.map((item) => ({
+): BatchMoneyMarketGetVaults => response.map((item) => ({
   moneyMarketContractAddress: item.id as string,
-  config: parseMoneyMarketGetMarkets(item.response),
+  config: parseMoneyMarketGetVaults(item.response),
   blockHeight: item.blockHeight,
 }));
 
 /**
- * query the markets for money market contracts at one time
+ * query the vaults for money market contracts at one time
  * NOT FOR PRODUCTION USE, CONTRACT IS IN DEVELOPMENT ON TESTNET ONLY
  */
-function batchQueryMoneyMarketGetMarkets$({
+function batchQueryMoneyMarketGetVaults$({
   queryRouterContractAddress,
   queryRouterCodeHash,
   lcdEndpoint,
@@ -426,7 +455,7 @@ function batchQueryMoneyMarketGetMarkets$({
       address: contract.address,
       codeHash: contract.codeHash,
     },
-    queryMsg: msgQueryMoneyMarketMarkets(
+    queryMsg: msgQueryMoneyMarketVaults(
       contract.pageSize !== undefined && contract.page !== undefined
         ? {
           page_size: contract.pageSize,
@@ -444,16 +473,16 @@ function batchQueryMoneyMarketGetMarkets$({
     minBlockHeightValidationOptions,
     blockHeight,
   }).pipe(
-    map(parseBatchQueryMoneyMarketGetMarkets),
+    map(parseBatchQueryMoneyMarketGetVaults),
     first(),
   );
 }
 
 /**
- * query the markets for money market contracts at one time
+ * query the vaults for money market contracts at one time
  * NOT FOR PRODUCTION USE, CONTRACT IS IN DEVELOPMENT ON TESTNET ONLY
  */
-async function batchQueryMoneyMarketGetMarkets({
+async function batchQueryMoneyMarketGetVaults({
   queryRouterContractAddress,
   queryRouterCodeHash,
   lcdEndpoint,
@@ -468,7 +497,7 @@ async function batchQueryMoneyMarketGetMarkets({
   moneyMarketContracts: ContractAndPagination[],
   minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
 }) {
-  return lastValueFrom(batchQueryMoneyMarketGetMarkets$({
+  return lastValueFrom(batchQueryMoneyMarketGetVaults$({
     queryRouterContractAddress,
     queryRouterCodeHash,
     lcdEndpoint,
@@ -538,7 +567,7 @@ function batchQueryMoneyMarketGetCollateral$({
     minBlockHeightValidationOptions,
     blockHeight,
   }).pipe(
-    map(parseBatchQueryMoneyMarketGetCollateral),
+    map((response) => parseBatchQueryMoneyMarketGetCollateral(response)),
     first(),
   );
 }
@@ -572,14 +601,270 @@ async function batchQueryMoneyMarketGetCollateral({
   }));
 }
 
+// Parsing function for MoneyMarket Public Logs response
+const parseMoneyMarketPublicLogs = (response: any) => ({
+  page: response.page,
+  pageSize: response.page_size,
+  totalPages: response.total_pages,
+  totalItems: response.total_items,
+  data: response.data
+    ? response.data.map((event: any) => ({
+      timestamp: new Date(event.timestamp * 1000), // Convert UNIX timestamp to JS Date
+      action: event.action, // Pass the full action JSON object without further parsing
+    }))
+    : [],
+});
+
+/**
+ * Query the Public Logs for a single money market contract using RxJS
+ * NOT FOR PRODUCTION USE, CONTRACT IS IN DEVELOPMENT ON TESTNET ONLY
+ */
+function queryMoneyMarketPublicLogs$({
+  contractAddress,
+  codeHash,
+  lcdEndpoint,
+  chainId,
+  pagination,
+}: {
+  contractAddress: string,
+  codeHash?: string,
+  lcdEndpoint?: string,
+  chainId?: string,
+  pagination?: Pagination,
+}) {
+  return getActiveQueryClient$(lcdEndpoint, chainId).pipe(
+    switchMap(({ client }) => sendSecretClientContractQuery$({
+      queryMsg: {
+        get_public_logs: { pagination },
+      },
+      client,
+      contractAddress,
+      codeHash,
+    })),
+    map((response) => parseMoneyMarketPublicLogs(response)),
+    first(),
+  );
+}
+
+/**
+ * Query the Public Logs for a single money market contract
+ * NOT FOR PRODUCTION USE, CONTRACT IS IN DEVELOPMENT ON TESTNET ONLY
+ */
+async function queryMoneyMarketPublicLogs({
+  contractAddress,
+  codeHash,
+  lcdEndpoint,
+  chainId,
+  pageSize,
+  page,
+}: {
+  contractAddress: string,
+  codeHash?: string,
+  lcdEndpoint?: string,
+  chainId?: string,
+  pageSize?: number,
+  page?: number,
+}) {
+  return lastValueFrom(queryMoneyMarketPublicLogs$({
+    contractAddress,
+    codeHash,
+    lcdEndpoint,
+    chainId,
+    pagination: pageSize !== undefined && page !== undefined
+      ? { page_size: pageSize, page }
+      : undefined,
+  }));
+}
+
+/**
+ * Batch query the Public Logs for multiple money market contracts
+ * NOT FOR PRODUCTION USE, CONTRACT IS IN DEVELOPMENT ON TESTNET ONLY
+ */
+function batchQueryMoneyMarketPublicLogs$({
+  queryPublicLogsContractAddress,
+  queryPublicLogsCodeHash,
+  lcdEndpoint,
+  chainId,
+  moneyMarketContracts,
+  batchSize,
+  minBlockHeightValidationOptions,
+  blockHeight,
+}: {
+  queryPublicLogsContractAddress: string,
+  queryPublicLogsCodeHash?: string,
+  lcdEndpoint?: string,
+  chainId?: string,
+  moneyMarketContracts: ContractAndPagination[],
+  batchSize?: number,
+  minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
+  blockHeight?: number,
+}) {
+  const queries: BatchQueryParams[] = moneyMarketContracts.map((contract) => ({
+    id: contract.address,
+    contract: {
+      address: contract.address,
+      codeHash: contract.codeHash,
+    },
+    queryMsg: {
+      get_public_logs: {
+        pagination: contract.pageSize && contract.page
+          ? { page_size: contract.pageSize, page: contract.page } : undefined,
+      },
+    },
+  }));
+
+  return batchQuery$({
+    contractAddress: queryPublicLogsContractAddress,
+    codeHash: queryPublicLogsCodeHash,
+    lcdEndpoint,
+    chainId,
+    queries,
+    batchSize,
+    minBlockHeightValidationOptions,
+    blockHeight,
+  }).pipe(
+    map((response) => response.map((item) => ({
+      moneyMarketContractAddress: item.id as string,
+      publicLogs: parseMoneyMarketPublicLogs(item.response),
+      blockHeight: item.blockHeight,
+    }))),
+    first(),
+  );
+}
+
+async function batchQueryMoneyMarketPublicLogs({
+  queryPublicLogsContractAddress,
+  queryPublicLogsCodeHash,
+  lcdEndpoint,
+  chainId,
+  moneyMarketContracts,
+  minBlockHeightValidationOptions,
+}: {
+  queryPublicLogsContractAddress: string,
+  queryPublicLogsCodeHash?: string,
+  lcdEndpoint?: string,
+  chainId?: string,
+  moneyMarketContracts: ContractAndPagination[],
+  minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
+}) {
+  return lastValueFrom(batchQueryMoneyMarketPublicLogs$({
+    queryPublicLogsContractAddress,
+    queryPublicLogsCodeHash,
+    lcdEndpoint,
+    chainId,
+    moneyMarketContracts,
+    minBlockHeightValidationOptions,
+  }));
+}
+
+const parseBatchQueryMoneyMarketRewardPools = (
+  responses: BatchQueryParsedResponse,
+): ParsedRewardPoolsResponse[] => (
+  responses.map((response: BatchQueryParsedResponseItem) => ({
+    vault: response.id.toString(),
+    blockHeight: response.blockHeight,
+    rewardPools: response.response.map((pool: RewardPoolResponse) => ({
+      rewardPoolId: pool.id,
+      amount: pool.amount,
+      token: pool.token,
+      start: pool.start,
+      end: pool.end,
+      rate: pool.rate,
+    })),
+  }))
+);
+
+function batchQueryMoneyMarketRewardPools$({
+  queryRouterContractAddress,
+  queryRouterCodeHash,
+  lcdEndpoint,
+  chainId,
+  moneyMarket,
+  vaults,
+  batchSize,
+  minBlockHeightValidationOptions,
+  blockHeight,
+}: {
+  queryRouterContractAddress: string,
+  queryRouterCodeHash?: string,
+  lcdEndpoint?: string,
+  chainId?: string,
+  moneyMarket: Contract,
+  vaults: string[],
+  batchSize?: number,
+  minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
+  blockHeight?: number,
+}) {
+  const queries = vaults.map((vaultId) => ({
+    id: vaultId,
+    contract: {
+      address: moneyMarket.address,
+      codeHash: moneyMarket.codeHash,
+    },
+    queryMsg: {
+      reward_pools: {
+        vault: vaultId,
+      },
+    },
+  }));
+
+  return batchQuery$({
+    contractAddress: queryRouterContractAddress,
+    codeHash: queryRouterCodeHash,
+    lcdEndpoint,
+    chainId,
+    queries,
+    batchSize,
+    minBlockHeightValidationOptions,
+    blockHeight,
+  }).pipe(
+    map((response) => parseBatchQueryMoneyMarketRewardPools(response)),
+    first(),
+  );
+}
+
+async function batchQueryMoneyMarketRewardPools({
+  queryRouterContractAddress,
+  queryRouterCodeHash,
+  lcdEndpoint,
+  chainId,
+  moneyMarket,
+  vaults,
+  minBlockHeightValidationOptions,
+}: {
+  queryRouterContractAddress: string,
+  queryRouterCodeHash?: string,
+  lcdEndpoint?: string,
+  chainId?: string,
+  moneyMarket: Contract,
+  vaults: string[],
+  minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
+}) {
+  return lastValueFrom(batchQueryMoneyMarketRewardPools$({
+    queryRouterContractAddress,
+    queryRouterCodeHash,
+    lcdEndpoint,
+    chainId,
+    moneyMarket,
+    vaults,
+    minBlockHeightValidationOptions,
+  }));
+}
+
 export {
   queryMoneyMarketConfig,
-  queryMoneyMarketGetMarkets,
+  queryMoneyMarketGetVaults,
   queryMoneyMarketGetCollateral,
   batchQueryMoneyMarketConfig$,
-  batchQueryMoneyMarketGetMarkets$,
+  batchQueryMoneyMarketGetVaults$,
   batchQueryMoneyMarketGetCollateral$,
   batchQueryMoneyMarketConfig,
-  batchQueryMoneyMarketGetMarkets,
+  batchQueryMoneyMarketGetVaults,
   batchQueryMoneyMarketGetCollateral,
+  queryMoneyMarketPublicLogs$,
+  queryMoneyMarketPublicLogs,
+  batchQueryMoneyMarketPublicLogs$,
+  batchQueryMoneyMarketPublicLogs,
+  batchQueryMoneyMarketRewardPools$,
+  batchQueryMoneyMarketRewardPools,
 };

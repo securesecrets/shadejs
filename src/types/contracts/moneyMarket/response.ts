@@ -11,18 +11,32 @@ type ConfigResponse = {
     address: string,
     code_hash: string,
   }
+  swap_router: {
+    address: string,
+    code_hash: string,
+  },
   fee_collector: string,
-  l_token_id: number,
-  l_token_code_hash: string,
-  l_token_blockchain_admin: string,
+  x_token_id: number,
+  x_token_code_hash: string,
+  x_token_blockchain_admin: string,
+  private_liquidation_protocol_fee: string,
+  public_liquidation_protocol_fee: string,
+  max_constant_product_price_impact: string,
+  max_stableswap_tvl_percent: string,
+  max_oracle_delay_interval: number,
+  private_liquidation_interval: number,
   status: {
     supply_enabled: boolean,
     borrow_enabled: boolean,
     repay_enabled: boolean,
     liquidation_enabled: boolean,
+    private_liquidation_enabled: boolean,
     interest_accrual_enabled: boolean,
     collateral_deposit_enabled: boolean,
-  }
+    flash_loan_enabled: boolean,
+    collateral_swap_enabled: boolean,
+    lp_claim_on_liquidate_enabled: boolean
+  },
 }
 
 type PaginatedResponse<T> = {
@@ -33,12 +47,12 @@ type PaginatedResponse<T> = {
   data: T[]
 }
 
-type MarketReponse = {
-    market_token: {
+type VaultResponse = {
+    token: {
       address: string,
       code_hash: string,
     },
-    l_token: {
+    x_token: {
       address: string,
       code_hash: string,
     },
@@ -48,7 +62,7 @@ type MarketReponse = {
       base: string,
       slope1: string,
       slope2: string,
-      optimal_utilisation: string,
+      optimal_utilization: string,
     },
     loanable: string,
     lent_amount: string,
@@ -57,7 +71,9 @@ type MarketReponse = {
     interest_per_utoken: string,
     last_interest_accrued: number,
     max_supply: string,
+    max_borrow: string,
     dao_interest_fee: string,
+    dao_flash_loan_interest_fee: string,
     flash_loan_interest: string,
     status: {
         supply_enabled: boolean,
@@ -65,31 +81,41 @@ type MarketReponse = {
         repay_enabled: boolean,
         liquidation_enabled: boolean,
         interest_accrual_enabled: boolean,
+        flash_loan_enabled: boolean,
     }
 }
 
-type GetMarketsResponse = PaginatedResponse<MarketReponse>;
+type GetVaultsResponse = PaginatedResponse<VaultResponse>;
 
-type CollateralReponse = {
+type CollateralResponse = {
   token: {
     address: string,
     code_hash: string,
   },
   amount: string,
   decimals: number,
-  max_initial_ltv: string,
-  liquidation_threshold: string,
+  deposit_limit: string,
+  max_borrow_ltv: string,
+  public_liquidation_threshold: string,
+  private_liquidation_threshold: string,
   liquidation_discount: string,
   oracle_key: string,
   status: {
     deposit_enabled: boolean,
-    liquidations_enabled: boolean,
+    liquidation_enabled: boolean,
+    collateral_swap_enabled: boolean,
   }
+  is_lp_token: boolean,
+  lp_staking_contract?: {
+    address: string,
+    code_hash: string,
+  },
+  lp_staking_reward_fee?: string,
 }
 
-type GetCollateralResponse = PaginatedResponse<CollateralReponse>;
+type GetCollateralResponse = PaginatedResponse<CollateralResponse>;
 
-type CalculatedUserCollateralReponse = {
+type CalculatedUserCollateralResponse = {
   calculated_user_collateral: {
     token: string,
     amount: string,
@@ -112,7 +138,7 @@ type CalculatedUserDebtResponse = {
 type UserPositionResponse = {
   calcualted_user_position: {
     id: string,
-    collateral: CalculatedUserCollateralReponse[],
+    collateral: CalculatedUserCollateralResponse[],
     debt: CalculatedUserDebtResponse[],
     total_collateral_value: string,
     total_principal_value: string,
@@ -122,9 +148,20 @@ type UserPositionResponse = {
   }
 }
 
+// Flexible type for actions, leaving it as a JSON object (blob)
+type PublicLogResponse = {
+  timestamp: number,
+  action: Record<string, any>, // Flexible JSON blob for action
+}
+
+// Paginated response type for public events
+type GetPublicLogsResponse = PaginatedResponse<PublicLogResponse>;
+
 export type {
   ConfigResponse,
-  GetMarketsResponse,
+  GetVaultsResponse,
   GetCollateralResponse,
   UserPositionResponse,
+  PublicLogResponse,
+  GetPublicLogsResponse,
 };
