@@ -146,12 +146,12 @@ type BatchMoneyMarketGetCollateral = {
 type BatchMoneyMarketGetCollaterals = BatchMoneyMarketGetCollateral[];
 
 type ParsedCalculatedUserCollateralResponse = {
-    [token: string]: {
-      token: string,
-      amount: string,
-      price: string,
-      value: string,
-    }
+  [token: string]: {
+    token: string,
+    amount: string,
+    price: string,
+    value: string,
+  }
 }
 
 type ParsedCalculatedUserDebtResponse = {
@@ -191,27 +191,118 @@ type PaginatedPublicLogs = {
 }
 
 type RewardPool = {
-    rewardPoolId: string,
-    amount: string,
-    token: string,
-    start: string,
-    end: string,
-    rate: string,
+  rewardPoolId: string,
+  amount: string,
+  token: string,
+  start: string,
+  end: string,
+  rate: string,
 }
 
 type RewardPoolResponse = {
-    id: string,
-    amount: string,
-    token: string,
-    start: string,
-    end: string,
-    rate: string,
+  id: string,
+  amount: string,
+  token: string,
+  start: string,
+  end: string,
+  rate: string,
 }
 
 type ParsedRewardPoolsResponse = {
-    vault: string,
-    blockHeight: number,
-    rewardPools: RewardPool[],
+  vault: string,
+  blockHeight: number,
+  rewardPools: RewardPool[],
+}
+
+type PublicLiquidatableUserCollateralResponse = {
+  token: {
+    address: string,
+    code_hash: string,
+  }
+  liquidatable_value: number,
+  liquidatable_amount: number,
+  liquidation_discount: number,
+  price: number,
+}
+
+type ParsedPublicLiquidatableUserCollateral = {
+  token: {
+    address: string,
+    codeHash: string,
+  }
+  liquidatableValue: number,
+  liquidatableAmount: number,
+  liquidationDiscount: number,
+  price: number,
+}
+
+type PublicLiquidatableUserDebtResponse = {
+  token: {
+    address: string,
+    code_hash: string,
+  },
+  liquidatable_value: number,
+  liquidatable_amount: number,
+  price: number,
+}
+
+type ParsedPublicLiquidatableUserDebt = {
+  token: {
+    address: string,
+    codeHash: string,
+  },
+  liquidatableValue: number,
+  liquidatableAmount: number,
+  price: number,
+}
+
+type PublicLiquidatableUserPositionResponse = {
+  id: number,
+  collateral: PublicLiquidatableUserCollateralResponse[],
+  debt: PublicLiquidatableUserDebtResponse[],
+}
+
+type ParsedPublicLiquidatableUserPosition = {
+  id: number,
+  collateral: ParsedPublicLiquidatableUserCollateral[],
+  debt: ParsedPublicLiquidatableUserDebt[],
+}
+
+type PaginatedPublicLiquidatableResponse = {
+  page: number,
+  page_size: number,
+  total_pages: number,
+  total_items: number,
+  data: PublicLiquidatableUserPositionResponse[],
+}
+
+type ParsedPaginatedPublicLiquidatable = {
+  page: number,
+  pageSize: number,
+  totalPages: number,
+  totalItems: number,
+  data: ParsedPublicLiquidatableUserPosition[],
+}
+
+type PrivateLiquidatableUserPosition = {
+  id: number,
+  routes: number,
+}
+
+type PaginatedPrivateLiquidatableResponse = {
+  page: number,
+  page_size: number,
+  total_pages: number,
+  total_items: number,
+  data: PrivateLiquidatableUserPosition[],
+}
+
+type ParsedPaginatedPrivateLiquidatable = {
+  page: number,
+  pageSize: number,
+  totalPages: number,
+  totalItems: number,
+  data: PrivateLiquidatableUserPosition[],
 }
 
 export type {
@@ -232,4 +323,15 @@ export type {
   RewardPool,
   RewardPoolResponse,
   ParsedRewardPoolsResponse,
+  PublicLiquidatableUserCollateralResponse,
+  ParsedPublicLiquidatableUserCollateral,
+  PublicLiquidatableUserDebtResponse,
+  ParsedPublicLiquidatableUserDebt,
+  PublicLiquidatableUserPositionResponse,
+  ParsedPublicLiquidatableUserPosition,
+  PaginatedPublicLiquidatableResponse,
+  ParsedPaginatedPublicLiquidatable,
+  PrivateLiquidatableUserPosition,
+  PaginatedPrivateLiquidatableResponse,
+  ParsedPaginatedPrivateLiquidatable,
 };
