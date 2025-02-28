@@ -758,7 +758,7 @@ async function queryMoneyMarketPublicLiquidatable({
   chainId?: string,
   pageSize?: number,
   page?: number,
-}) {
+}): Promise<ParsedPaginatedPublicLiquidatable> {
   return lastValueFrom(queryMoneyMarketPublicLiquidatable$({
     contractAddress,
     codeHash,
@@ -800,7 +800,7 @@ function queryMoneyMarketPrivateLiquidatable$({
   return getActiveQueryClient$(lcdEndpoint, chainId).pipe(
     switchMap(({ client }) => sendSecretClientContractQuery$({
       queryMsg: {
-        public_liquidatable: { pagination },
+        private_liquidatable: { pagination },
       },
       client,
       contractAddress,
@@ -830,7 +830,7 @@ async function queryMoneyMarketPrivateLiquidatable({
   pageSize?: number,
   page?: number,
 }) {
-  return lastValueFrom(queryMoneyMarketPublicLiquidatable$({
+  return lastValueFrom(queryMoneyMarketPrivateLiquidatable$({
     contractAddress,
     codeHash,
     lcdEndpoint,
