@@ -284,6 +284,12 @@ type ParsedPaginatedPublicLiquidatable = {
   data: ParsedPublicLiquidatableUserPosition[],
 }
 
+type BatchMoneyMarketPublicLiquidatable = {
+  moneyMarketContractAddress: string,
+  public_liquidatable: ParsedPaginatedPublicLiquidatable,
+  blockHeight: number,
+}
+
 type PrivateLiquidatableUserPosition = {
   id: number,
   routes: number,
@@ -303,6 +309,12 @@ type ParsedPaginatedPrivateLiquidatable = {
   totalPages: number,
   totalItems: number,
   data: PrivateLiquidatableUserPosition[],
+}
+
+type BatchMoneyMarketPrivateLiquidatable = {
+  moneyMarketContractAddress: string,
+  private_liquidatable: ParsedPaginatedPrivateLiquidatable,
+  blockHeight: number,
 }
 
 export type {
@@ -331,7 +343,9 @@ export type {
   ParsedPublicLiquidatableUserPosition,
   PaginatedPublicLiquidatableResponse,
   ParsedPaginatedPublicLiquidatable,
+  BatchMoneyMarketPublicLiquidatable,
   PrivateLiquidatableUserPosition,
   PaginatedPrivateLiquidatableResponse,
   ParsedPaginatedPrivateLiquidatable,
+  BatchMoneyMarketPrivateLiquidatable,
 };

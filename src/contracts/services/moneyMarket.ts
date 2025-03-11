@@ -16,6 +16,8 @@ import {
   BatchMoneyMarketConfigs,
   BatchMoneyMarketGetCollaterals,
   BatchMoneyMarketGetVaults,
+  BatchMoneyMarketPublicLiquidatable,
+  BatchMoneyMarketPrivateLiquidatable,
   ContractAndPagination,
   Pagination, ParsedConfigResponse, ParsedGetCollateralResponse, ParsedGetVaultsResponse,
   ParsedRewardPoolsResponse,
@@ -770,6 +772,88 @@ async function queryMoneyMarketPublicLiquidatable({
   }));
 }
 
+const parseBatchQueryMoneyMarketPublicLiquidatable = (
+  responses: BatchQueryParsedResponse,
+): BatchMoneyMarketPublicLiquidatable[] => (
+  responses.map((response: BatchQueryParsedResponseItem) => ({
+    moneyMarketContractAddress: response.id.toString(),
+    blockHeight: response.blockHeight,
+    public_liquidatable: response.response.map(parsePublicLiquidatable),
+  }))
+);
+
+function batchQueryMoneyMarketPublicLiquidatable$({
+  queryRouterContractAddress,
+  queryRouterCodeHash,
+  lcdEndpoint,
+  chainId,
+  moneyMarketContracts,
+  pagination,
+  batchSize,
+  minBlockHeightValidationOptions,
+  blockHeight,
+}: {
+  queryRouterContractAddress: string,
+  queryRouterCodeHash?: string,
+  lcdEndpoint?: string,
+  chainId?: string,
+  moneyMarketContracts: Contract[],
+  pagination: Pagination,
+  batchSize?: number,
+  minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
+  blockHeight?: number,
+}) {
+  const queries: BatchQueryParams[] = moneyMarketContracts.map((contract) => ({
+    id: contract.address,
+    contract: {
+      address: contract.address,
+      codeHash: contract.codeHash,
+    },
+    queryMsg: { public_liquidatable: { pagination } },
+  }));
+  return batchQuery$({
+    contractAddress: queryRouterContractAddress,
+    codeHash: queryRouterCodeHash,
+    lcdEndpoint,
+    chainId,
+    queries,
+    batchSize,
+    minBlockHeightValidationOptions,
+    blockHeight,
+  }).pipe(
+    map(parseBatchQueryMoneyMarketPublicLiquidatable),
+    first(),
+  );
+}
+
+async function batchQueryMoneyMarketPublicLiquidatable({
+  queryRouterContractAddress,
+  queryRouterCodeHash,
+  lcdEndpoint,
+  chainId,
+  moneyMarketContracts,
+  pagination,
+  minBlockHeightValidationOptions,
+}: {
+  queryRouterContractAddress: string,
+  queryRouterCodeHash?: string,
+  lcdEndpoint?: string,
+  chainId?: string,
+  moneyMarketContracts: ContractAndPagination[],
+  pagination: Pagination,
+  minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
+}) {
+  return lastValueFrom(batchQueryMoneyMarketPublicLiquidatable$({
+    queryRouterContractAddress,
+    queryRouterCodeHash,
+    lcdEndpoint,
+    chainId,
+    moneyMarketContracts,
+    pagination,
+    minBlockHeightValidationOptions,
+  }));
+}
+
 const parsePrivateLiquidatable = (
   response: any,
 ): ParsedPaginatedPrivateLiquidatable => ({
@@ -838,6 +922,88 @@ async function queryMoneyMarketPrivateLiquidatable({
     pagination: pageSize !== undefined && page !== undefined
       ? { page_size: pageSize, page }
       : undefined,
+  }));
+}
+
+const parseBatchQueryMoneyMarketPrivateLiquidatable = (
+  responses: BatchQueryParsedResponse,
+): BatchMoneyMarketPrivateLiquidatable[] => (
+  responses.map((response: BatchQueryParsedResponseItem) => ({
+    moneyMarketContractAddress: response.id.toString(),
+    blockHeight: response.blockHeight,
+    private_liquidatable: response.response.map(parsePrivateLiquidatable),
+  }))
+);
+
+function batchQueryMoneyMarketPrivateLiquidatable$({
+  queryRouterContractAddress,
+  queryRouterCodeHash,
+  lcdEndpoint,
+  chainId,
+  moneyMarketContracts,
+  pagination,
+  batchSize,
+  minBlockHeightValidationOptions,
+  blockHeight,
+}: {
+  queryRouterContractAddress: string,
+  queryRouterCodeHash?: string,
+  lcdEndpoint?: string,
+  chainId?: string,
+  moneyMarketContracts: Contract[],
+  pagination: Pagination,
+  batchSize?: number,
+  minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
+  blockHeight?: number,
+}) {
+  const queries: BatchQueryParams[] = moneyMarketContracts.map((contract) => ({
+    id: contract.address,
+    contract: {
+      address: contract.address,
+      codeHash: contract.codeHash,
+    },
+    queryMsg: { private_liquidatable: { pagination } },
+  }));
+  return batchQuery$({
+    contractAddress: queryRouterContractAddress,
+    codeHash: queryRouterCodeHash,
+    lcdEndpoint,
+    chainId,
+    queries,
+    batchSize,
+    minBlockHeightValidationOptions,
+    blockHeight,
+  }).pipe(
+    map(parseBatchQueryMoneyMarketPrivateLiquidatable),
+    first(),
+  );
+}
+
+async function batchQueryMoneyMarketPrivateLiquidatable({
+  queryRouterContractAddress,
+  queryRouterCodeHash,
+  lcdEndpoint,
+  chainId,
+  moneyMarketContracts,
+  pagination,
+  minBlockHeightValidationOptions,
+}: {
+  queryRouterContractAddress: string,
+  queryRouterCodeHash?: string,
+  lcdEndpoint?: string,
+  chainId?: string,
+  moneyMarketContracts: ContractAndPagination[],
+  pagination: Pagination,
+  minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
+}) {
+  return lastValueFrom(batchQueryMoneyMarketPrivateLiquidatable$({
+    queryRouterContractAddress,
+    queryRouterCodeHash,
+    lcdEndpoint,
+    chainId,
+    moneyMarketContracts,
+    pagination,
+    minBlockHeightValidationOptions,
   }));
 }
 
@@ -1032,6 +1198,10 @@ export {
   queryMoneyMarketPublicLiquidatable,
   queryMoneyMarketPrivateLiquidatable$,
   queryMoneyMarketPrivateLiquidatable,
+  batchQueryMoneyMarketPublicLiquidatable$,
+  batchQueryMoneyMarketPublicLiquidatable,
+  batchQueryMoneyMarketPrivateLiquidatable$,
+  batchQueryMoneyMarketPrivateLiquidatable,
   batchQueryMoneyMarketPublicLogs$,
   batchQueryMoneyMarketPublicLogs,
   batchQueryMoneyMarketRewardPools$,
