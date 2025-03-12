@@ -798,7 +798,7 @@ function batchQueryMoneyMarketPublicLiquidatable$({
   lcdEndpoint?: string,
   chainId?: string,
   moneyMarketContracts: Contract[],
-  pagination: Pagination,
+  pagination?: Pagination,
   batchSize?: number,
   minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
   blockHeight?: number,
@@ -840,7 +840,7 @@ async function batchQueryMoneyMarketPublicLiquidatable({
   lcdEndpoint?: string,
   chainId?: string,
   moneyMarketContracts: ContractAndPagination[],
-  pagination: Pagination,
+  pagination?: Pagination,
   minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
 }) {
   return lastValueFrom(batchQueryMoneyMarketPublicLiquidatable$({
@@ -951,7 +951,7 @@ function batchQueryMoneyMarketPrivateLiquidatable$({
   lcdEndpoint?: string,
   chainId?: string,
   moneyMarketContracts: Contract[],
-  pagination: Pagination,
+  pagination?: Pagination,
   batchSize?: number,
   minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
   blockHeight?: number,
@@ -993,7 +993,7 @@ async function batchQueryMoneyMarketPrivateLiquidatable({
   lcdEndpoint?: string,
   chainId?: string,
   moneyMarketContracts: ContractAndPagination[],
-  pagination: Pagination,
+  pagination?: Pagination,
   minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
 }) {
   return lastValueFrom(batchQueryMoneyMarketPrivateLiquidatable$({
