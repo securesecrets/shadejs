@@ -1,4 +1,4 @@
-/* eslint-disable max-len */
+ 
 import { expect, test } from 'vitest';
 import BigNumber from 'bignumber.js';
 import { isBigNumberWithinMarginOfError } from '~/lib/test';
