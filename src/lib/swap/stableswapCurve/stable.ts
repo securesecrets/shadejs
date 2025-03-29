@@ -1,4 +1,4 @@
-/* eslint-disable max-len */
+ 
 import BigNumber from 'bignumber.js';
 import { ReverseTradeResult, TradeResult } from '~/types/stableswap/stable';
 import { NewtonMethodError } from '~/lib/swap/stableswapCurve/error';

@@ -5,7 +5,7 @@ const batchPricesWithErrorParsedResponse: ParsedOraclePricesResponse = {
     oracleKey: 'BTC',
     rate: '49521843708800000000000',
     lastUpdatedBase: 1707858482,
-    // eslint-disable-next-line
+     
     lastUpdatedQuote: 18446744073709551615,
     blockHeight: 3,
   },

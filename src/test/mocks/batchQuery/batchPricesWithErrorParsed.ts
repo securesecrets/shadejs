@@ -7,7 +7,7 @@ const batchPricesWithErrorParsed: BatchQueryParsedResponse = [{
     data: {
       rate: '49521843708800000000000',
       last_updated_base: 1707858482,
-      // eslint-disable-next-line
+       
       last_updated_quote: 18446744073709551615,
     },
   },

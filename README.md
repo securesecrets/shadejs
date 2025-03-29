@@ -44,3 +44,9 @@ Docs will be available on a vitepress site. You can run the site locally with th
 ```
 $ yarn docs:dev
 ```
+
+## CHangeset for deployment
+
+```
+$ yarn changeset
+```
