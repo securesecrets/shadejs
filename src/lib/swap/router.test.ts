@@ -13,7 +13,9 @@ import {
   batchPairsInfoMockForComplexRoute,
   tokenConfigMock,
 } from '~/test/mocks/swap/router';
-import { GasMultiplier } from '~/types/swap/router';
+import {
+  PathsWithPair,
+} from '~/types';
 
 test('it can generate possible route paths', () => {
   // Returns single pair
@@ -210,8 +212,23 @@ test('it can calculate the output of a single pool swap route', () => {
     priceImpact: BigNumber('0.000009000000009'),
     inputTokenContractAddress: 'TOKEN_A_CONTRACT_ADDRESS',
     outputTokenContractAddress: 'TOKEN_B_CONTRACT_ADDRESS',
-    path: ['CONTRACT_ADDRESS_PAIR_1'],
-    gasMultiplier: GasMultiplier.CONSTANT_PRODUCT,
+    path: [{
+      pair: [
+        {
+          address: 'TOKEN_A_CONTRACT_ADDRESS',
+          codeHash: 'TOKEN_A_CODE_HASH',
+        },
+        {
+          address: 'TOKEN_B_CONTRACT_ADDRESS',
+          codeHash: 'TOKEN_B_CODE_HASH',
+        },
+      ],
+      poolCodeHash: 'CONTRACT_HASH_PAIR_1',
+      poolContractAddress: 'CONTRACT_ADDRESS_PAIR_1',
+      poolType: 'constant_product',
+      stableOracleKeys: null,
+    }] as PathsWithPair,
+    iterationsCount: 0,
   };
   expect(calculateRoute({
     inputTokenAmount: BigNumber('1000000000'),
@@ -300,9 +317,15 @@ test('it can calculate the output of a multi-hop constant product swap route', (
       'CONTRACT_ADDRESS_PAIR_2',
       'CONTRACT_ADDRESS_PAIR_3',
     ],
-    gasMultiplier: GasMultiplier.CONSTANT_PRODUCT * 3,
+    iterationsCount: 0,
   };
-
+  // Verify path and delete formatted PairsWithPath
+  expect(
+    calulatedRouteResult.path
+      .map(({ poolContractAddress }) => poolContractAddress),
+  ).toStrictEqual(output.path);
+  calulatedRouteResult.path = [];
+  output.path = [];
   // Output Object validation
   expect(calulatedRouteResult).toStrictEqual(output);
 
@@ -403,12 +426,17 @@ test('it can calculate the output of a multi-hop stable swap route', () => {
       'CONTRACT_ADDRESS_PAIR_11',
       'CONTRACT_ADDRESS_PAIR_12',
     ],
-    gasMultiplier: GasMultiplier.STABLE * 3,
+    iterationsCount: 27,
   };
-
+  // Verify path and delete formatted PairsWithPath
+  expect(
+    calulatedStableRouteResult.path
+      .map(({ poolContractAddress }) => poolContractAddress),
+  ).toStrictEqual(output.path);
+  calulatedStableRouteResult.path = [];
+  output.path = [];
   // Output Object validation
   expect(calulatedStableRouteResult).toStrictEqual(output);
-
   // Output Amount validation
   expect(calulatedStableRouteResult.quoteOutputAmount).toStrictEqual(stableSwap3Output);
 });
@@ -497,8 +525,15 @@ test('it can calculate the output of a multi-hop mixed swap route', () => {
       'CONTRACT_ADDRESS_PAIR_11',
       'CONTRACT_ADDRESS_PAIR_14',
     ],
-    gasMultiplier: GasMultiplier.CONSTANT_PRODUCT * 2 + GasMultiplier.STABLE,
+    iterationsCount: 9,
   };
+  // Verify path and delete formatted PairsWithPath
+  expect(
+    mixedMultiHopResult.path
+      .map(({ poolContractAddress }) => poolContractAddress),
+  ).toStrictEqual(output.path);
+  mixedMultiHopResult.path = [];
+  output.path = [];
 
   // Output Object validation
   expect(mixedMultiHopResult).toStrictEqual(output);
@@ -530,7 +565,7 @@ test('it can calculate all routes for input + output token', () => {
       'CONTRACT_ADDRESS_PAIR_16',
       'CONTRACT_ADDRESS_PAIR_17',
     ],
-    gasMultiplier: GasMultiplier.STABLE * 3,
+    iterationsCount: 27,
   };
 
   const output2 = {
@@ -545,8 +580,23 @@ test('it can calculate all routes for input + output token', () => {
       'CONTRACT_ADDRESS_PAIR_18',
       'CONTRACT_ADDRESS_PAIR_17',
     ],
-    gasMultiplier: GasMultiplier.STABLE * 2,
+    iterationsCount: 18,
   };
+  // Verify path and delete formatted PairsWithPath
+  expect(
+    result[1].path
+      .map(({ poolContractAddress }) => poolContractAddress),
+  ).toStrictEqual(output1.path);
+  result[1].path = [];
+  output1.path = [];
+
+  // Verify path and delete formatted PairsWithPath
+  expect(
+    result[0].path
+      .map(({ poolContractAddress }) => poolContractAddress),
+  ).toStrictEqual(output2.path);
+  result[0].path = [];
+  output2.path = [];
 
   expect(result).toStrictEqual([output2, output1]);
 });

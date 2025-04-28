@@ -5,13 +5,14 @@ import {
   stableSwapToken1for0,
   constantProductPriceImpactToken0for1,
   constantProductPriceImpactToken1for0,
-  stableSwapPriceImpactToken0For1,
-  stableSwapPriceImpactToken1For0,
 } from '~/lib/swap/swapCalculations';
 import BigNumber from 'bignumber.js';
-import { BatchPairsInfo } from '~/types/contracts/swap/model';
 import {
-  GasMultiplier,
+  BatchPairsInfo,
+  PathsWithPair,
+  PathWithPair,
+} from '~/types/contracts/swap/model';
+import {
   Route,
 } from '~/types/swap/router';
 import { TokensConfig } from '~/types/shared';
@@ -20,6 +21,7 @@ import {
   convertCoinFromUDenom,
   getTokenDecimalsByTokenConfig,
 } from '~/lib/utils';
+import { SwapType } from '~/lib/swap/gasEstimation/oracle-costs';
 
 /**
 * retuns possible paths through one or multiple pools to complete a trade of two tokens
@@ -122,12 +124,12 @@ function calculateRoute({
       quoteShadeDaoFee,
       quotePriceImpact,
       quoteLPFee,
-      gasMultiplier,
+      iterationsCount,
     } = prev;
 
     let swapAmountOutput;
     let swapPriceImpact;
-    let poolMultiplier;
+    let poolIterationsCount = 0;
 
     const pairArr = pairs.filter(
       (pair) => pair.pairContractAddress === poolContractAddress,
@@ -204,8 +206,6 @@ function calculateRoute({
 
     // Stable Pool calculations
     if (isStable && stableParams) {
-      poolMultiplier = GasMultiplier.STABLE;
-
       if (!stableParams.priceRatio) {
         throw new Error('PriceRatio not available: Oracle Error');
       }
@@ -227,13 +227,14 @@ function calculateRoute({
           priceImpactLimit: BigNumber(stableParams.maxPriceImpactAllowed),
         };
 
-        const swapAmountOutputHumanReadable = stableSwapToken0for1(swapParams);
+        const tradeResult = stableSwapToken0for1(swapParams);
 
         swapAmountOutput = BigNumber(convertCoinToUDenom(
-          swapAmountOutputHumanReadable,
+          tradeResult.tradeReturn,
           outputTokenDecimals,
         ));
-        swapPriceImpact = stableSwapPriceImpactToken0For1(swapParams);
+        swapPriceImpact = tradeResult.priceImpact;
+        poolIterationsCount = tradeResult.iterationsCount;
       // token1 as the input
       } else if (currentTokenContractAddress === token1Contract.address) {
         const swapParams = {
@@ -251,20 +252,21 @@ function calculateRoute({
           priceImpactLimit: BigNumber(stableParams.maxPriceImpactAllowed),
         };
 
-        const swapAmountOutputHumanReadable = stableSwapToken1for0(swapParams);
+        const tradeResult = stableSwapToken1for0(swapParams);
 
         swapAmountOutput = BigNumber(convertCoinToUDenom(
-          swapAmountOutputHumanReadable,
+          tradeResult.tradeReturn,
           outputTokenDecimals,
         ));
-        swapPriceImpact = stableSwapPriceImpactToken1For0(swapParams);
+        swapPriceImpact = tradeResult.priceImpact;
+        poolIterationsCount = tradeResult.iterationsCount;
       } else {
         throw Error('stableswap parameter error');
       }
     } else {
-      poolMultiplier = GasMultiplier.CONSTANT_PRODUCT;
       // non-stable pools using constant product rule math
       // token0 as the input
+      // eslint-disable-next-line no-lonely-if
       if (currentTokenContractAddress === token0Contract.address) {
         swapAmountOutput = constantProductSwapToken0for1({
           token0LiquidityAmount: BigNumber(token0Amount),
@@ -305,7 +307,7 @@ function calculateRoute({
       quoteShadeDaoFee: quoteShadeDaoFee.plus(daoFee),
       quoteLPFee: quoteLPFee.plus(lpFee),
       quotePriceImpact: quotePriceImpact.plus(swapPriceImpact),
-      gasMultiplier: gasMultiplier + poolMultiplier,
+      iterationsCount: iterationsCount + poolIterationsCount,
     };
 
     // reduce function starting values
@@ -315,7 +317,28 @@ function calculateRoute({
     quoteShadeDaoFee: BigNumber(0),
     quoteLPFee: BigNumber(0),
     quotePriceImpact: BigNumber(0),
-    gasMultiplier: 0,
+    iterationsCount: 0,
+  });
+
+  const pathsWithPair: PathsWithPair = path.map((poolContractAddress) => {
+    // already validated a single pair exists
+    const batchPairInfo = pairs.find(
+      (pair) => pair.pairContractAddress === poolContractAddress,
+    )!;
+
+    return {
+      pair: [
+        batchPairInfo.pairInfo.token0Contract,
+        batchPairInfo.pairInfo.token1Contract,
+      ],
+      poolType: batchPairInfo.pairInfo.isStable ? SwapType.STABLE : SwapType.CONSTANT_PRODUCT,
+      stableOracleKeys: batchPairInfo.pairInfo.stableParams ? [
+        batchPairInfo.pairInfo.stableParams.token0Data.oracleKey,
+        batchPairInfo.pairInfo.stableParams.token1Data.oracleKey,
+      ] : null,
+      poolContractAddress,
+      poolCodeHash: batchPairInfo.pairCodeHash,
+    } as PathWithPair;
   });
 
   // formulate the Routes data model
@@ -325,7 +348,7 @@ function calculateRoute({
     quoteShadeDaoFee,
     quoteLPFee,
     quotePriceImpact,
-    gasMultiplier,
+    iterationsCount,
   } = routeCalculation;
 
   return {
@@ -336,8 +359,8 @@ function calculateRoute({
     priceImpact: quotePriceImpact,
     inputTokenContractAddress,
     outputTokenContractAddress,
-    path,
-    gasMultiplier,
+    path: pathsWithPair,
+    iterationsCount,
   };
 }
 

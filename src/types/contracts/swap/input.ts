@@ -1,10 +1,17 @@
-type PathContractFormatted = {
-  addr: string,
+type PathContractWithTokensFormatted = {
+  address: string,
   code_hash: string,
+  token0: {
+    address: string,
+    code_hash?: string,
+  },
+  token1: {
+    address: string,
+    code_hash?: string,
+  },
 }
-
-type PathsContractFormatted = PathContractFormatted[]
+type PathsContractWithTokensFormatted = PathContractWithTokensFormatted[]
 
 export type {
-  PathsContractFormatted,
+  PathsContractWithTokensFormatted,
 };

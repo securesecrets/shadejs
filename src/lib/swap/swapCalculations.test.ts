@@ -109,7 +109,7 @@ test('it tests stableswap with input of token 0', () => {
   const swapResult = stableSwapToken0for1(inputParams);
   expect(isBigNumberWithinMarginOfError(
     BigNumber('33.32804290125453'),
-    swapResult,
+    swapResult.tradeReturn,
     BigNumber('0.0000000001'),
   )).toBeTruthy();
 });
@@ -132,7 +132,7 @@ test('it tests reverse stableswap with output of token 1', () => {
   const swapResult = stableReverseSwapToken0for1(inputParams);
   expect(isBigNumberWithinMarginOfError(
     BigNumber(100),
-    swapResult,
+    swapResult.result,
     BigNumber('0.0000000001'),
   )).toBeTruthy();
 });
@@ -155,7 +155,7 @@ test('it tests reverse stableswap token 0 input with fees', () => {
   const swapResultForward = stableSwapToken0for1(inputParamsForward);
 
   const inputParamsBackward = {
-    outputToken1Amount: swapResultForward,
+    outputToken1Amount: swapResultForward.tradeReturn,
     poolToken0Amount: BigNumber(30000.0),
     poolToken1Amount: BigNumber(10000.0),
     priceRatio: BigNumber(3),
@@ -171,7 +171,7 @@ test('it tests reverse stableswap token 0 input with fees', () => {
   const swapResultBackward = stableReverseSwapToken0for1(inputParamsBackward);
   expect(isBigNumberWithinMarginOfError(
     inputParamsForward.inputToken0Amount,
-    swapResultBackward,
+    swapResultBackward.result,
     BigNumber('0.00000000000001'),
   )).toBeTruthy();
 });
@@ -194,7 +194,7 @@ test('it tests stableswap with input of token 0', () => {
   const swapResult = stableSwapToken0for1(inputParams);
   expect(isBigNumberWithinMarginOfError(
     BigNumber('33.32804290125453'),
-    swapResult,
+    swapResult.tradeReturn,
     BigNumber('0.0000000001'),
   )).toBeTruthy();
 });
@@ -217,7 +217,7 @@ test('it tests stableswap with input of token 1', () => {
   const swapResult = stableSwapToken1for0(inputParams1);
   expect(isBigNumberWithinMarginOfError(
     BigNumber('299.8571590852683'),
-    swapResult,
+    swapResult.tradeReturn,
     BigNumber('0.0000000001'),
   )).toBeTruthy();
 });
@@ -240,7 +240,7 @@ test('it tests reverse stableswap with output of token 0', () => {
   const swapResult = stableReverseSwapToken1for0(inputParams1);
   expect(isBigNumberWithinMarginOfError(
     BigNumber(100.0),
-    swapResult,
+    swapResult.result,
     BigNumber('0.0000000001'),
   )).toBeTruthy();
 });
@@ -263,7 +263,7 @@ test('it tests reverse stableswap token 1 input with fees', () => {
   const swapResultForward = stableSwapToken1for0(inputParamsForward);
 
   const inputParamsBackward = {
-    outputToken0Amount: swapResultForward,
+    outputToken0Amount: swapResultForward.tradeReturn,
     poolToken0Amount: BigNumber(30000.0),
     poolToken1Amount: BigNumber(10000.0),
     priceRatio: BigNumber(3),
@@ -279,7 +279,7 @@ test('it tests reverse stableswap token 1 input with fees', () => {
   const swapResultBackward = stableReverseSwapToken1for0(inputParamsBackward);
   expect(isBigNumberWithinMarginOfError(
     inputParamsForward.inputToken1Amount,
-    swapResultBackward,
+    swapResultBackward.result,
     BigNumber('0.00000000000001'),
   )).toBeTruthy();
 });
@@ -304,7 +304,7 @@ test('it tests stableswap price impact with input of token 0', () => {
   const priceImpact = stableSwapPriceImpactToken0For1(inputParams);
   expect(isBigNumberWithinMarginOfError(
     BigNumber('0.001595308670509'),
-    priceImpact,
+    priceImpact.result,
     BigNumber('0.0000000001'),
   )).toBeTruthy();
 });
@@ -329,7 +329,7 @@ test('it tests stableswap price impact with input of token 1', () => {
   const priceImpact = stableSwapPriceImpactToken1For0(inputParams);
   expect(isBigNumberWithinMarginOfError(
     BigNumber('0.370012139540090'),
-    priceImpact,
+    priceImpact.result,
     BigNumber('0.00000000001'),
   )).toBeTruthy();
 });

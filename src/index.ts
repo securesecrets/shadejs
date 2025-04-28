@@ -12,3 +12,4 @@ export * from './types';
 export * from '~/lib/apy/derivativeShd';
 export * from '~/lib/apy/derivativeScrt';
 export { calculateRewardPoolAPY } from '~/lib/apy/utils';
+export * from 'bignumber.js';

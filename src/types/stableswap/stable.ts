@@ -7,6 +7,7 @@ interface ReverseTradeResult {
   tradeReturn: BigNumber,
   lpFeeAmount: BigNumber,
   shadeDaoFeeAmount: BigNumber,
+  iterationsCount: number,
 }
 
 interface TradeResult {
@@ -15,6 +16,8 @@ interface TradeResult {
   tradeReturn: BigNumber,
   lpFeeAmount: BigNumber,
   shadeDaoFeeAmount: BigNumber,
+  priceImpact: BigNumber,
+  iterationsCount: number,
 }
 
 enum StableswapCalculationErrorType {

@@ -1,10 +1,5 @@
 import BigNumber from 'bignumber.js';
-
-// Gas Multipliers based on the swap type
-enum GasMultiplier {
-  STABLE = 2.7,
-  CONSTANT_PRODUCT = 1,
-}
+import { PathsWithPair } from '~/types';
 
 type Route = {
   inputAmount: BigNumber,
@@ -14,13 +9,10 @@ type Route = {
   priceImpact: BigNumber,
   inputTokenContractAddress: string,
   outputTokenContractAddress: string,
-  path: string[],
-  gasMultiplier: number,
+  path: PathsWithPair,
+  iterationsCount: number,
 };
 
-export {
-  GasMultiplier,
-};
 export type {
   Route,
 };

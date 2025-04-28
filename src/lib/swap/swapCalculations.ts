@@ -1,12 +1,13 @@
 import BigNumber from 'bignumber.js';
+import { TradeResult } from '~/types/stableswap/stable';
 import { StableConfig } from './stableswapCurve/stable';
 
 /**
-* returns output of a simulated swap from token0 to token1 using the constant
-* product rule for non-stable pairs.
-* The swap output is rounded to the nearest integer, so inputs should be in
-* raw number form to prevent loss of precision
-* */
+ * returns output of a simulated swap from token0 to token1 using the constant
+ * product rule for non-stable pairs.
+ * The swap output is rounded to the nearest integer, so inputs should be in
+ * raw number form to prevent loss of precision
+ * */
 function constantProductSwapToken0for1({
   token0LiquidityAmount,
   token1LiquidityAmount,
@@ -16,7 +17,7 @@ function constantProductSwapToken0for1({
   token0LiquidityAmount: BigNumber,
   token1LiquidityAmount: BigNumber,
   token0InputAmount: BigNumber,
-  fee: BigNumber
+  fee: BigNumber,
 }) {
   // constant product rule
   const token1OutputAmount = token1LiquidityAmount.minus(
@@ -30,11 +31,11 @@ function constantProductSwapToken0for1({
 }
 
 /**
-* returns input of a simulated swap from token0 to token1 using the constant
-* product rule for non-stable pairs
-* The swap output is rounded to the nearest integer, so inputs should be in
-* raw number form to prevent loss of precision
-* */
+ * returns input of a simulated swap from token0 to token1 using the constant
+ * product rule for non-stable pairs
+ * The swap output is rounded to the nearest integer, so inputs should be in
+ * raw number form to prevent loss of precision
+ * */
 function constantProductReverseSwapToken0for1({
   token0LiquidityAmount,
   token1LiquidityAmount,
@@ -44,7 +45,7 @@ function constantProductReverseSwapToken0for1({
   token0LiquidityAmount: BigNumber,
   token1LiquidityAmount: BigNumber,
   token1OutputAmount: BigNumber,
-  fee: BigNumber
+  fee: BigNumber,
 }) {
   if (token1OutputAmount.isGreaterThanOrEqualTo(token1LiquidityAmount)) {
     throw Error('Not enough liquidity for swap');
@@ -59,12 +60,12 @@ function constantProductReverseSwapToken0for1({
 }
 
 /**
-* returns the price impact of a simulated swap of token 0 for token 1,
-* Price impact is the difference between the current market price and the
-* price you will actually pay.
-* Inputs may either be in human readable or raw form. There is no rounding performed, therefore
-* there is no risk of loss of precision
-* */
+ * returns the price impact of a simulated swap of token 0 for token 1,
+ * Price impact is the difference between the current market price and the
+ * price you will actually pay.
+ * Inputs may either be in human readable or raw form. There is no rounding performed, therefore
+ * there is no risk of loss of precision
+ * */
 function constantProductPriceImpactToken0for1({
   token0LiquidityAmount,
   token1LiquidityAmount,
@@ -86,11 +87,11 @@ function constantProductPriceImpactToken0for1({
 }
 
 /**
-* returns output of a simulated swap from token1 to token0 using the constant
-* product rule for non-stable pairs
-* The swap output is rounded to the nearest integer, so inputs should be in
-* raw number form to prevent loss of precision
-* */
+ * returns output of a simulated swap from token1 to token0 using the constant
+ * product rule for non-stable pairs
+ * The swap output is rounded to the nearest integer, so inputs should be in
+ * raw number form to prevent loss of precision
+ * */
 function constantProductSwapToken1for0({
   token0LiquidityAmount,
   token1LiquidityAmount,
@@ -100,7 +101,7 @@ function constantProductSwapToken1for0({
   token0LiquidityAmount: BigNumber,
   token1LiquidityAmount: BigNumber,
   token1InputAmount: BigNumber,
-  fee: BigNumber
+  fee: BigNumber,
 }) {
   // constant product rule
   const token0OutputAmount = token0LiquidityAmount.minus(
@@ -113,11 +114,11 @@ function constantProductSwapToken1for0({
 }
 
 /**
-* returns input of a simulated swap from token1 to token0 using the constant
-* product rule for non-stable pairs
-* The swap output is rounded to the nearest integer, so inputs should be in
-* raw number form to prevent loss of precision
-* */
+ * returns input of a simulated swap from token1 to token0 using the constant
+ * product rule for non-stable pairs
+ * The swap output is rounded to the nearest integer, so inputs should be in
+ * raw number form to prevent loss of precision
+ * */
 function constantProductReverseSwapToken1for0({
   token0LiquidityAmount,
   token1LiquidityAmount,
@@ -127,7 +128,7 @@ function constantProductReverseSwapToken1for0({
   token0LiquidityAmount: BigNumber,
   token1LiquidityAmount: BigNumber,
   token0OutputAmount: BigNumber,
-  fee: BigNumber
+  fee: BigNumber,
 }) {
   if (token0OutputAmount.isGreaterThanOrEqualTo(token0LiquidityAmount)) {
     throw Error('Not enough liquidity for swap');
@@ -143,12 +144,12 @@ function constantProductReverseSwapToken1for0({
 }
 
 /**
-* returns the price impact of a simulated swap of token 1 for token 0,
-* Price impact is the difference between the current market price and the
-* price you will actually pay.
-* Inputs may either be in human readable or raw form. There is no rounding performed, therefore
-* there is no risk of loss of precision
-* */
+ * returns the price impact of a simulated swap of token 1 for token 0,
+ * Price impact is the difference between the current market price and the
+ * price you will actually pay.
+ * Inputs may either be in human readable or raw form. There is no rounding performed, therefore
+ * there is no risk of loss of precision
+ * */
 function constantProductPriceImpactToken1for0({
   token0LiquidityAmount,
   token1LiquidityAmount,
@@ -169,9 +170,9 @@ function constantProductPriceImpactToken1for0({
 }
 
 /**
-* returns output of a simulated swap of token0 for token1 using the stableswap math
-* inputs token amounts must be passsed in as human readable form
-* */
+ * returns output of a simulated swap of token0 for token1 using the stableswap math
+ * inputs token amounts must be passsed in as human readable form
+ * */
 function stableSwapToken0for1({
   inputToken0Amount,
   poolToken0Amount,
@@ -198,32 +199,27 @@ function stableSwapToken0for1({
   minTradeSizeToken0For1: BigNumber,
   minTradeSizeToken1For0: BigNumber,
   priceImpactLimit: BigNumber,
-}) {
-  function stableSwapConfig(): StableConfig {
-    BigNumber.set({ DECIMAL_PLACES: 30 });
-    return new StableConfig({
-      pool0Size: poolToken0Amount,
-      pool1Size: poolToken1Amount,
-      priceRatio,
-      alpha,
-      gamma1,
-      gamma2,
-      lpFee: liquidityProviderFee,
-      shadeDaoFee: daoFee,
-      minTradeSize0For1: minTradeSizeToken0For1,
-      minTradeSize1For0: minTradeSizeToken1For0,
-      priceImpactLimit,
-    });
-  }
-
-  const swap: StableConfig = stableSwapConfig();
+}): TradeResult {
+  const swap: StableConfig = StableConfig.create({
+    poolToken0Amount,
+    poolToken1Amount,
+    priceRatio,
+    alpha,
+    gamma1,
+    gamma2,
+    liquidityProviderFee,
+    daoFee,
+    minTradeSizeToken0For1,
+    minTradeSizeToken1For0,
+    priceImpactLimit,
+  });
   return swap.swapToken0WithToken1(inputToken0Amount);
 }
 
 /**
-* returns input of a simulated swap of token0 for token1 using the stableswap math
-* inputs token amounts must be passsed in as human readable form
-* */
+ * returns input of a simulated swap of token0 for token1 using the stableswap math
+ * inputs token amounts must be passsed in as human readable form
+ * */
 function stableReverseSwapToken0for1({
   outputToken1Amount,
   poolToken0Amount,
@@ -250,36 +246,35 @@ function stableReverseSwapToken0for1({
   minTradeSizeToken0For1: BigNumber,
   minTradeSizeToken1For0: BigNumber,
   priceImpactLimit: BigNumber,
-}) {
-  function stableSwapConfig(): StableConfig {
-    BigNumber.set({ DECIMAL_PLACES: 30 });
-    return new StableConfig({
-      pool0Size: poolToken0Amount,
-      pool1Size: poolToken1Amount,
-      priceRatio,
-      alpha,
-      gamma1,
-      gamma2,
-      lpFee: liquidityProviderFee,
-      shadeDaoFee: daoFee,
-      minTradeSize0For1: minTradeSizeToken0For1,
-      minTradeSize1For0: minTradeSizeToken1For0,
-      priceImpactLimit,
-    });
-  }
-
+}): { result: BigNumber; iterationsCount: number } {
   // add fees before the reverse swap
   const totalFee = liquidityProviderFee.plus(daoFee);
   const outputWithFeesAdded = outputToken1Amount.dividedBy(BigNumber(1).minus(totalFee));
 
-  const swap: StableConfig = stableSwapConfig();
-  return swap.simulateReverseToken0WithToken1Trade(outputWithFeesAdded).tradeInput;
+  const swap: StableConfig = StableConfig.create({
+    poolToken0Amount,
+    poolToken1Amount,
+    priceRatio,
+    alpha,
+    gamma1,
+    gamma2,
+    liquidityProviderFee,
+    daoFee,
+    minTradeSizeToken0For1,
+    minTradeSizeToken1For0,
+    priceImpactLimit,
+  });
+  const reverseTradeResult = swap.simulateReverseToken0WithToken1Trade(outputWithFeesAdded);
+  return {
+    result: reverseTradeResult.tradeInput,
+    iterationsCount: reverseTradeResult.iterationsCount,
+  };
 }
 
 /**
-* returns output of a simulated swap of token1 for token0 using the stableswap math
-* inputs token amounts must be passsed in as human readable form
-* */
+ * returns output of a simulated swap of token1 for token0 using the stableswap math
+ * inputs token amounts must be passsed in as human readable form
+ * */
 function stableSwapToken1for0({
   inputToken1Amount,
   poolToken0Amount,
@@ -306,32 +301,27 @@ function stableSwapToken1for0({
   minTradeSizeToken0For1: BigNumber,
   minTradeSizeToken1For0: BigNumber,
   priceImpactLimit: BigNumber,
-}) {
-  function stableSwapConfig(): StableConfig {
-    BigNumber.set({ DECIMAL_PLACES: 30 });
-    return new StableConfig({
-      pool0Size: poolToken0Amount,
-      pool1Size: poolToken1Amount,
-      priceRatio,
-      alpha,
-      gamma1,
-      gamma2,
-      lpFee: liquidityProviderFee,
-      shadeDaoFee: daoFee,
-      minTradeSize0For1: minTradeSizeToken0For1,
-      minTradeSize1For0: minTradeSizeToken1For0,
-      priceImpactLimit,
-    });
-  }
-
-  const swap: StableConfig = stableSwapConfig();
+}): TradeResult {
+  const swap: StableConfig = StableConfig.create({
+    poolToken0Amount,
+    poolToken1Amount,
+    priceRatio,
+    alpha,
+    gamma1,
+    gamma2,
+    liquidityProviderFee,
+    daoFee,
+    minTradeSizeToken0For1,
+    minTradeSizeToken1For0,
+    priceImpactLimit,
+  });
   return swap.swapToken1WithToken0(inputToken1Amount);
 }
 
 /**
-* returns output of a simulated swap of token1 for token0 using the stableswap math
-* inputs token amounts must be passsed in as human readable form
-* */
+ * returns output of a simulated swap of token1 for token0 using the stableswap math
+ * inputs token amounts must be passsed in as human readable form
+ * */
 function stableReverseSwapToken1for0({
   outputToken0Amount,
   poolToken0Amount,
@@ -358,34 +348,34 @@ function stableReverseSwapToken1for0({
   minTradeSizeToken0For1: BigNumber,
   minTradeSizeToken1For0: BigNumber,
   priceImpactLimit: BigNumber,
-}) {
-  function stableSwapConfig(): StableConfig {
-    BigNumber.set({ DECIMAL_PLACES: 30 });
-    return new StableConfig({
-      pool0Size: poolToken0Amount,
-      pool1Size: poolToken1Amount,
-      priceRatio,
-      alpha,
-      gamma1,
-      gamma2,
-      lpFee: liquidityProviderFee,
-      shadeDaoFee: daoFee,
-      minTradeSize0For1: minTradeSizeToken0For1,
-      minTradeSize1For0: minTradeSizeToken1For0,
-      priceImpactLimit,
-    });
-  }
+}): { result: BigNumber; iterationsCount: number } {
   // add fees before the reverse swap
   const totalFee = liquidityProviderFee.plus(daoFee);
   const outputWithFeesAdded = outputToken0Amount.dividedBy(BigNumber(1).minus(totalFee));
-  const swap: StableConfig = stableSwapConfig();
-  return swap.simulateReverseToken1WithToken0Trade(outputWithFeesAdded).tradeInput;
+  const swap: StableConfig = StableConfig.create({
+    poolToken0Amount,
+    poolToken1Amount,
+    priceRatio,
+    alpha,
+    gamma1,
+    gamma2,
+    liquidityProviderFee,
+    daoFee,
+    minTradeSizeToken0For1,
+    minTradeSizeToken1For0,
+    priceImpactLimit,
+  });
+  const reverseTradeResult = swap.simulateReverseToken1WithToken0Trade(outputWithFeesAdded);
+  return {
+    result: reverseTradeResult.tradeInput,
+    iterationsCount: reverseTradeResult.iterationsCount,
+  };
 }
 
 /**
-* returns price impact of a simulated swap of token0 for token1
-* inputs token amounts must be passsed in as human readable form
-* */
+ * returns price impact of a simulated swap of token0 for token1
+ * inputs token amounts must be passsed in as human readable form
+ * */
 function stableSwapPriceImpactToken0For1({
   inputToken0Amount,
   poolToken0Amount,
@@ -412,40 +402,40 @@ function stableSwapPriceImpactToken0For1({
   minTradeSizeToken0For1: BigNumber,
   minTradeSizeToken1For0: BigNumber,
   priceImpactLimit: BigNumber,
-}) {
-  function stableSwapConfig(): StableConfig {
-    BigNumber.set({ DECIMAL_PLACES: 30 });
-    return new StableConfig({
-      pool0Size: poolToken0Amount,
-      pool1Size: poolToken1Amount,
-      priceRatio,
-      alpha,
-      gamma1,
-      gamma2,
-      lpFee: liquidityProviderFee,
-      shadeDaoFee: daoFee,
-      minTradeSize0For1: minTradeSizeToken0For1,
-      minTradeSize1For0: minTradeSizeToken1For0,
-      priceImpactLimit,
-    });
-  }
-
-  const swap: StableConfig = stableSwapConfig();
-  const marketPrice = swap.priceToken1();
-  const amountToken1Received = swap.swapToken0WithToken1(inputToken0Amount);
+}): { result: BigNumber; iterationsCount: number } {
+  const swap: StableConfig = StableConfig.create({
+    poolToken0Amount,
+    poolToken1Amount,
+    priceRatio,
+    alpha,
+    gamma1,
+    gamma2,
+    liquidityProviderFee,
+    daoFee,
+    minTradeSizeToken0For1,
+    minTradeSizeToken1For0,
+    priceImpactLimit,
+  });
+  const marketPrice = swap.priceToken1;
+  const tradeResult = swap.swapToken0WithToken1(inputToken0Amount);
+  const amountToken1Received = tradeResult.tradeReturn;
   // Add trade fees back into the received amount because price impact is
   // measured prior to fees being taken out of the trade
   const amountToken1ReceivedNoTradeFee = amountToken1Received.dividedBy(
     BigNumber(1).minus(liquidityProviderFee.plus(daoFee)),
   );
   const paidPrice = inputToken0Amount.dividedBy(amountToken1ReceivedNoTradeFee);
-  return paidPrice.dividedBy(marketPrice).minus(1);
+  return {
+    result: paidPrice.dividedBy(marketPrice).minus(1),
+    iterationsCount: tradeResult.iterationsCount,
+
+  };
 }
 
 /**
-* returns price impact of a simulated swap of token1 for token0
-* inputs token amounts must be passsed in as human readable form
-* */
+ * returns price impact of a simulated swap of token1 for token0
+ * inputs token amounts must be passsed in as human readable form
+ * */
 function stableSwapPriceImpactToken1For0({
   inputToken1Amount,
   poolToken0Amount,
@@ -472,34 +462,33 @@ function stableSwapPriceImpactToken1For0({
   minTradeSizeToken0For1: BigNumber,
   minTradeSizeToken1For0: BigNumber,
   priceImpactLimit: BigNumber,
-}) {
-  function stableSwapConfig(): StableConfig {
-    BigNumber.set({ DECIMAL_PLACES: 30 });
-    return new StableConfig({
-      pool0Size: poolToken0Amount,
-      pool1Size: poolToken1Amount,
-      priceRatio,
-      alpha,
-      gamma1,
-      gamma2,
-      lpFee: liquidityProviderFee,
-      shadeDaoFee: daoFee,
-      minTradeSize0For1: minTradeSizeToken0For1,
-      minTradeSize1For0: minTradeSizeToken1For0,
-      priceImpactLimit,
-    });
-  }
-
-  const swap: StableConfig = stableSwapConfig();
-  const marketPrice = swap.priceToken0();
-  const amountToken0Received = swap.swapToken1WithToken0(inputToken1Amount);
+}): { result: BigNumber; iterationsCount: number } {
+  const swap: StableConfig = StableConfig.create({
+    poolToken0Amount,
+    poolToken1Amount,
+    priceRatio,
+    alpha,
+    gamma1,
+    gamma2,
+    liquidityProviderFee,
+    daoFee,
+    minTradeSizeToken0For1,
+    minTradeSizeToken1For0,
+    priceImpactLimit,
+  });
+  const marketPrice = swap.priceToken0;
+  const tradeResult = swap.swapToken1WithToken0(inputToken1Amount);
+  const amountToken0Received = tradeResult.tradeReturn;
   // Add trade fees back into the received amount because price impact is
   // measured prior to fees being taken out of the trade
   const amountToken0ReceivedNoTradeFee = amountToken0Received.dividedBy(
     BigNumber(1).minus(liquidityProviderFee.plus(daoFee)),
   );
   const paidPrice = inputToken1Amount.dividedBy(amountToken0ReceivedNoTradeFee);
-  return paidPrice.dividedBy(marketPrice).minus(1);
+  return {
+    result: paidPrice.dividedBy(marketPrice).minus(1),
+    iterationsCount: tradeResult.iterationsCount,
+  };
 }
 
 export {

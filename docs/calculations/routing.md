@@ -1,6 +1,6 @@
 # ShadeSwap Multi-Hop Routing
 
-This page contains an example router that determines the optimal path for maximizing the users output tokens received
+This page contains an example router that determines the optimal route for maximizing the users output tokens received
 
 ## Router
 
@@ -26,19 +26,19 @@ Increasing the max hops too much can cause decreased performance due to the larg
 :::
 
 ### Calculate Route
-Calculates the output amount received for a given path
+Calculates the output amount received for a given route
 
 ```ts
 function calculateRoute({
   inputTokenAmount,
   inputTokenContractAddress,
-  path,
+  route,
   pairs,
   tokens,
 }:{
   inputTokenAmount: BigNumber, // amount in uDenom
   inputTokenContractAddress: string,
-  path: string[], // path determined by getPossiblePaths
+  route: string[], // route determined by getPossiblePaths
   pairs: BatchPairsInfo,
   tokens: TokensConfig, // list of all possible swap tokens
 }): Route
@@ -69,9 +69,8 @@ type Route = {
   priceImpact: BigNumber,
   inputTokenContractAddress: string,
   outputTokenContractAddress: string,
-  path: string[],
-  gasMultiplier: number, // multiplier which is to be applied 
-  // to the base gas cost of a swap
+  path: PathsWithPair,
+  iterationsCount: number, // used for estimating gas cost of stable swaps
 };
 ```
 
