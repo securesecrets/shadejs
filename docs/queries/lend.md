@@ -133,7 +133,7 @@ See "Vault" type in the all vaults output.
 
 
 ## Stability Pool
-Query info for the stability pool data
+Query info for the stability batchPairInfo data
 
 **input**
 ```ts

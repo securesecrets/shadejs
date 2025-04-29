@@ -17,7 +17,7 @@ import {
   queryPairConfig$,
   queryPairConfig,
   parseSwapResponse,
-  parseBatchQueryPairInfoResponse,
+  getParseBatchQueryPairInfoResponse,
   parseBatchQueryStakingInfoResponse,
   parseBatchQueryPairConfigResponse,
   batchQueryPairsInfo,
@@ -115,7 +115,10 @@ test('it can parse the swap token response', () => {
 });
 
 test('it can parse the batch pairs response', () => {
-  expect(parseBatchQueryPairInfoResponse(
+  expect(getParseBatchQueryPairInfoResponse([
+    { address: 'secret1qyt4l47yq3x43ezle4nwlh5q0sn6f9sesat7ap', codeHash: 'hash1' },
+    { address: 'secret1wn9tdlvut2nz0cpv28qtv74pqx20p847j8gx3w', codeHash: 'hash2' },
+  ])(
     pairsInfoResponseUnparsed,
   )).toStrictEqual(pairsInfoParsed);
 });
@@ -259,8 +262,11 @@ test('it can call the batch pairs info query service', async () => {
     lcdEndpoint: 'LCD_ENDPOINT',
     chainId: 'CHAIN_ID',
     pairsContracts: [{
-      address: 'PAIR_ADDRESS',
-      codeHash: 'PAIR_CODE_HASH',
+      address: 'secret1qyt4l47yq3x43ezle4nwlh5q0sn6f9sesat7ap',
+      codeHash: 'hash1',
+    }, {
+      address: 'secret1wn9tdlvut2nz0cpv28qtv74pqx20p847j8gx3w',
+      codeHash: 'hash2',
     }],
   };
   // observables function
@@ -277,6 +283,7 @@ test('it can call the batch pairs info query service', async () => {
     codeHash: input.queryRouterCodeHash,
     lcdEndpoint: input.lcdEndpoint,
     chainId: input.chainId,
+    blockHeight: undefined,
     queries: [{
       id: input.pairsContracts[0].address,
       contract: {
@@ -284,8 +291,16 @@ test('it can call the batch pairs info query service', async () => {
         codeHash: input.pairsContracts[0].codeHash,
       },
       queryMsg: 'PAIR_INFO_MSG',
+    }, {
+      id: input.pairsContracts[1].address,
+      contract: {
+        address: input.pairsContracts[1].address,
+        codeHash: input.pairsContracts[1].codeHash,
+      },
+      queryMsg: 'PAIR_INFO_MSG',
     }],
     batchSize: 60,
+    minBlockHeightValidationOptions: undefined,
   });
 
   expect(output).toStrictEqual(pairsInfoParsed);
@@ -303,6 +318,13 @@ test('it can call the batch pairs info query service', async () => {
       contract: {
         address: input.pairsContracts[0].address,
         codeHash: input.pairsContracts[0].codeHash,
+      },
+      queryMsg: 'PAIR_INFO_MSG',
+    }, {
+      id: input.pairsContracts[1].address,
+      contract: {
+        address: input.pairsContracts[1].address,
+        codeHash: input.pairsContracts[1].codeHash,
       },
       queryMsg: 'PAIR_INFO_MSG',
     }],

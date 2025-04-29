@@ -1,4 +1,5 @@
 import BigNumber from 'bignumber.js';
+import { PathV2 } from '~/types';
 
 // Gas Multipliers based on the swap type
 enum GasMultiplier {
@@ -18,9 +19,15 @@ type Route = {
   gasMultiplier: number,
 };
 
+type RouteV2 = Omit<Route, 'path' | 'gasMultiplier'> & {
+  path: PathV2[],
+  iterationsCount: number,
+}
+
 export {
   GasMultiplier,
 };
 export type {
   Route,
+  RouteV2,
 };

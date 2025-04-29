@@ -113,7 +113,7 @@ const parseSilkBasketAndPricesResponse = ({
       price: itemPrice.toString(),
       weight: {
         initial: item.weight.initial,
-        current: currentWeight.toString(),
+        current: currentWeight.decimalPlaces(ORACLE_NORMALIZATION_FACTOR).toString(),
       },
     };
   });
