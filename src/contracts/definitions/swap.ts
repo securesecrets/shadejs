@@ -1,9 +1,16 @@
-import { PathsContractFormatted } from '~/types/contracts/swap/input';
+import {
+  PathsContractFormatted,
+  PathsContractWithTokensFormatted,
+} from '~/types/contracts/swap/input';
 import {
   Path,
   Paths,
+  PathV2,
 } from '~/types/contracts/swap/model';
 import { generatePadding } from '~/lib/utils';
+import {
+  Contract,
+} from '~/types';
 import { snip20 } from './snip20';
 
 /**
@@ -13,7 +20,7 @@ const msgQueryFactoryConfig = () => ({ get_config: {} });
 
 /**
  * Query the factory for a list of registered pairs
- * @param startingIndex index of the list to return data from
+ * @param startIndex index of the list to return data from
  * @param limit number of entries to be returned
  */
 const msgQueryFactoryPairs = (startIndex: number, limit: number) => ({
@@ -79,6 +86,69 @@ function msgSwap({
   }).msg;
 }
 
+/**
+ * message to swap tokens
+ */
+function msgSwapV2({
+  snip20ContractAddress,
+  snip20CodeHash,
+  routerContractAddress,
+  routerCodeHash,
+  sendAmount,
+  minExpectedReturnAmount,
+  path,
+}: {
+  snip20ContractAddress: string,
+  snip20CodeHash?: string,
+  routerContractAddress: string,
+  routerCodeHash?: string,
+  sendAmount: string,
+  minExpectedReturnAmount: string,
+  path: PathV2[],
+}) {
+  const pathFormatted: PathsContractWithTokensFormatted = path.map((hop: PathV2) => {
+    const tokens = hop.pair.map((p) => ({
+      address: p.address,
+      code_hash: p.codeHash,
+    }));
+    return ({
+      address: hop.poolContractAddress,
+      code_hash: hop.poolCodeHash,
+      token0: tokens[0],
+      token1: tokens[1],
+    });
+  });
+  const lastToken = path.reduce(({ address }, hop) => {
+    if (address === hop.pair[0].address) {
+      return hop.pair[1];
+    }
+    return hop.pair[0];
+  }, {
+    address: snip20ContractAddress,
+    codeHash: snip20CodeHash,
+  } as Contract);
+
+  const swapParamsMessage = {
+    swap_tokens_for_exact: {
+      expected_return: {
+        amount: minExpectedReturnAmount,
+        token: {
+          address: lastToken.address,
+          code_hash: lastToken.codeHash,
+        },
+      },
+      path: pathFormatted,
+    },
+  };
+
+  return snip20.messages.send({
+    recipient: routerContractAddress,
+    recipientCodeHash: routerCodeHash,
+    amount: sendAmount,
+    handleMsg: swapParamsMessage,
+    padding: generatePadding(),
+  }).msg;
+}
 export {
   msgQueryFactoryConfig,
   msgQueryFactoryPairs,
@@ -86,4 +156,5 @@ export {
   msgQueryPairInfo,
   msgQueryStakingConfig,
   msgSwap,
+  msgSwapV2,
 };

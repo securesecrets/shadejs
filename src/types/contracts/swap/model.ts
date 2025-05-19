@@ -1,4 +1,5 @@
 import { Contract } from '~/types/contracts/shared';
+import { SwapType } from '~/lib/swap/v2/gasEstimation/oracleCosts';
 
 type FactoryPair = {
   pairContract: Contract,
@@ -91,6 +92,7 @@ type PairInfo = {
 
 type BatchPairInfo = {
   pairContractAddress: string,
+  pairCodeHash: string,
   pairInfo: PairInfo,
   blockHeight: number,
 }
@@ -137,6 +139,12 @@ type Path = {
 
 type Paths = Path[]
 
+type PathV2 = Path & {
+  pair: Contract[],
+  poolType: SwapType,
+  stableOracleKeys?: [string, string] | null,
+}
+
 type ParsedSwapResponse = {
   txHash: string,
   inputTokenAddress: string | undefined,
@@ -148,6 +156,7 @@ type ParsedSwapResponse = {
 export type {
   FactoryPairs,
   PairConfig,
+  BatchPairInfo,
   BatchPairsConfig,
   FactoryConfig,
   PairInfo,
@@ -156,7 +165,9 @@ export type {
   BatchSingleStakingInfo,
   BatchStakingInfo,
   Path,
+  PathV2,
   Paths,
   ParsedSwapResponse,
   RewardTokenInfo,
+  StableParams,
 };

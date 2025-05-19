@@ -3,6 +3,33 @@
 This page demonstrates how to generate messages and parse responses for  swap transactions
 
 ## Swap Tokens
+
+### V2 (Recommended)
+
+V2 also allows precise gas estimation to be done on the client side. See [Swap Gas Estimation](./swap-gas-estimation.html)
+
+```ts
+function msgSwapV2({
+  snip20ContractAddress: string,
+  snip20CodeHash: string,
+  routerContractAddress,
+  routerCodeHash,
+  sendAmount,
+  minExpectedReturnAmount,
+  path,
+}: {
+  snip20ContractAddress: string,
+  snip20CodeHash?: string,
+  routerContractAddress: string,
+  routerCodeHash?: string,
+  sendAmount: string,
+  minExpectedReturnAmount: string,
+  path: PathV2[],
+}) 
+```
+
+### V1 (Legacy)
+
 ```ts
 function msgSwap({
   routerContractAddress,
@@ -29,6 +56,20 @@ type Path = {
 }
 
 type Paths = Path[]
+```
+
+**Type reference**
+```ts
+type Path = {
+  poolContractAddress: string,
+  poolCodeHash: string,
+}
+
+type PathV2 = Path & {
+  batchPairInfo: Contract[],
+  poolType: SwapType,
+  stableOracleKeys?: [string, string] | null,
+}
 ```
 
 ### Response Parser

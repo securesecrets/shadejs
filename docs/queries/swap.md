@@ -194,7 +194,7 @@ console.log(output)
 ```
 
 ## Pair Config
-query the configuration of a single pair
+query the configuration of a single batchPairInfo
 
 **input**
 
@@ -282,7 +282,7 @@ console.log(output)
 ```
 
 ## Pairs Config
-Query the pair config  for multiple pairs
+Query the batchPairInfo config  for multiple pairs
 ::: info
 This query uses a smart contract batch query router to allow you to query many pairs in a single http request. This is a highly efficient method of interacting with the chain and minimizes the load on the LCD endpoint.
 :::
@@ -442,7 +442,7 @@ type BatchPairsInfo = BatchPairInfo[]
 
 type BatchPairInfo = {
   pairContractAddress: string,
-  pairInfo: PairInfo,
+  batchPairInfo: PairInfo,
 }
 
 type PairInfo = {
@@ -517,7 +517,7 @@ console.log(output)
 [
     {
         "pairContractAddress": "secret1qyt4l47yq3x43ezle4nwlh5q0sn6f9sesat7ap",
-        "pairInfo": {
+        "batchPairInfo": {
             "token0Contract": {
                 "address": "secret153wu605vvp934xhd4k9dtd640zsep5jkesstdm",
                 "codeHash": "638a3e1d50175fbcb8373cf801565283e3eb23d88a9b7b7f99fcc5eb1e6b561e"
@@ -547,7 +547,7 @@ console.log(output)
     },
     {
         "pairContractAddress": "secret1wn9tdlvut2nz0cpv28qtv74pqx20p847j8gx3w",
-        "pairInfo": {
+        "batchPairInfo": {
             "token0Contract": {
                 "address": "secret153wu605vvp934xhd4k9dtd640zsep5jkesstdm",
                 "codeHash": "638a3e1d50175fbcb8373cf801565283e3eb23d88a9b7b7f99fcc5eb1e6b561e"

@@ -18,7 +18,7 @@ $ yarn add @shadeprotocol/shadejs
 ### Standard Syntax
 ```ts
 /*
-* Queries the configuration for the swap pair
+* Queries the configuration for the swap batchPairInfo
 */
 async function queryPairConfig({
   contractAddress,
@@ -54,7 +54,7 @@ The standard async/await syntax function is designed as a simple wrapper functio
 
 ```ts
 /*
-* Queries the configuration for the swap pair
+* Queries the configuration for the swap batchPairInfo
 */
 function queryPairConfig$({
   contractAddress,

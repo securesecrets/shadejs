@@ -17,6 +17,15 @@ interface TradeResult {
   shadeDaoFeeAmount: BigNumber,
 }
 
+type TradeResultV2 = TradeResult & {
+  priceImpact: BigNumber,
+  iterationsCount: number,
+}
+
+type ReverseTradeResultV2 = ReverseTradeResult & {
+  iterationsCount: number,
+}
+
 enum StableswapCalculationErrorType {
   LIQUIDITY = 'liquidity error',
   MIN_TRADE_SIZE = 'min trade size',
@@ -25,5 +34,7 @@ enum StableswapCalculationErrorType {
 export type {
   TradeResult,
   ReverseTradeResult,
+  TradeResultV2,
+  ReverseTradeResultV2,
   StableswapCalculationErrorType,
 };

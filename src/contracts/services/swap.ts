@@ -39,7 +39,7 @@ import {
 import { TxResponse } from 'secretjs';
 import { Attribute } from 'secretjs/dist/protobuf/cosmos/base/abci/v1beta1/abci';
 import { MinBlockHeightValidationOptions } from '~/types';
-import { batchQuery$ } from './batchQuery';
+import { batchQuery$ } from '~/contracts';
 import { SERVICE_BATCH_SIZE } from './config';
 
 /**
@@ -229,13 +229,15 @@ function parsePairInfo(
 }
 
 /**
- * parses the pair info reponse from a batch query of
- * multiple pair contracts
+ * Gets a function that parses the pair info response from a batch query of
+ * multiple pair contracts allowing optional resolving of pair code hashes via the pairContracts
  */
 const parseBatchQueryPairInfoResponse = (
   response: BatchQueryParsedResponse,
+  pairContracts: Contract[],
 ): BatchPairsInfo => response.map((item) => ({
   pairContractAddress: item.id as string,
+  pairCodeHash: pairContracts.find(({ address }) => address === item.id)!.codeHash,
   pairInfo: parsePairInfo(item.response),
   blockHeight: item.blockHeight,
 }));
@@ -305,8 +307,8 @@ const parseBatchQueryStakingInfoResponse = (
 }));
 
 /**
-* parse the response from a successful token swap
-*/
+ * parse the response from a successful token swap
+ */
 const parseSwapResponse = (
   response: TxResponse,
 ): ParsedSwapResponse => {
@@ -545,7 +547,7 @@ function batchQueryPairsInfo$({
     minBlockHeightValidationOptions,
     blockHeight,
   }).pipe(
-    map(parseBatchQueryPairInfoResponse),
+    map((response) => parseBatchQueryPairInfoResponse(response, pairsContracts)),
     first(),
   );
 }

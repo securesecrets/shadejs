@@ -1,6 +1,8 @@
 import BigNumber from 'bignumber.js';
 import { TokensConfig } from '~/types/shared';
 
+BigNumber.config({ DECIMAL_PLACES: 18 });
+
 const encodeJsonToB64 = (toEncode:any) : string => Buffer.from(JSON.stringify(toEncode), 'utf8').toString('base64');
 
 const decodeB64ToJson = (encodedData: string) => JSON.parse(Buffer.from(encodedData, 'base64').toString('utf8'));
@@ -29,12 +31,9 @@ const generatePadding = ():string => {
 const convertCoinFromUDenom = (
   amount: number | string | BigNumber,
   decimals:number,
-) => {
-  BigNumber.config({ DECIMAL_PLACES: 18 });
-  return BigNumber(
-    amount,
-  ).dividedBy(BigNumber(10).pow(decimals));
-};
+) => BigNumber(
+  amount,
+).dividedBy(BigNumber(10).pow(decimals)).decimalPlaces(18);
 
 /**
  * Convert BigNumber to the uDenom string type
@@ -70,6 +69,7 @@ function getTokenDecimalsByTokenConfig(tokenContractAddress: string, tokens: Tok
 }
 
 export {
+  BigNumber,
   encodeJsonToB64,
   decodeB64ToJson,
   generatePadding,
