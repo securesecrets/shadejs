@@ -232,8 +232,9 @@ function parsePairInfo(
  * Gets a function that parses the pair info response from a batch query of
  * multiple pair contracts allowing optional resolving of pair code hashes via the pairContracts
  */
-const getParseBatchQueryPairInfoResponse = (pairContracts: Contract[]) => (
+const parseBatchQueryPairInfoResponse = (
   response: BatchQueryParsedResponse,
+  pairContracts: Contract[],
 ): BatchPairsInfo => response.map((item) => ({
   pairContractAddress: item.id as string,
   pairCodeHash: pairContracts.find(({ address }) => address === item.id)!.codeHash,
@@ -546,7 +547,7 @@ function batchQueryPairsInfo$({
     minBlockHeightValidationOptions,
     blockHeight,
   }).pipe(
-    map(getParseBatchQueryPairInfoResponse(pairsContracts)),
+    map((response) => parseBatchQueryPairInfoResponse(response, pairsContracts)),
     first(),
   );
 }
@@ -744,7 +745,7 @@ export {
   batchQueryStakingInfo$,
   batchQueryStakingInfo,
   parseSwapResponse,
-  getParseBatchQueryPairInfoResponse,
+  parseBatchQueryPairInfoResponse,
   parseBatchQueryStakingInfoResponse,
   parseBatchQueryPairConfigResponse,
 };

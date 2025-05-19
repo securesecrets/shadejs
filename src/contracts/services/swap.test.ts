@@ -17,7 +17,7 @@ import {
   queryPairConfig$,
   queryPairConfig,
   parseSwapResponse,
-  getParseBatchQueryPairInfoResponse,
+  parseBatchQueryPairInfoResponse,
   parseBatchQueryStakingInfoResponse,
   parseBatchQueryPairConfigResponse,
   batchQueryPairsInfo,
@@ -115,12 +115,10 @@ test('it can parse the swap token response', () => {
 });
 
 test('it can parse the batch pairs response', () => {
-  expect(getParseBatchQueryPairInfoResponse([
+  expect(parseBatchQueryPairInfoResponse(pairsInfoResponseUnparsed, [
     { address: 'secret1qyt4l47yq3x43ezle4nwlh5q0sn6f9sesat7ap', codeHash: 'hash1' },
     { address: 'secret1wn9tdlvut2nz0cpv28qtv74pqx20p847j8gx3w', codeHash: 'hash2' },
-  ])(
-    pairsInfoResponseUnparsed,
-  )).toStrictEqual(pairsInfoParsed);
+  ])).toStrictEqual(pairsInfoParsed);
 });
 
 test('it can parse the batch staking response', () => {
