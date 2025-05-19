@@ -2,7 +2,7 @@
 
 ## 1.8.0
 
-### Patch Changes
+### Minor Changes
 
 - a6328299: added routes calculation, RouterV2 support and gas estimation
 

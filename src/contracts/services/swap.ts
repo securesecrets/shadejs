@@ -242,12 +242,6 @@ const getParseBatchQueryPairInfoResponse = (pairContracts: Contract[]) => (
 }));
 
 /**
- * parses the pair info response from a batch query of
- * multiple pair contracts
- */
-const parseBatchQueryPairInfoResponse = getParseBatchQueryPairInfoResponse([]);
-
-/**
  * parses the pair config response from a batch query of
  * multiple pair contracts
  */
@@ -750,7 +744,6 @@ export {
   batchQueryStakingInfo$,
   batchQueryStakingInfo,
   parseSwapResponse,
-  parseBatchQueryPairInfoResponse,
   getParseBatchQueryPairInfoResponse,
   parseBatchQueryStakingInfoResponse,
   parseBatchQueryPairConfigResponse,

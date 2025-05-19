@@ -43,13 +43,12 @@ afterEach(() => {
 });
 
 test('it can parse the silk basket response', () => {
-  const silkBasketAndPricesResponse = parseSilkBasketAndPricesResponse({
+  expect(parseSilkBasketAndPricesResponse({
     silkBasketResponse,
     batchBasketPricesResponse: batchSilkBasketOraclePricesResponse[1],
     silkBasketResponseBlockHeight: 1,
     basketPricesResponseBlockHeight: 1,
-  });
-  expect(silkBasketAndPricesResponse).toStrictEqual(silkBasketParsedWithStatus);
+  })).toStrictEqual(silkBasketParsedWithStatus);
 });
 
 test('it can parse the silk basket response via the query router', () => {
