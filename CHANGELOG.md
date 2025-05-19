@@ -1,5 +1,11 @@
 # shadejs
 
+## 1.8.0
+
+### Minor Changes
+
+- 9b99c91: added routes calculation, RouterV2 support and gas estimation
+
 ## 1.7.0
 
 ### Minor Changes
