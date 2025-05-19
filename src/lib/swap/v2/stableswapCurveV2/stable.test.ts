@@ -1,11 +1,14 @@
 /* eslint-disable max-len */
-import { expect, test } from 'vitest';
+import {
+  expect,
+  test,
+} from 'vitest';
 import BigNumber from 'bignumber.js';
 import { isBigNumberWithinMarginOfError } from '~/lib/test';
-import { StableConfig, bisect } from './stable';
-/*
-* Utility function for testing within margin of error for the BigNumber.js library
-*/
+import {
+  bisect,
+  StableConfig,
+} from './stable';
 
 function getConf(): StableConfig {
   return new StableConfig({
@@ -75,23 +78,23 @@ test('min_trade_size vars work', () => {
   const conf: StableConfig = getConfFee();
   conf.minTradeSize0For1 = BigNumber(0.1);
 
-  expect(() => conf.swapToken0WithToken1(BigNumber(0))).toThrowError();
-  expect(() => conf.swapToken1WithToken0(BigNumber(0))).toThrowError();
+  expect(() => conf.swapToken0WithToken1(BigNumber(0), true)).toThrowError();
+  expect(() => conf.swapToken1WithToken0(BigNumber(0), true)).toThrowError();
 
-  expect(() => conf.swapToken0WithToken1(BigNumber(0.000000001))).toThrowError();
-  expect(() => conf.swapToken1WithToken0(BigNumber(0.000000001))).toThrowError();
+  expect(() => conf.swapToken0WithToken1(BigNumber(0.000000001), true)).toThrowError();
+  expect(() => conf.swapToken1WithToken0(BigNumber(0.000000001), true)).toThrowError();
 
-  expect(() => conf.swapToken0WithToken1(BigNumber(0.001))).toThrowError();
-  expect(conf.swapToken1WithToken0(BigNumber(0.001)));
+  expect(() => conf.swapToken0WithToken1(BigNumber(0.001), true)).toThrowError();
+  expect(conf.swapToken1WithToken0(BigNumber(0.001), true));
 
-  expect(conf.swapToken0WithToken1(BigNumber(0.2)));
-  expect(conf.swapToken1WithToken0(BigNumber(0.2)));
+  expect(conf.swapToken0WithToken1(BigNumber(0.2), true));
+  expect(conf.swapToken1WithToken0(BigNumber(0.2), true));
 });
 
 test('trade size of zero is err', () => {
   const conf: StableConfig = getConfFee();
-  expect(() => conf.swapToken0WithToken1(BigNumber(-1))).toThrowError(/^Trade size must be positive$/);
-  expect(() => conf.swapToken0WithToken1(BigNumber(0))).toThrowError(/^Trade size must be positive$/);
+  expect(() => conf.swapToken0WithToken1(BigNumber(-1), true)).toThrowError(/^Trade size must be positive$/);
+  expect(() => conf.swapToken0WithToken1(BigNumber(0), true)).toThrowError(/^Trade size must be positive$/);
 });
 
 test('slippage calculations correct', () => {
@@ -128,7 +131,7 @@ test('slippage calculations correct', () => {
 
   // slippage limit
   conf = getConfSmallPool();
-  expect(() => conf.swapToken0WithToken1(BigNumber(100000000))).toThrowError(/^The price impact of this trade.*/);
+  expect(() => conf.swapToken0WithToken1(BigNumber(100000000), true)).toThrowError(/^The slippage of this trade.*/);
 });
 
 test('py correct', () => {
@@ -162,55 +165,57 @@ test('price', () => {
 
   expect(isBigNumberWithinMarginOfError(
     BigNumber(3.0),
-    conf.priceToken1(),
+    conf.priceToken1,
     BigNumber('0.00000000000000001'),
   )).toBeTruthy();
 
   expect(isBigNumberWithinMarginOfError(
     BigNumber(1).dividedBy(BigNumber(3.0)),
-    conf.priceToken0(),
+    conf.priceToken0,
     BigNumber('0.00000000000000001'),
   )).toBeTruthy();
 });
 
 test('bisect', () => {
   const f = (input: &BigNumber): BigNumber => input.multipliedBy(5);
-  let res = bisect({
+  let res = bisect(
     f,
-    a: BigNumber(0),
-    b: BigNumber(1),
-    epsilon: BigNumber('0.000000001'),
-    maxIterations: 50,
-  });
-  expect(res).toEqual(BigNumber(0));
+    BigNumber(0),
+    BigNumber(1),
+    BigNumber('0.000000001'),
+    50,
+  );
+  expect(res.result).toEqual(BigNumber(0));
 
-  res = bisect({
+  res = bisect(
     f,
-    a: BigNumber(-1.0),
-    b: BigNumber(0),
-    epsilon: BigNumber('0.000000001'),
-    maxIterations: 50,
-  });
-  expect(res).toEqual(BigNumber(0));
+    BigNumber(-1.0),
+    BigNumber(0),
+    BigNumber('0.000000001'),
+    50,
+  );
+  expect(res.result).toEqual(BigNumber(0));
 
-  expect(() => bisect({
+  expect(() => bisect(
     f,
-    a: BigNumber(1),
-    b: BigNumber(2),
-    epsilon: BigNumber('0.000000001'),
-    maxIterations: 50,
-  })).toThrowError();
+    BigNumber(1),
+    BigNumber(2),
+    BigNumber('0.000000001'),
+    50,
+  )).toThrowError();
 });
 
 test('feeWithSwap', () => {
   const conf: StableConfig = getConfFee();
+  const token1FromToken0Swap = conf.swapToken0WithToken1(BigNumber(100.0), true).tradeReturn;
   expect(isBigNumberWithinMarginOfError(
-    conf.swapToken0WithToken1(BigNumber(100.0)),
+    token1FromToken0Swap,
     BigNumber('32.661482043229410'),
     BigNumber('0.000000000001'),
   )).toBeTruthy();
+  const token0FromToken1Swap = conf.swapToken1WithToken0(BigNumber(75.7564), true).tradeReturn;
   expect(isBigNumberWithinMarginOfError(
-    conf.swapToken1WithToken0(BigNumber(75.7564)),
+    token0FromToken1Swap,
     BigNumber('222.713817729937016'),
     BigNumber('0.0000000000001'),
   )).toBeTruthy();
@@ -230,7 +235,7 @@ test('feeWithSwapReverse', () => {
 
   // actually run the trade above
   expect(isBigNumberWithinMarginOfError(
-    conf.swapToken0WithToken1(BigNumber(100.0)),
+    conf.swapToken0WithToken1(BigNumber(100.0), true).tradeReturn,
     BigNumber('32.661482043229410'),
     BigNumber('0.000000000001'),
   )).toBeTruthy();
@@ -249,18 +254,18 @@ test('invXyAndDerivs', () => {
   const conf: StableConfig = getConf();
   expect(isBigNumberWithinMarginOfError(
     BigNumber('233276112000000000000000000000'),
-    conf.invariantFnFromPoolSizes(conf.pool0Size, conf.token1TvlInUnitsToken0().dividedBy(conf.invariant)),
+    conf.invariantFnFromPoolSizes(conf.pool0Size, conf.token1TvlInUnitsToken0().dividedBy(conf.invariant.result)),
     BigNumber('0.000000000000001'),
   )).toBeTruthy();
 
   expect(isBigNumberWithinMarginOfError(
     BigNumber('46655352000000000000000000'),
-    conf.derivRespectToPool0OfInvFnFromPool0(conf.pool0Size, conf.token1TvlInUnitsToken0().dividedBy(conf.invariant)),
+    conf.derivRespectToPool0OfInvFnFromPool0(conf.pool0Size, conf.token1TvlInUnitsToken0().dividedBy(conf.invariant.result)),
   )).toBeTruthy();
 
   expect(isBigNumberWithinMarginOfError(
     BigNumber('2332768896000000000000000000000'),
-    conf.derivRespectToPool1OfInvFn(conf.pool0Size, conf.token1TvlInUnitsToken0().dividedBy(conf.invariant)),
+    conf.derivRespectToPool1OfInvFn(conf.pool0Size, conf.token1TvlInUnitsToken0().dividedBy(conf.invariant.result)),
   )).toBeTruthy();
 });
 
@@ -303,20 +308,23 @@ test('invDAndDerivs', () => {
 test('calculateD', () => {
   const conf: StableConfig = getConf();
   expect(
-    conf.calculateInvariant(),
-  ).toEqual(BigNumber(60000));
+    conf.recalculateInvariant(),
+  ).toEqual({
+    result: BigNumber(60000),
+    iterationsCount: 1,
+  });
 });
 
 test('solves', () => {
   const conf: StableConfig = getConf();
   expect(isBigNumberWithinMarginOfError(
     BigNumber('1323.89078895106217'),
-    conf.solveInvFnForPool0Size(BigNumber(200000.0)),
+    conf.solveInvFnForPool0Size(BigNumber(200000.0)).result,
     BigNumber('0.000000000000001'),
   )).toBeTruthy();
   expect(isBigNumberWithinMarginOfError(
     BigNumber('551.16761895687093'),
-    conf.solveInvFnForPool1Size(BigNumber(200000.0)),
+    conf.solveInvFnForPool1Size(BigNumber(200000.0)).result,
     BigNumber('0.00000000000001'),
   )).toBeTruthy();
 });
@@ -328,17 +336,17 @@ test('swapXWithY', () => {
     .simulateToken0WithToken1Trade(BigNumber(100))
     .tradeReturn;
   const firstTrade = conf
-    .swapToken0WithToken1(BigNumber(100));
+    .swapToken0WithToken1(BigNumber(100), true).tradeReturn;
   const secondSim = conf
     .simulateToken0WithToken1Trade(BigNumber(5000))
     .tradeReturn;
   const secondTrade = conf
-    .swapToken0WithToken1(BigNumber(5000));
+    .swapToken0WithToken1(BigNumber(5000), true).tradeReturn;
   const thirdSim = conf
     .simulateToken0WithToken1Trade(BigNumber(100))
     .tradeReturn;
   const thirdTrade = conf
-    .swapToken0WithToken1(BigNumber(100));
+    .swapToken0WithToken1(BigNumber(100), true).tradeReturn;
 
   expect(isBigNumberWithinMarginOfError(
     BigNumber('33.32804290125453'),
@@ -379,17 +387,17 @@ test('swapXWithYReverse', () => {
   const firstSim = conf
     .simulateReverseToken0WithToken1Trade(BigNumber('33.32804290125453'))
     .tradeInput;
-  conf.swapToken0WithToken1(BigNumber(100));
+  conf.swapToken0WithToken1(BigNumber(100), true);
 
   const secondSim = conf
     .simulateReverseToken0WithToken1Trade(BigNumber('1651.13809727604920'))
     .tradeInput;
-  conf.swapToken0WithToken1(BigNumber(5000));
+  conf.swapToken0WithToken1(BigNumber(5000), true);
 
   const thirdSim = conf
     .simulateReverseToken0WithToken1Trade(BigNumber('32.63860689949264'))
     .tradeInput;
-  conf.swapToken0WithToken1(BigNumber(100));
+  conf.swapToken0WithToken1(BigNumber(100), true);
 
   expect(isBigNumberWithinMarginOfError(
     BigNumber(100),
@@ -415,17 +423,17 @@ test('swapYWithX', () => {
     .simulateToken1WithToken0Trade(BigNumber(100))
     .tradeReturn;
   const firstTrade = conf
-    .swapToken1WithToken0(BigNumber(100));
+    .swapToken1WithToken0(BigNumber(100), true).tradeReturn;
   const secondSim = conf
     .simulateToken1WithToken0Trade(BigNumber(5000))
     .tradeReturn;
   const secondTrade = conf
-    .swapToken1WithToken0(BigNumber(5000));
+    .swapToken1WithToken0(BigNumber(5000), true).tradeReturn;
   const thirdSim = conf
     .simulateToken1WithToken0Trade(BigNumber(100))
     .tradeReturn;
   const thirdTrade = conf
-    .swapToken1WithToken0(BigNumber(100));
+    .swapToken1WithToken0(BigNumber(100), true).tradeReturn;
 
   expect(isBigNumberWithinMarginOfError(
     BigNumber('299.8571590852683'),
@@ -466,15 +474,15 @@ test('swapYWithXReverse', () => {
   const firstSim = conf
     .simulateReverseToken1WithToken0Trade(BigNumber('299.8571590852683'))
     .tradeInput;
-  conf.swapToken1WithToken0(BigNumber(100));
+  conf.swapToken1WithToken0(BigNumber(100), true);
   const secondSim = conf
     .simulateReverseToken1WithToken0Trade(BigNumber('14137.0480571128589'))
     .tradeInput;
-  conf.swapToken1WithToken0(BigNumber(5000));
+  conf.swapToken1WithToken0(BigNumber(5000), true);
   const thirdSim = conf
     .simulateReverseToken1WithToken0Trade(BigNumber('239.8541826320275'))
     .tradeInput;
-  conf.swapToken1WithToken0(BigNumber(100));
+  conf.swapToken1WithToken0(BigNumber(100), true);
 
   expect(isBigNumberWithinMarginOfError(
     BigNumber(100),
@@ -499,7 +507,7 @@ test('updateP', () => {
   expect(conf.priceOfToken1).toEqual(new BigNumber(0.5));
   expect(isBigNumberWithinMarginOfError(
     BigNumber('31368.965682419663771680677678645059'),
-    conf.invariant,
+    conf.invariant.result,
   )).toBeTruthy();
 });
 
@@ -508,31 +516,31 @@ test('full', () => {
   const tradeResults: BigNumber[] = [];
 
   tradeResults.push(
-    conf.swapToken1WithToken0(BigNumber(100.0)),
+    conf.swapToken1WithToken0(BigNumber(100.0), true).tradeReturn,
   );
   tradeResults.push(
-    conf.swapToken0WithToken1(BigNumber(5000.0)),
+    conf.swapToken0WithToken1(BigNumber(5000.0), true).tradeReturn,
   );
   tradeResults.push(
-    conf.swapToken0WithToken1(BigNumber(505.83573)),
+    conf.swapToken0WithToken1(BigNumber(505.83573), true).tradeReturn,
   );
   tradeResults.push(
-    conf.swapToken1WithToken0(BigNumber(52.4174)),
+    conf.swapToken1WithToken0(BigNumber(52.4174), true).tradeReturn,
   );
   tradeResults.push(
-    conf.swapToken1WithToken0(BigNumber(100.0)),
+    conf.swapToken1WithToken0(BigNumber(100.0), true).tradeReturn,
   );
   tradeResults.push(
-    conf.swapToken0WithToken1(BigNumber(100.0)),
+    conf.swapToken0WithToken1(BigNumber(100.0), true).tradeReturn,
   );
 
   conf.updatePriceOfToken1(BigNumber(5.0));
 
   tradeResults.push(
-    conf.swapToken1WithToken0(BigNumber(100.0)),
+    conf.swapToken1WithToken0(BigNumber(100.0), true).tradeReturn,
   );
   tradeResults.push(
-    conf.swapToken0WithToken1(BigNumber(100.0)),
+    conf.swapToken0WithToken1(BigNumber(100.0), true).tradeReturn,
   );
 
   expect(isBigNumberWithinMarginOfError(
@@ -577,6 +585,4 @@ test('full', () => {
   )).toBeTruthy();
 });
 
-export {
-  isBigNumberWithinMarginOfError,
-};
+export { isBigNumberWithinMarginOfError };

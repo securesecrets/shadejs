@@ -113,7 +113,7 @@ console.log(output)
         address: 'secret16h5sqd79x43wutne8ge3pdz3e3lngw62vy5lmr',
         code_hash: 'a83f0fdc6e5bcdb1f59e39200a084401309fc5338dbb2e54a2bcdc08fa3eaf49',
       },
-      pair: [
+      batchPairInfo: [
         {
           custom_token: {
             contract_addr: 'secret19e75l25r6sa6nhdf4lggjmgpw0vmpfvsw5cnpe',

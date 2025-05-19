@@ -1,6 +1,7 @@
 const pairsInfoParsed = [
   {
     pairContractAddress: 'secret1qyt4l47yq3x43ezle4nwlh5q0sn6f9sesat7ap',
+    pairCodeHash: 'hash1',
     pairInfo: {
       token0Contract: {
         address: 'secret153wu605vvp934xhd4k9dtd640zsep5jkesstdm',
@@ -32,6 +33,7 @@ const pairsInfoParsed = [
   },
   {
     pairContractAddress: 'secret1wn9tdlvut2nz0cpv28qtv74pqx20p847j8gx3w',
+    pairCodeHash: 'hash2',
     pairInfo: {
       token0Contract: {
         address: 'secret153wu605vvp934xhd4k9dtd640zsep5jkesstdm',

@@ -4,6 +4,7 @@ import { TokensConfig } from '~/types/shared';
 const batchPairsInfoMock: BatchPairsInfo = [
   {
     pairContractAddress: 'CONTRACT_ADDRESS_PAIR_1',
+    pairCodeHash: 'CONTRACT_HASH_PAIR_1',
     pairInfo: {
       lpTokenAmount: '0',
       lpTokenContract: {
@@ -32,6 +33,7 @@ const batchPairsInfoMock: BatchPairsInfo = [
   },
   {
     pairContractAddress: 'CONTRACT_ADDRESS_PAIR_2',
+    pairCodeHash: 'CONTRACT_HASH_PAIR_2',
     pairInfo: {
       lpTokenAmount: '0',
       lpTokenContract: {
@@ -60,6 +62,7 @@ const batchPairsInfoMock: BatchPairsInfo = [
   },
   {
     pairContractAddress: 'CONTRACT_ADDRESS_PAIR_3',
+    pairCodeHash: 'CONTRACT_HASH_PAIR_3',
     pairInfo: {
       lpTokenAmount: '0',
       lpTokenContract: {
@@ -88,6 +91,7 @@ const batchPairsInfoMock: BatchPairsInfo = [
   },
   {
     pairContractAddress: 'CONTRACT_ADDRESS_PAIR_4',
+    pairCodeHash: 'CONTRACT_HASH_PAIR_4',
     pairInfo: {
       lpTokenAmount: '0',
       lpTokenContract: {
@@ -137,6 +141,7 @@ const batchPairsInfoMock: BatchPairsInfo = [
   },
   {
     pairContractAddress: 'CONTRACT_ADDRESS_PAIR_5',
+    pairCodeHash: 'CONTRACT_HASH_PAIR_5',
     pairInfo: {
       lpTokenAmount: '0',
       lpTokenContract: {
@@ -186,6 +191,7 @@ const batchPairsInfoMock: BatchPairsInfo = [
   },
   {
     pairContractAddress: 'CONTRACT_ADDRESS_PAIR_6',
+    pairCodeHash: 'CONTRACT_HASH_PAIR_6',
     pairInfo: {
       lpTokenAmount: '145080056',
       lpTokenContract: {
@@ -235,6 +241,7 @@ const batchPairsInfoMock: BatchPairsInfo = [
   },
   {
     pairContractAddress: 'CONTRACT_ADDRESS_PAIR_7',
+    pairCodeHash: 'CONTRACT_HASH_PAIR_7',
     pairInfo: {
       lpTokenAmount: '145080056',
       lpTokenContract: {
@@ -263,6 +270,7 @@ const batchPairsInfoMock: BatchPairsInfo = [
   },
   {
     pairContractAddress: 'CONTRACT_ADDRESS_PAIR_8',
+    pairCodeHash: 'CONTRACT_HASH_PAIR_8',
     pairInfo: {
       lpTokenAmount: '145080056',
       lpTokenContract: {
@@ -291,6 +299,7 @@ const batchPairsInfoMock: BatchPairsInfo = [
   },
   {
     pairContractAddress: 'CONTRACT_ADDRESS_PAIR_9',
+    pairCodeHash: 'CONTRACT_HASH_PAIR_8',
     pairInfo: {
       lpTokenAmount: '145080056',
       lpTokenContract: {
@@ -319,6 +328,7 @@ const batchPairsInfoMock: BatchPairsInfo = [
   },
   {
     pairContractAddress: 'CONTRACT_ADDRESS_PAIR_10',
+    pairCodeHash: 'CONTRACT_HASH_PAIR_10',
     pairInfo: {
       lpTokenAmount: '145080056',
       lpTokenContract: {
@@ -368,6 +378,7 @@ const batchPairsInfoMock: BatchPairsInfo = [
   },
   {
     pairContractAddress: 'CONTRACT_ADDRESS_PAIR_11',
+    pairCodeHash: 'CONTRACT_HASH_PAIR_11',
     pairInfo: {
       lpTokenAmount: '145080056',
       lpTokenContract: {
@@ -417,6 +428,7 @@ const batchPairsInfoMock: BatchPairsInfo = [
   },
   {
     pairContractAddress: 'CONTRACT_ADDRESS_PAIR_12',
+    pairCodeHash: 'CONTRACT_HASH_PAIR_12',
     pairInfo: {
       lpTokenAmount: '145080056',
       lpTokenContract: {
@@ -466,6 +478,7 @@ const batchPairsInfoMock: BatchPairsInfo = [
   },
   {
     pairContractAddress: 'CONTRACT_ADDRESS_PAIR_13',
+    pairCodeHash: 'CONTRACT_HASH_PAIR_13',
     pairInfo: {
       lpTokenAmount: '0',
       lpTokenContract: {
@@ -515,6 +528,7 @@ const batchPairsInfoMock: BatchPairsInfo = [
   },
   {
     pairContractAddress: 'CONTRACT_ADDRESS_PAIR_14',
+    pairCodeHash: 'CONTRACT_HASH_PAIR_14',
     pairInfo: {
       lpTokenAmount: '0',
       lpTokenContract: {
@@ -544,6 +558,7 @@ const batchPairsInfoMock: BatchPairsInfo = [
   },
   {
     pairContractAddress: 'CONTRACT_ADDRESS_PAIR_15',
+    pairCodeHash: 'CONTRACT_HASH_PAIR_15',
     pairInfo: {
       lpTokenAmount: '0',
       lpTokenContract: {
@@ -593,6 +608,7 @@ const batchPairsInfoMock: BatchPairsInfo = [
   },
   {
     pairContractAddress: 'CONTRACT_ADDRESS_PAIR_16',
+    pairCodeHash: 'CONTRACT_HASH_PAIR_16',
     pairInfo: {
       lpTokenAmount: '145080056',
       lpTokenContract: {
@@ -642,6 +658,7 @@ const batchPairsInfoMock: BatchPairsInfo = [
   },
   {
     pairContractAddress: 'CONTRACT_ADDRESS_PAIR_17',
+    pairCodeHash: 'CONTRACT_HASH_PAIR_17',
     pairInfo: {
       lpTokenAmount: '145080056',
       lpTokenContract: {
@@ -691,6 +708,7 @@ const batchPairsInfoMock: BatchPairsInfo = [
   },
   {
     pairContractAddress: 'CONTRACT_ADDRESS_PAIR_18',
+    pairCodeHash: 'CONTRACT_HASH_PAIR_18',
     pairInfo: {
       lpTokenAmount: '145080056',
       lpTokenContract: {
@@ -743,6 +761,7 @@ const batchPairsInfoMock: BatchPairsInfo = [
 const batchPairsInfoMockForComplexRoute: BatchPairsInfo = [
   {
     pairContractAddress: 'CONTRACT_ADDRESS_PAIR_1',
+    pairCodeHash: 'CONTRACT_HASH_PAIR_1',
     pairInfo: {
       lpTokenAmount: '0',
       lpTokenContract: {
@@ -771,6 +790,7 @@ const batchPairsInfoMockForComplexRoute: BatchPairsInfo = [
   },
   {
     pairContractAddress: 'CONTRACT_ADDRESS_PAIR_2',
+    pairCodeHash: 'CONTRACT_HASH_PAIR_2',
     pairInfo: {
       lpTokenAmount: '0',
       lpTokenContract: {
@@ -799,6 +819,7 @@ const batchPairsInfoMockForComplexRoute: BatchPairsInfo = [
   },
   {
     pairContractAddress: 'CONTRACT_ADDRESS_PAIR_3',
+    pairCodeHash: 'CONTRACT_HASH_PAIR_3',
     pairInfo: {
       lpTokenAmount: '0',
       lpTokenContract: {
@@ -827,6 +848,7 @@ const batchPairsInfoMockForComplexRoute: BatchPairsInfo = [
   },
   {
     pairContractAddress: 'CONTRACT_ADDRESS_PAIR_4',
+    pairCodeHash: 'CONTRACT_HASH_PAIR_4',
     pairInfo: {
       lpTokenAmount: '0',
       lpTokenContract: {
@@ -876,6 +898,7 @@ const batchPairsInfoMockForComplexRoute: BatchPairsInfo = [
   },
   {
     pairContractAddress: 'CONTRACT_ADDRESS_PAIR_5',
+    pairCodeHash: 'CONTRACT_HASH_PAIR_5',
     pairInfo: {
       lpTokenAmount: '0',
       lpTokenContract: {
@@ -925,6 +948,7 @@ const batchPairsInfoMockForComplexRoute: BatchPairsInfo = [
   },
   {
     pairContractAddress: 'CONTRACT_ADDRESS_PAIR_6',
+    pairCodeHash: 'CONTRACT_HASH_PAIR_6',
     pairInfo: {
       lpTokenAmount: '145080056',
       lpTokenContract: {
@@ -974,6 +998,7 @@ const batchPairsInfoMockForComplexRoute: BatchPairsInfo = [
   },
   {
     pairContractAddress: 'CONTRACT_ADDRESS_PAIR_7',
+    pairCodeHash: 'CONTRACT_HASH_PAIR_7',
     pairInfo: {
       lpTokenAmount: '145080056',
       lpTokenContract: {
@@ -1002,6 +1027,7 @@ const batchPairsInfoMockForComplexRoute: BatchPairsInfo = [
   },
   {
     pairContractAddress: 'CONTRACT_ADDRESS_PAIR_8',
+    pairCodeHash: 'CONTRACT_HASH_PAIR_8',
     pairInfo: {
       lpTokenAmount: '145080056',
       lpTokenContract: {
@@ -1030,6 +1056,7 @@ const batchPairsInfoMockForComplexRoute: BatchPairsInfo = [
   },
   {
     pairContractAddress: 'CONTRACT_ADDRESS_PAIR_9',
+    pairCodeHash: 'CONTRACT_HASH_PAIR_9',
     pairInfo: {
       lpTokenAmount: '145080056',
       lpTokenContract: {
@@ -1058,6 +1085,7 @@ const batchPairsInfoMockForComplexRoute: BatchPairsInfo = [
   },
   {
     pairContractAddress: 'CONTRACT_ADDRESS_PAIR_10',
+    pairCodeHash: 'CONTRACT_HASH_PAIR_10',
     pairInfo: {
       lpTokenAmount: '145080056',
       lpTokenContract: {
@@ -1107,6 +1135,7 @@ const batchPairsInfoMockForComplexRoute: BatchPairsInfo = [
   },
   {
     pairContractAddress: 'CONTRACT_ADDRESS_PAIR_11',
+    pairCodeHash: 'CONTRACT_HASH_PAIR_11',
     pairInfo: {
       lpTokenAmount: '145080056',
       lpTokenContract: {

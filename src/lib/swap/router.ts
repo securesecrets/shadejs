@@ -22,8 +22,8 @@ import {
 } from '~/lib/utils';
 
 /**
-* retuns possible paths through one or multiple pools to complete a trade of two tokens
-*/
+ * retuns possible paths through one or multiple pools to complete a trade of two tokens
+ */
 function getPossiblePaths({
   inputTokenContractAddress,
   outputTokenContractAddress,
@@ -97,9 +97,9 @@ function getPossiblePaths({
 }
 
 /**
-* calculates the estimated output of swapping through a route given an input token amount
-* and also transforms the data collected in each pool into the Route data model
-*/
+ * calculates the estimated output of swapping through a route given an input token amount
+ * and also transforms the data collected in each pool into the Route data model
+ */
 function calculateRoute({
   inputTokenAmount,
   inputTokenContractAddress,
@@ -234,7 +234,7 @@ function calculateRoute({
           outputTokenDecimals,
         ));
         swapPriceImpact = stableSwapPriceImpactToken0For1(swapParams);
-      // token1 as the input
+        // token1 as the input
       } else if (currentTokenContractAddress === token1Contract.address) {
         const swapParams = {
           inputToken1Amount: inputAmountHumanReadable,
@@ -342,10 +342,10 @@ function calculateRoute({
 }
 
 /**
-* retrieves all potential route options and the outputs of each route.
-* returns an array of routes in the order that will give the highest quoted
-* output amount
-*/
+ * retrieves all potential route options and the outputs of each route.
+ * returns an array of routes in the order that will give the highest quoted
+ * output amount
+ */
 function getRoutes({
   inputTokenAmount,
   inputTokenContractAddress,
