@@ -1,17 +1,5 @@
 # shadejs
 
-## 1.8.0
-
-### Minor Changes
-
-- a6328299: added routes calculation, RouterV2 support and gas estimation
-
-## 1.7.0
-
-### Patch Changes
-
-- 86af5b6: adding decimals as a required arg to queryDerivativeShdStakingInfo
-
 ## 1.7.0
 
 ### Minor Changes

@@ -1,7 +1,7 @@
 {
   "name": "@shadeprotocol/shadejs",
   "description": "The Typescript SDK for Shade Protocol",
-  "version": "1.8.0",
+  "version": "1.7.0",
   "author": "Secure Secrets",
   "bugs": {
     "url": "https://github.com/securesecrets/shadejs/issues"
