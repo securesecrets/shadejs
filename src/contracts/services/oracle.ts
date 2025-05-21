@@ -1,20 +1,14 @@
-import {
-  OraclePriceResponse,
-  OraclePricesResponse,
-} from '~/types/contracts/oracle/response';
+import { OraclePriceResponse } from '~/types/contracts/oracle/response';
 import {
   ParsedOraclePriceResponse,
   ParsedOraclePricesResponse,
   OracleErrorType,
 } from '~/types/contracts/oracle/model';
 import {
-  switchMap,
   first,
   map,
   lastValueFrom,
 } from 'rxjs';
-import { sendSecretClientContractQuery$ } from '~/client/services/clientServices';
-import { getActiveQueryClient$ } from '~/client';
 import { msgQueryOraclePrice, msgQueryOraclePrices } from '~/contracts/definitions/oracle';
 import {
   BatchItemResponseStatus,
@@ -29,7 +23,7 @@ import { batchQuery$ } from './batchQuery';
 */
 const parsePriceFromContract = (
   response: OraclePriceResponse,
-  blockHeight?: number,
+  blockHeight: number,
 ): ParsedOraclePriceResponse => ({
   oracleKey: response.key,
   rate: response.data.rate,
@@ -39,19 +33,18 @@ const parsePriceFromContract = (
 });
 
 /**
-* Parses the contract prices query into the app data model
-*/
-function parsePricesFromContract(pricesResponse: OraclePricesResponse) {
-  return pricesResponse.reduce((prev, curr) => ({
-    ...prev,
-    [curr.key]: {
-      oracleKey: curr.key,
-      rate: curr.data.rate,
-      lastUpdatedBase: curr.data.last_updated_base,
-      lastUpdatedQuote: curr.data.last_updated_quote,
-    } as ParsedOraclePriceResponse,
-  }), {} as ParsedOraclePricesResponse);
-}
+ * parses the reponse from a batch query of
+ * multiple individual prices
+ */
+const parseBatchPrice = (
+  response: BatchQueryParsedResponse,
+): ParsedOraclePriceResponse => {
+  if (response.length > 1) {
+    throw new Error('Error parsing price, multiple prices returned when only 1 was expected');
+  }
+  const { response: priceResponse, blockHeight } = response[0];
+  return parsePriceFromContract(priceResponse as OraclePriceResponse, blockHeight);
+};
 
 /**
  * parses the reponse from a batch query of
@@ -90,53 +83,111 @@ const parseBatchQueryIndividualPrices = (
 }, {});
 
 /**
+ * parses the reponse from a batch query of
+ * multiple prices returned as a group
+ */
+const parseBatchPrices = (
+  response: BatchQueryParsedResponse,
+): ParsedOraclePricesResponse => {
+  if (response.length > 1) {
+    throw new Error('Error parsing prices, multiple groups of prices were returned when only 1 was expected');
+  }
+  const pricesResponse = response[0];
+
+  if (
+    pricesResponse.status
+    && pricesResponse.status === BatchItemResponseStatus.ERROR
+  ) {
+    let errorType = OracleErrorType.UNKNOWN;
+    if (pricesResponse.response.includes('Derivative rate is stale')) {
+      errorType = OracleErrorType.STALE_DERIVATIVE_RATE;
+    }
+    throw new Error(`ORACLE ERROR: ${errorType}`);
+  }
+
+  return pricesResponse.response.reduce((
+    acc:ParsedOraclePricesResponse,
+    curr: OraclePriceResponse,
+  ) => ({
+    ...acc,
+    [curr.key]: parsePriceFromContract(curr, pricesResponse.blockHeight),
+  }), {} as ParsedOraclePricesResponse);
+};
+/**
  * query the price of an asset using the oracle key
  */
 const queryPrice$ = ({
-  contractAddress,
-  codeHash,
+  queryRouterContractAddress,
+  queryRouterCodeHash,
+  oracleContractAddress,
+  oracleCodeHash,
   oracleKey,
   lcdEndpoint,
   chainId,
+  minBlockHeightValidationOptions,
 }:{
-  contractAddress: string,
-  codeHash?: string,
+  queryRouterContractAddress: string,
+  queryRouterCodeHash?: string,
+  oracleContractAddress: string,
+  oracleCodeHash: string,
   oracleKey: string,
   lcdEndpoint?: string,
   chainId?: string,
-}) => getActiveQueryClient$(lcdEndpoint, chainId).pipe(
-  switchMap(({ client }) => sendSecretClientContractQuery$({
+  minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
+}) => {
+  const query: BatchQueryParams[] = [{
+    id: 1,
+    contract: {
+      address: oracleContractAddress,
+      codeHash: oracleCodeHash,
+    },
     queryMsg: msgQueryOraclePrice(oracleKey),
-    client,
-    contractAddress,
-    codeHash,
-  })),
-  map((response) => parsePriceFromContract(response as OraclePriceResponse)),
-  first(),
-);
+  }];
+
+  return batchQuery$({
+    contractAddress: queryRouterContractAddress,
+    codeHash: queryRouterCodeHash,
+    lcdEndpoint,
+    chainId,
+    queries: query,
+    minBlockHeightValidationOptions,
+  }).pipe(
+    map(parseBatchPrice),
+    first(),
+  );
+};
 
 /**
  * query the price of an asset using the oracle key
  */
 async function queryPrice({
-  contractAddress,
-  codeHash,
+  queryRouterContractAddress,
+  queryRouterCodeHash,
+  oracleContractAddress,
+  oracleCodeHash,
   oracleKey,
   lcdEndpoint,
   chainId,
+  minBlockHeightValidationOptions,
 }:{
-  contractAddress: string,
-  codeHash?: string,
+  queryRouterContractAddress: string,
+  queryRouterCodeHash?: string,
+  oracleContractAddress: string,
+  oracleCodeHash: string,
   oracleKey: string,
   lcdEndpoint?: string,
   chainId?: string,
+  minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
 }) {
   return lastValueFrom(queryPrice$({
-    contractAddress,
-    codeHash,
+    queryRouterContractAddress,
+    queryRouterCodeHash,
+    oracleContractAddress,
+    oracleCodeHash,
     oracleKey,
     lcdEndpoint,
     chainId,
+    minBlockHeightValidationOptions,
   }));
 }
 
@@ -144,50 +195,76 @@ async function queryPrice({
  * query multiple asset prices using oracle keys
  */
 const queryPrices$ = ({
-  contractAddress,
-  codeHash,
+  queryRouterContractAddress,
+  queryRouterCodeHash,
+  oracleContractAddress,
+  oracleCodeHash,
   oracleKeys,
   lcdEndpoint,
   chainId,
+  minBlockHeightValidationOptions,
 }:{
-  contractAddress: string,
-  codeHash?: string,
+  queryRouterContractAddress: string,
+  queryRouterCodeHash?: string,
+  oracleContractAddress: string,
+  oracleCodeHash: string,
   oracleKeys: string[],
   lcdEndpoint?: string,
   chainId?: string,
-}) => getActiveQueryClient$(lcdEndpoint, chainId).pipe(
-  switchMap(({ client }) => sendSecretClientContractQuery$({
+  minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
+}) => {
+  const query: BatchQueryParams[] = [{
+    id: 1,
+    contract: {
+      address: oracleContractAddress,
+      codeHash: oracleCodeHash,
+    },
     queryMsg: msgQueryOraclePrices(oracleKeys),
-    client,
-    contractAddress,
-    codeHash,
-  })),
-  map((response) => parsePricesFromContract(response as OraclePricesResponse)),
-  first(),
-);
+  }];
 
+  return batchQuery$({
+    contractAddress: queryRouterContractAddress,
+    codeHash: queryRouterCodeHash,
+    lcdEndpoint,
+    chainId,
+    queries: query,
+    minBlockHeightValidationOptions,
+  }).pipe(
+    map(parseBatchPrices),
+    first(),
+  );
+};
 /**
  * query multiple asset prices using oracle keys
  */
 async function queryPrices({
-  contractAddress,
-  codeHash,
+  queryRouterContractAddress,
+  queryRouterCodeHash,
+  oracleContractAddress,
+  oracleCodeHash,
   oracleKeys,
   lcdEndpoint,
   chainId,
+  minBlockHeightValidationOptions,
 }:{
-  contractAddress: string,
-  codeHash?: string,
+  queryRouterContractAddress: string,
+  queryRouterCodeHash?: string,
+  oracleContractAddress: string,
+  oracleCodeHash: string,
   oracleKeys: string[],
   lcdEndpoint?: string,
   chainId?: string,
+  minBlockHeightValidationOptions?: MinBlockHeightValidationOptions,
 }) {
   return lastValueFrom(queryPrices$({
-    contractAddress,
-    codeHash,
+    queryRouterContractAddress,
+    queryRouterCodeHash,
+    oracleContractAddress,
+    oracleCodeHash,
     oracleKeys,
     lcdEndpoint,
     chainId,
+    minBlockHeightValidationOptions,
   }));
 }
 
@@ -279,12 +356,13 @@ async function batchQueryIndividualPrices({
 
 export {
   parsePriceFromContract,
-  parsePricesFromContract,
   queryPrice$,
   queryPrices$,
   queryPrice,
   queryPrices,
-  parseBatchQueryIndividualPrices,
   batchQueryIndividualPrices$,
   batchQueryIndividualPrices,
+  parseBatchPrice,
+  parseBatchPrices,
+  parseBatchQueryIndividualPrices,
 };
