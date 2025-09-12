@@ -1,5 +1,11 @@
 # shadejs
 
+## 1.8.1
+
+### Patch Changes
+
+- 721f927: bump secretjs
+
 ## 1.8.0
 
 ### Minor Changes
