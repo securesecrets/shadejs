@@ -1,4 +1,33 @@
-import { OracleErrorType, ParsedOraclePricesResponse } from '~/types';
+import {
+  BatchQueryParsedResponse,
+  OracleErrorType,
+  ParsedOraclePricesResponse,
+  BatchItemResponseStatus,
+} from '~/types';
+
+const batchPricesParsedResponse: BatchQueryParsedResponse = [{
+  id: 1,
+  response: [
+    {
+      key: 'BTC',
+      data: {
+        rate: '27917207155600000000000',
+        last_updated_base: 1696644063,
+        last_updated_quote: 18446744073709552000,
+      },
+    },
+    {
+      key: 'ETH',
+      data: {
+        rate: '1644083682900000000000',
+        last_updated_base: 1696644063,
+        last_updated_quote: 18446744073709552000,
+      },
+    },
+  ],
+  status: BatchItemResponseStatus.SUCCESS,
+  blockHeight: 3,
+}];
 
 const batchPricesWithErrorParsedResponse: ParsedOraclePricesResponse = {
   BTC: {
@@ -20,5 +49,6 @@ const batchPricesWithErrorParsedResponse: ParsedOraclePricesResponse = {
 };
 
 export {
+  batchPricesParsedResponse,
   batchPricesWithErrorParsedResponse,
 };

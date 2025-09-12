@@ -7,26 +7,29 @@ import {
 } from 'vitest';
 import {
   parsePriceFromContract,
-  parsePricesFromContract,
-  parseBatchQueryIndividualPrices,
+  parseBatchPrices,
   queryPrice$,
   queryPrices$,
   queryPrice,
   queryPrices,
   batchQueryIndividualPrices,
   batchQueryIndividualPrices$,
+  parseBatchPrice,
+  parseBatchQueryIndividualPrices,
 } from '~/contracts/services/oracle';
 import priceResponse from '~/test/mocks/oracle/priceResponse.json';
-import pricesResponse from '~/test/mocks/oracle/pricesResponse.json';
 import { batchPricesWithErrorParsed } from '~/test/mocks/batchQuery/batchPricesWithErrorParsed';
 import { of } from 'rxjs';
 import {
   priceParsed,
   pricesParsed,
 } from '~/test/mocks/oracle/pricesParsed';
-import { batchPricesWithErrorParsedResponse } from '~/test/mocks/oracle/batchPricesParsed';
+import {
+  batchPricesWithErrorParsedResponse,
+  batchPricesParsedResponse,
+} from '~/test/mocks/oracle/batchPrices';
+import { batchPrice } from '~/test/mocks/oracle/batchPrice';
 
-const sendSecretClientContractQuery$ = vi.hoisted(() => vi.fn());
 const batchQuery$ = vi.hoisted(() => vi.fn());
 
 beforeAll(() => {
@@ -39,10 +42,6 @@ beforeAll(() => {
     getActiveQueryClient$: vi.fn(() => of({ client: 'CLIENT' })),
   }));
 
-  vi.mock('~/client/services/clientServices', () => ({
-    sendSecretClientContractQuery$,
-  }));
-
   vi.mock('~/contracts/services/batchQuery', () => ({
     batchQuery$,
   }));
@@ -52,35 +51,46 @@ afterAll(() => {
   vi.clearAllMocks();
 });
 
-test('it can parse the price response', () => {
+test('it can parse the price contract response', () => {
   expect(parsePriceFromContract(
     priceResponse,
+    123456789,
   )).toStrictEqual(priceParsed);
 });
 
-test('it can parse the prices response', () => {
-  expect(parsePricesFromContract(
-    pricesResponse,
-  )).toStrictEqual(pricesParsed);
+test('it can parse the batch single price response', () => {
+  expect(parseBatchPrice(
+    batchPrice,
+  )).toStrictEqual(priceParsed);
 });
 
 test('it can parse the batch individual prices response', () => {
   expect(parseBatchQueryIndividualPrices(
     batchPricesWithErrorParsed,
   )).toStrictEqual(batchPricesWithErrorParsedResponse);
+
+  expect(parseBatchPrices(
+    batchPricesParsedResponse,
+  )).toStrictEqual(pricesParsed);
 });
 
 test('it can send the query single price service', async () => {
   const input = {
-    contractAddress: 'CONTRACT_ADDRESS',
-    codeHash: 'CODE_HASH',
+    queryRouterContractAddress: 'QUERY_ROUTER_CONTRACT_ADDRESS',
+    queryRouterCodeHash: 'QUERY_ROUTER_CODE_HASH',
+    oracleContractAddress: 'ORACLE_CONTRACT_ADDRESS',
+    oracleCodeHash: 'ORACLE_CODE_HASH',
     oracleKey: 'ORACLE_KEY',
     lcdEndpoint: 'LCD_ENDPOINT',
     chainId: 'CHAIN_ID',
+    minBlockHeightValidationOptions: {
+      minBlockHeight: 1,
+      maxRetries: 2,
+    },
   };
 
   // observables function
-  sendSecretClientContractQuery$.mockReturnValueOnce(of(priceResponse));
+  batchQuery$.mockReturnValueOnce(of(batchPrice));
 
   let output;
   queryPrice$(input).subscribe({
@@ -89,40 +99,49 @@ test('it can send the query single price service', async () => {
     },
   });
 
-  expect(sendSecretClientContractQuery$).toHaveBeenCalledWith({
-    queryMsg: 'MSG_QUERY_ORACLE_PRICE',
-    client: 'CLIENT',
-    contractAddress: input.contractAddress,
-    codeHash: input.codeHash,
-  });
-
+  const batchQueryParams = {
+    contractAddress: input.queryRouterContractAddress,
+    codeHash: input.queryRouterCodeHash,
+    lcdEndpoint: input.lcdEndpoint,
+    chainId: input.chainId,
+    queries: [{
+      id: 1,
+      contract: {
+        address: input.oracleContractAddress,
+        codeHash: input.oracleCodeHash,
+      },
+      queryMsg: 'MSG_QUERY_ORACLE_PRICE',
+    }],
+    minBlockHeightValidationOptions: input.minBlockHeightValidationOptions,
+  };
+  expect(batchQuery$).toHaveBeenCalledWith(batchQueryParams);
   expect(output).toStrictEqual(priceParsed);
 
   // async/await function
-  sendSecretClientContractQuery$.mockReturnValueOnce(of(priceResponse));
+  batchQuery$.mockReturnValueOnce(of(batchPrice));
   const response = await queryPrice(input);
 
-  expect(sendSecretClientContractQuery$).toHaveBeenCalledWith({
-    queryMsg: 'MSG_QUERY_ORACLE_PRICE',
-    client: 'CLIENT',
-    contractAddress: input.contractAddress,
-    codeHash: input.codeHash,
-  });
-
+  expect(batchQuery$).toHaveBeenCalledWith(batchQueryParams);
   expect(response).toStrictEqual(priceParsed);
 });
 
 test('it can send the query multiple prices service', async () => {
   const input = {
-    contractAddress: 'CONTRACT_ADDRESS',
-    codeHash: 'CODE_HASH',
-    oracleKeys: ['ORACLE_KEY'],
+    queryRouterContractAddress: 'QUERY_ROUTER_CONTRACT_ADDRESS',
+    queryRouterCodeHash: 'QUERY_ROUTER_CODE_HASH',
+    oracleContractAddress: 'ORACLE_CONTRACT_ADDRESS',
+    oracleCodeHash: 'ORACLE_CODE_HASH',
+    oracleKeys: ['ORACLE_KEY_1, ORACLE_KEY_2'],
     lcdEndpoint: 'LCD_ENDPOINT',
     chainId: 'CHAIN_ID',
+    minBlockHeightValidationOptions: {
+      minBlockHeight: 1,
+      maxRetries: 2,
+    },
   };
 
   // observables function
-  sendSecretClientContractQuery$.mockReturnValueOnce(of(pricesResponse));
+  batchQuery$.mockReturnValueOnce(of(batchPricesParsedResponse));
 
   let output;
   queryPrices$(input).subscribe({
@@ -131,26 +150,30 @@ test('it can send the query multiple prices service', async () => {
     },
   });
 
-  expect(sendSecretClientContractQuery$).toHaveBeenCalledWith({
-    queryMsg: 'MSG_QUERY_ORACLE_PRICES',
-    client: 'CLIENT',
-    contractAddress: input.contractAddress,
-    codeHash: input.codeHash,
-  });
+  const batchQueryParams = {
+    contractAddress: input.queryRouterContractAddress,
+    codeHash: input.queryRouterCodeHash,
+    lcdEndpoint: input.lcdEndpoint,
+    chainId: input.chainId,
+    queries: [{
+      id: 1,
+      contract: {
+        address: input.oracleContractAddress,
+        codeHash: input.oracleCodeHash,
+      },
+      queryMsg: 'MSG_QUERY_ORACLE_PRICES',
+    }],
+    minBlockHeightValidationOptions: input.minBlockHeightValidationOptions,
+  };
 
+  expect(batchQuery$).toHaveBeenCalledWith(batchQueryParams);
   expect(output).toStrictEqual(pricesParsed);
 
   // async/await function
-  sendSecretClientContractQuery$.mockReturnValueOnce(of(pricesResponse));
+  batchQuery$.mockReturnValueOnce(of(batchPricesParsedResponse));
   const response = await queryPrices(input);
 
-  expect(sendSecretClientContractQuery$).toHaveBeenCalledWith({
-    queryMsg: 'MSG_QUERY_ORACLE_PRICES',
-    client: 'CLIENT',
-    contractAddress: input.contractAddress,
-    codeHash: input.codeHash,
-  });
-
+  expect(batchQuery$).toHaveBeenCalledWith(batchQueryParams);
   expect(response).toStrictEqual(pricesParsed);
 });
 
